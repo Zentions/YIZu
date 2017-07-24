@@ -1,0 +1,184 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:stretchColumns="0,3">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/rented"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/logo2" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/renting"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/logo" />
+    </TableRow>
+
+    <TableRow>
+        <TextView />
+        <TextView
+            android:id="@+id/rentedPersonname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:minWidth="220px"
+
+            android:textSize="24px"
+            />
+        <TextView
+            android:id="@+id/rentingPersonname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="24px"
+            android:minWidth="220px"/>
+        <TextView />
+    </TableRow>
+    <TextView
+        android:text="    "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="66px"
+        />
+
+    <TableRow android:layout_marginTop="20px">
+        <TextView />
+        <TextView
+            android:text="交易编码："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="220px"
+            android:textSize="30px"
+            />
+
+    </TableRow>
+
+    <TableRow android:layout_marginTop="20px">
+        <TextView />
+        <TextView
+            android:text="交易物品："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/goodsName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="220px"
+            android:textSize="30px"
+            />
+
+    </TableRow>
+
+    <TableRow android:layout_marginTop="20px">
+        <TextView />
+        <TextView
+            android:text="租        金："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/RentMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="220px"
+            android:textSize="30px"
+            />
+
+    </TableRow>
+
+    <TableRow android:layout_marginTop="20px">
+        <TextView />
+        <TextView
+            android:text="押        金："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/Deposit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="220px"
+            android:textSize="30px"
+            />
+
+    </TableRow>
+    <TableRow android:layout_marginTop="20px">
+        <TextView />
+        <TextView
+            android:text="损  耗  费："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/OtherMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="220px"
+            android:textSize="30px"
+            />
+
+    </TableRow>
+
+    <TableRow android:layout_marginTop="20px">
+        <TextView />
+        <TextView
+            android:text="交易时间："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="220px"
+            android:textSize="30px"
+            />
+        <TextView />
+    </TableRow>
+    <TableRow android:layout_marginTop="20px">
+        <TextView />
+        <TextView
+            android:text="交易状态："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/Now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="220px"
+            android:textSize="30px"
+            />
+        <TextView />
+    </TableRow>
+
+</TableLayout>
+
+

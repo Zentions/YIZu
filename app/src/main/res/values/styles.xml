@@ -1,0 +1,42 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#5fb7ef</item>
+        <item name="colorPrimaryDark">#0ca7ef</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="PersonalMainLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">#cccccc</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">1dp</item>
+    </style>
+    <style name="FindBottomStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">30dp</item>
+    <item name="android:layout_margin">5dp</item>
+    <item name="android:background">#cccccc</item>
+</style>
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabPaddingStart">12dp</item>
+        <item name="tabTextColor">#aaa</item>
+        <item name="tabPaddingEnd">12dp</item>
+        <item name="tabSelectedTextColor">#f00</item>
+    </style>
+    <style name="BaseTheme" parent="android:Theme.Light.NoTitleBar" />
+
+    <style name="ImageSelectorTheme" parent="BaseTheme" />
+    <style name="main_menu_animstyle">
+        <item name="android:windowEnterAnimation">@anim/photo_dialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/photo_dialog_out_anim</item>
+    </style>
+    <style name="transparentFrameWindowStyle" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/photo_choose_bg</item>
+    </style>
+</resources>
