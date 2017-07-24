@@ -8,9 +8,9 @@ import cn.bmob.v3.BmobObject;
 public class Evaluation extends BmobObject {
     private Double StarRating;//星级
     private String  TextEvaluation;//文字评价
-    private String rentedPerson;//租用方
-    private String rentingPerson;//出租方
-    private String goodsName;//物品名称
+    private User eval;//租用方评论
+    private Record comment;//记录的评价
+    private Goods BelongTo;//属于某个物品
 
     public Double getStarRating() {
         return StarRating;
@@ -28,27 +28,27 @@ public class Evaluation extends BmobObject {
         TextEvaluation = textEvaluation;
     }
 
-    public String getRentedPerson() {
-        return rentedPerson;
+    public User getEval() {
+        return eval;
     }
 
-    public void setRentedPerson(String rentedPerson) {
-        this.rentedPerson = rentedPerson;
+    public void setEval(User eval) {
+        this.eval = eval;
     }
 
-    public String getRentingPerson() {
-        return rentingPerson;
+    public Record getComment() {
+        return comment;
     }
 
-    public void setRentingPerson(String rentingPerson) {
-        this.rentingPerson = rentingPerson;
+    public void setComment(Record comment) {
+        this.comment = comment;
     }
 
-    public String getGoodsName() {
-        return goodsName;
+    public Goods getBelongTo() {
+        return BelongTo;
     }
 
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
+    public void setBelongTo(Goods belongTo) {
+        BelongTo = belongTo;
     }
 }

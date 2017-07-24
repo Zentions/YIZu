@@ -1,4 +1,4 @@
-package com.example.yizu.dialog;
+package com.example.yizu.control;
 
 import android.content.Context;
 import android.text.Editable;

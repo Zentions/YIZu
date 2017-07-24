@@ -2,7 +2,9 @@ package com.example.yizu;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.example.yizu.bean.Record;
@@ -25,6 +27,12 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.RecordToolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         rentedPersonName = (TextView)findViewById(R.id.rentedPersonname);
         rentingPersonName=(TextView)findViewById(R.id.rentingPersonname);
         Code=(TextView)findViewById(R.id.code);
@@ -39,10 +47,10 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         show();
     }
     void show(){
-        rentedPersonName.setText("出租方："+record.getRentedPerson());
-        rentingPersonName.setText("租用方："+record.getRentingPerson());
+       // rentedPersonName.setText("出租方："+record.getRented());
+       // rentingPersonName.setText("租用方："+record.getRenting());
         Code.setText(record.getObjectId());
-        GoodsName.setText(record.getGoodsName());
+       // GoodsName.setText(record.getMake()+"");
         Rentmoney.setText(record.getMoney().toString());
         deposit.setText(record.getDeposit().toString());
         othermoney.setText(record.getLossOfExpense().toString());

@@ -72,7 +72,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder,int position)
     {
         Record record=mBusinessList.get(position);
-        holder.goodsname.setText(record.getGoodsName());
+       // holder.goodsname.setText(record.getGoodsName());
         holder.TIME.setText(record.getCreatedAt());
         holder.OTHERMONEY.setText(record.getDeposit().toString());
         holder.CODE.setText(record.getObjectId());

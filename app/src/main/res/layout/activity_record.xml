@@ -1,30 +1,27 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_vertical"
     android:stretchColumns="0,3">
-
-    <TableRow
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/RecordToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/rented"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/logo2" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/renting"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/logo" />
-    </TableRow>
-
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="0,3">
+    <TextView
+        android:text="    "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="66px"
+        />
     <TableRow>
         <TextView />
         <TextView
@@ -33,9 +30,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
-            android:minWidth="220px"
-
-            android:textSize="24px"
+            android:minWidth="260px"
+            android:textSize="16sp"
             />
         <TextView
             android:id="@+id/rentingPersonname"
@@ -43,142 +39,186 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
-            android:textSize="24px"
-            android:minWidth="220px"/>
+            android:textSize="16sp"
+            android:minWidth="260px"/>
         <TextView />
     </TableRow>
-    <TextView
-        android:text="    "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="66px"
-        />
+            <TextView
+                android:layout_margin="10dp"
+                android:text="交易状态"
+                android:textColor="@android:color/black"
+                android:id="@+id/Now"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="24sp"
+                />
 
-    <TableRow android:layout_marginTop="20px">
-        <TextView />
-        <TextView
-            android:text="交易编码："
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30px"
-            />
-        <TextView
-            android:id="@+id/code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="220px"
-            android:textSize="30px"
-            />
 
-    </TableRow>
+    <TableRow android:layout_marginTop="20px"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:weightSum="2">
 
-    <TableRow android:layout_marginTop="20px">
-        <TextView />
         <TextView
             android:text="交易物品："
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="30px"
+            android:textSize="18sp"
+            android:layout_weight="1"
             />
         <TextView
             android:id="@+id/goodsName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="220px"
-            android:textSize="30px"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="right"
             />
 
     </TableRow>
 
-    <TableRow android:layout_marginTop="20px">
-        <TextView />
+    <TableRow android:layout_marginTop="20px"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:weightSum="2">
+
         <TextView
             android:text="租        金："
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="30px"
+            android:textSize="18sp"
             />
         <TextView
             android:id="@+id/RentMoney"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="220px"
-            android:textSize="30px"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="right"
             />
 
     </TableRow>
 
-    <TableRow android:layout_marginTop="20px">
-        <TextView />
+    <TableRow android:layout_marginTop="20px"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:weightSum="2">
+
         <TextView
             android:text="押        金："
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="30px"
+            android:layout_weight="1"
+            android:textSize="18sp"
             />
+
         <TextView
             android:id="@+id/Deposit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="220px"
-            android:textSize="30px"
-            />
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textSize="18sp" />
 
     </TableRow>
-    <TableRow android:layout_marginTop="20px">
-        <TextView />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:weightSum="2">
+
         <TextView
-            android:text="损  耗  费："
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="30px"
-            />
+            android:layout_weight="1"
+            android:text="损  耗  费："
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/OtherMoney"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="220px"
-            android:textSize="30px"
-            />
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="right" />
 
     </TableRow>
 
-    <TableRow android:layout_marginTop="20px">
-        <TextView />
+    <TableRow android:layout_marginTop="20px"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:weightSum="2" >
+
         <TextView
             android:text="交易时间："
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="30px"
+            android:textSize="18sp"
             />
         <TextView
             android:id="@+id/time"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="220px"
-            android:textSize="30px"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="right"
             />
-        <TextView />
-    </TableRow>
-    <TableRow android:layout_marginTop="20px">
-        <TextView />
-        <TextView
-            android:text="交易状态："
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30px"
-            />
-        <TextView
-            android:id="@+id/Now"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="220px"
-            android:textSize="30px"
-            />
-        <TextView />
-    </TableRow>
 
+    </TableRow>
+    <TableRow android:layout_marginTop="20px"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:weightSum="2">
+
+        <TextView
+            android:text="交易编码："
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:id="@+id/code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="right"
+            />
+
+    </TableRow>
+    <Button
+        android:id="@+id/jieshujiaoyi"
+        android:layout_height="wrap_content"
+       android:layout_width="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:background="?attr/colorPrimary"
+        android:text="结束交易"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        />
+            <Button
+                android:id="@+id/pingjia"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                android:background="?attr/colorPrimary"
+                android:text="立即评价"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                />
+       </TableLayout>
+    </ScrollView>
 </TableLayout>
 
 

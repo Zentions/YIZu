@@ -30,7 +30,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.yizu.bean.Goods;
-import com.example.yizu.dialog.NumberAddSubView;
+import com.example.yizu.control.NumberAddSubView;
 import com.example.yizu.tool.PictureTool;
 
 import java.io.File;
@@ -323,11 +323,12 @@ public class CreateMessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dialog.dismiss();
             }
-        });}
-
-
-
+        });
     }
+
+
+
+}
 
 
 

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.media.Image;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * Created by q on 2017/7/19.
@@ -19,7 +20,8 @@ public class Goods extends BmobObject {
     private String area;//区
     private String state;//状态
     private Double StarRating;//星级
-
+    private User user;//拥有该物品
+    private BmobRelation purchase;//用户租物品，多对多
     public Double getStarRating() {
         return StarRating;
     }

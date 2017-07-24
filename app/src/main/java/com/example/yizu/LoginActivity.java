@@ -1,6 +1,7 @@
 package com.example.yizu;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -40,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        pref= PreferenceManager.getDefaultSharedPreferences(this);
+        pref= getSharedPreferences("data", Context.MODE_PRIVATE);
         final Toolbar toolbar = (Toolbar)findViewById(R.id.loginToolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -86,15 +87,16 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putBoolean("remember", true);
                                         editor.putString("account", user.getPhoneNumber());
                                         editor.putString("password", user.getPassword());
-                                        editor.putString("ObjectId",user.getObjectId());
+
                                     } else {
                                         editor.clear();
                                     }
+                                    editor.putString("ObjectId",user.getObjectId());
                                     editor.apply();
-                                    Toast.makeText(LoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent();
-                                    intent.setClass(LoginActivity.this, SearchActivity.class);
+                                    intent.setClass(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 } else {
                                     Toast.makeText(LoginActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
                                 }

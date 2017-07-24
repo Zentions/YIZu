@@ -6,36 +6,36 @@ import cn.bmob.v3.BmobObject;
  * Created by q on 2017/7/19.
  */
 public class Record extends BmobObject {
-    private String goodsName;//物品名称
-    private String rentedPerson;//租用方
-    private String rentingPerson;//出租方
+    private Goods make;//物品
+    private User rented;//租用方
+    private User renting;//出租方
     private Double money;//租金
     private Double deposit;//押金
     private Double LossOfExpense;//损耗费
     private String state;//交易状态
 
-    public String getGoodsName() {
-        return goodsName;
+    public Goods getMake() {
+        return make;
     }
 
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
+    public void setMake(Goods make) {
+        this.make = make;
     }
 
-    public String getRentedPerson() {
-        return rentedPerson;
+    public User getRented() {
+        return rented;
     }
 
-    public void setRentedPerson(String rentedPerson) {
-        this.rentedPerson = rentedPerson;
+    public void setRented(User rented) {
+        this.rented = rented;
     }
 
-    public String getRentingPerson() {
-        return rentingPerson;
+    public User getRenting() {
+        return renting;
     }
 
-    public void setRentingPerson(String rentingPerson) {
-        this.rentingPerson = rentingPerson;
+    public void setRenting(User renting) {
+        this.renting = renting;
     }
 
     public Double getMoney() {

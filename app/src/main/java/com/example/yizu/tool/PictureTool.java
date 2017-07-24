@@ -5,11 +5,14 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -19,18 +22,6 @@ import java.io.OutputStream;
  */
 
 public class PictureTool {
-    boolean  saveBitmap2file(Context context, Bitmap bmp, String filename) {
-        Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
-        int quality = 100;
-        OutputStream stream = null;
-        try {
-            stream = new FileOutputStream(context.getExternalCacheDir() + filename);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return bmp.compress(format, quality, stream);
-    }
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public String getPicFromUri(Context context, Uri uri){
         if (Build.VERSION.SDK_INT >= 19) {
@@ -83,5 +74,40 @@ public class PictureTool {
     }
     public static Bitmap zoomBimtap(Bitmap src, int width, int height) {
         return Bitmap.createScaledBitmap(src, width, height, true);
+    }
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // 源图片的高度和宽度
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            // 计算出实际宽高和目标宽高的比率
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            // 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高都会大于等于目标的宽和高。
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
+    }
+    public static Bitmap decodeSampledBitmapFromResource(String path, int reqWidth, int reqHeight) {
+        // 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path,options);
+        // 调用上面定义的方法计算inSampleSize值
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        // 使用获取到的inSampleSize值再次解析图片
+        options.inJustDecodeBounds = false;
+        Bitmap bitmap= BitmapFactory.decodeFile(path,options);
+        File outputFile=new File(path);
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(outputFile);
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }
