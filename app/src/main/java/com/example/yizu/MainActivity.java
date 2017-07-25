@@ -1,28 +1,21 @@
 package com.example.yizu;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -33,11 +26,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.yizu.bean.User;
@@ -46,13 +36,13 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.example.yizu.control.ChangeAddressPopwindow;
+import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
+import com.example.yizu.tool.ToastShow;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,13 +50,8 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.R.id.icon1;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -80,20 +65,25 @@ public class MainActivity extends AppCompatActivity
     static  String c_sheng,c_shi,c_qu;
     private User user;
     TextView myNum,myName;
-    private String Path;
+    DrawerLayout drawer;
+    private String Path=null;
+    private long exitTime;
+    private ToastShow toastShow = new ToastShow(this);
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        changeStatusBar();
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(new MyLocationListener());
         setContentView(R.layout.activity_main);
-
+        ActivityCollecter.addActivty(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         right = (CoordinatorLayout) findViewById(R.id.right1);
         left = (NavigationView) findViewById(R.id.nav_view);
         title = (TextView)findViewById(R.id.MianTitle);
@@ -171,7 +161,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,UserMessageActivity.class);
                 intent.putExtra("mime",user);
-                intent.putExtra("path",Path);
+                if(Path==null)intent.putExtra("path","null");
+                else intent.putExtra("path",Path);
                 startActivity(intent);
             }
         });
@@ -225,9 +216,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_camera) {
-
+            Intent intent = new Intent(this,OrderActivity.class);
+            intent.putExtra("flag","1");
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(this,OrderActivity.class);
+            intent.putExtra("flag","1");
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -237,8 +232,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -353,5 +346,55 @@ public class MainActivity extends AppCompatActivity
         super.onRestart();
         String ObjectId = ShareStorage.getShareString(this,"ObjectId");
         queryUser(ObjectId);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawers();
+            return true;
+        }
+        else{
+            if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN)
+            {
+
+                if((System.currentTimeMillis()-exitTime) > 2000) {
+                    toastShow.toastShow ("再按一次退出程序");
+                    exitTime = System.currentTimeMillis();
+                }
+                else {
+                    moveTaskToBack(false);
+                }
+
+                return true;
+            }
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    void changeStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //获取样式中的属性值
+            TypedValue typedValue = new TypedValue();
+            this.getTheme().resolveAttribute(android.R.attr.colorPrimary, typedValue, true);
+            int[] attribute = new int[]{android.R.attr.colorPrimary};
+            TypedArray array = this.obtainStyledAttributes(typedValue.resourceId, attribute);
+            int color = array.getColor(0, Color.TRANSPARENT);
+            array.recycle();
+            window.setStatusBarColor(color);
+        }
     }
 }

@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.yizu.adapter.ViewPagerAdapter;
+import com.example.yizu.fragment.ArticleFragment;
+import com.example.yizu.tool.ActivityCollecter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class ArticlesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_articles);
-
+        ActivityCollecter.addActivty(this);
 
         final Toolbar toolbar = (Toolbar)findViewById(R.id.PagerToolbar);
         setSupportActionBar(toolbar);
@@ -86,4 +88,9 @@ public class ArticlesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
+    }
 }

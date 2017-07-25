@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.yizu.tool.ActivityCollecter;
+
 public class ChangeNameActivity extends AppCompatActivity {
     Button button;
     EditText editText;
@@ -19,6 +21,7 @@ public class ChangeNameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name);
+        ActivityCollecter.addActivty(this);
         final Toolbar toolbar = (Toolbar)findViewById(R.id.changenameToolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -50,5 +53,11 @@ public class ChangeNameActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
     }
 }

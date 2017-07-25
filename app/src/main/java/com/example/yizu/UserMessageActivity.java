@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.yizu.bean.User;
+import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
 
@@ -66,6 +67,7 @@ public class UserMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_message);
+        ActivityCollecter.addActivty(this);
         final Toolbar toolbar = (Toolbar)findViewById(R.id.userToolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -118,7 +120,7 @@ public class UserMessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent3 = new Intent(UserMessageActivity.this,LoginActivity.class);
                 startActivity(intent3);
-                finish();
+                ActivityCollecter.finishALL();
             }
         });
         USERIMAGE.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +133,7 @@ public class UserMessageActivity extends AppCompatActivity {
         user = (User)intent.getSerializableExtra("mime");
         UriPath = intent.getStringExtra("path");
         show();
+        if(!UriPath.equals("null"))
         USERIMAGE.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath,300,300));
     }
 
@@ -308,6 +311,12 @@ public class UserMessageActivity extends AppCompatActivity {
                 // 返回的上传进度（百分比）
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
     }
 }
 

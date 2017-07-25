@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.yizu.adapter.TitleFragmentPagerAdapter;
+import com.example.yizu.fragment.OrderFragment;
+import com.example.yizu.tool.ActivityCollecter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class OrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+        ActivityCollecter.addActivty(this);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.OrderToolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -47,5 +50,11 @@ public class OrderActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
     }
 }

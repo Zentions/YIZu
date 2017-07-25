@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.yizu.bean.Goods;
 import com.example.yizu.control.NumberAddSubView;
+import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 
 import java.io.File;
@@ -73,6 +74,7 @@ public class CreateMessageActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_message);
+        ActivityCollecter.addActivty(this);
         goodsnameEdit=(EditText)findViewById(R.id.goodsname);
         goodsMessageEdit=(EditText)findViewById(R.id.goodsMessage);
         ZUJIN=(NumberAddSubView)findViewById(R.id.zujin1);
@@ -326,8 +328,11 @@ public class CreateMessageActivity extends AppCompatActivity {
         });
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
+    }
 }
 
 

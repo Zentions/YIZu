@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yizu.bean.User;
+import com.example.yizu.tool.ActivityCollecter;
 
 import org.json.JSONObject;
 
@@ -41,6 +42,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ActivityCollecter.addActivty(this);
         final Toolbar toolbar = (Toolbar)findViewById(R.id.registerToolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -223,6 +225,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements View
         super.onDestroy();
         // 销毁回调监听接口
         SMSSDK.unregisterAllEventHandler();
+        ActivityCollecter.removeActivity(this);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

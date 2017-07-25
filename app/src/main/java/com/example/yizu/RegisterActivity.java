@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yizu.bean.User;
+import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.QueryUser;
 
 import org.json.JSONObject;
@@ -40,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ActivityCollecter.addActivty(this);
         final Toolbar toolbar = (Toolbar)findViewById(R.id.registerToolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -99,6 +101,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     final User user = new User();
                                     user.setPassword(password.getText().toString().trim());
                                     user.setPhoneNumber(etPhoneNumber.getText().toString().trim());
+                                    user.setGrade(0);
                                     user.save(new SaveListener<String>() {
                                         @Override
                                         public void done(String s, BmobException e) {
@@ -221,6 +224,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onDestroy();
         // 销毁回调监听接口
         SMSSDK.unregisterAllEventHandler();
+        ActivityCollecter.removeActivity(this);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

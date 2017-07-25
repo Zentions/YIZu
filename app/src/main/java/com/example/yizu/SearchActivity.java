@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 
 import com.example.yizu.db.HistoryRecord;
+import com.example.yizu.tool.ActivityCollecter;
 
 import org.litepal.crud.DataSupport;
 
@@ -29,6 +30,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        ActivityCollecter.addActivty(this);
         back = (ImageButton)findViewById(R.id.back);
         search = (Button)findViewById(R.id.search);
         clear = (ImageButton)findViewById(R.id.clear);
@@ -95,5 +97,11 @@ public class SearchActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
     }
 }

@@ -22,6 +22,23 @@ public class Goods extends BmobObject {
     private Double StarRating;//星级
     private User user;//拥有该物品
     private BmobRelation purchase;//用户租物品，多对多
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public BmobRelation getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(BmobRelation purchase) {
+        this.purchase = purchase;
+    }
+
     public Double getStarRating() {
         return StarRating;
     }

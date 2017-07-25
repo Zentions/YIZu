@@ -1,4 +1,4 @@
-package com.example.yizu;
+package com.example.yizu.control;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +8,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yizu.R;
 import com.example.yizu.wheelview.OnWheelChangedListener;
 import com.example.yizu.wheelview.OnWheelScrollListener;
 import com.example.yizu.wheelview.WheelView;
@@ -67,7 +68,7 @@ public class ChangeAddressPopwindow extends PopupWindow implements View.OnClickL
 	public ChangeAddressPopwindow(final Context context) {
 		super(context);
 		this.context = context;
-		View view= View.inflate(context,R.layout.edit_changeaddress_pop_layout,null);
+		View view= View.inflate(context, R.layout.edit_changeaddress_pop_layout,null);
 
 		wvProvince = (WheelView) view.findViewById(R.id.wv_address_province);
 		wvCitys = (WheelView) view.findViewById(R.id.wv_address_city);

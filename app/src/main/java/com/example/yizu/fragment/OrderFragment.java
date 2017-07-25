@@ -1,4 +1,4 @@
-package com.example.yizu;
+package com.example.yizu.fragment;
 
 
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.yizu.OrderActivity;
+import com.example.yizu.R;
 import com.example.yizu.adapter.BusinessAdapter;
 import com.example.yizu.bean.Record;
 
@@ -33,6 +35,7 @@ public class OrderFragment extends Fragment {
     RecyclerView recyclerView;
     BusinessAdapter adapter;
     View view;
+    private int POLICY =1;
     OrderActivity orderActivity;
     public OrderFragment() {
         // Required empty public constructor
@@ -64,6 +67,7 @@ public class OrderFragment extends Fragment {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                POLICY = 2;
                 refreshBusiness();
             }
         });
@@ -73,6 +77,8 @@ public class OrderFragment extends Fragment {
     void initRV() {
         BmobQuery<Record> query = new BmobQuery<Record>();
         query.setLimit(10).order("-createdAt");
+        if(POLICY==1) query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        else query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findObjects(new FindListener<Record>() {
             @Override
             public void done(List<Record> object, BmobException e) {

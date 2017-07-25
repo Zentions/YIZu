@@ -13,13 +13,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * © 2012 amsoft.cn 名称：TitleFragmentPagerAdapter.java 描述：一个通用的Fragment适配器
- *
- * @author wolf
- * @version v1.0
- * @date：2016-3-7 上午10:57:53
- */
 public class TitleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /**
@@ -28,26 +21,12 @@ public class TitleFragmentPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragmentList = null;
 
     private String[] titles;
-
-    /**
-     * Instantiates a new ab fragment pager adapter.
-     *
-     * @param mFragmentManager the m fragment manager
-     * @param fragmentList     the fragment list
-     */
     public TitleFragmentPagerAdapter(FragmentManager mFragmentManager,
                                      ArrayList<Fragment> fragmentList) {
         super(mFragmentManager);
         mFragmentList = fragmentList;
     }
 
-    /**
-     * titles是给TabLayout设置title用的
-     *
-     * @param mFragmentManager
-     * @param fragmentList
-     * @param titles
-     */
     public TitleFragmentPagerAdapter(FragmentManager mFragmentManager,
                                      List<Fragment> fragmentList, String[] titles) {
         super(mFragmentManager);

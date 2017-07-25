@@ -1,4 +1,4 @@
-package com.example.yizu;
+package com.example.yizu.fragment;
 
 
 import android.content.Context;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.yizu.ArticlesActivity;
+import com.example.yizu.R;
 import com.example.yizu.adapter.ArticleAdapter;
 import com.example.yizu.bean.Goods;
 

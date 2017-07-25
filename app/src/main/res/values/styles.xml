@@ -1,11 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#5fb7ef</item>
-        <item name="colorPrimaryDark">#0ca7ef</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">#5fb7ef</item>
+        <item name="colorAccent">#5fb7ef</item>
     </style>
     <style name="PersonalMainLayoutStyle">
         <item name="android:layout_width">match_parent</item>
@@ -42,5 +42,5 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="AppTheme" parent="@style/AppBaseTheme"></style>
 </resources>

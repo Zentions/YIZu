@@ -13,6 +13,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.yizu.bean.Evaluation;
+import com.example.yizu.tool.ActivityCollecter;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -27,7 +28,7 @@ public class EvaluationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation);
-
+        ActivityCollecter.addActivty(this);
 
         final Toolbar toolbar = (Toolbar)findViewById(R.id.evlToolbar);
         setSupportActionBar(toolbar);
@@ -87,5 +88,9 @@ public class EvaluationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
+    }
 }

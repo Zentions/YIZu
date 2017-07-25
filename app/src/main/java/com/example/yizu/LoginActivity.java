@@ -21,6 +21,7 @@ import android.util.Log;
 
 
 import com.example.yizu.bean.User;
+import com.example.yizu.tool.ActivityCollecter;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ActivityCollecter.addActivty(this);
         pref= getSharedPreferences("data", Context.MODE_PRIVATE);
         final Toolbar toolbar = (Toolbar)findViewById(R.id.loginToolbar);
         setSupportActionBar(toolbar);
@@ -92,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.clear();
                                     }
                                     editor.putString("ObjectId",user.getObjectId());
+                                    editor.putString("PN",user.getPhoneNumber());
                                     editor.apply();
                                     Intent intent = new Intent();
                                     intent.setClass(LoginActivity.this, MainActivity.class);
@@ -152,5 +155,11 @@ public class LoginActivity extends AppCompatActivity {
                 break;
             default:;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
     }
 }

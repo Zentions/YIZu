@@ -22,27 +22,6 @@
         android:gravity="center"
         android:textSize="66px"
         />
-    <TableRow>
-        <TextView />
-        <TextView
-            android:id="@+id/rentedPersonname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:minWidth="260px"
-            android:textSize="16sp"
-            />
-        <TextView
-            android:id="@+id/rentingPersonname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:minWidth="260px"/>
-        <TextView />
-    </TableRow>
             <TextView
                 android:layout_margin="10dp"
                 android:text="交易状态"
@@ -53,7 +32,49 @@
                 android:gravity="center"
                 android:textSize="24sp"
                 />
+            <TableRow android:layout_marginTop="20px"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="15dp"
+                android:weightSum="2">
 
+                <TextView
+                    android:text="出租用户："
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:id="@+id/rentedPersonname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+            <TableRow android:layout_marginTop="20px"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="15dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:text="租用用户："
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:id="@+id/rentingPersonname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:gravity="right"
+                    />
+            </TableRow>
 
     <TableRow android:layout_marginTop="20px"
         android:layout_marginRight="10dp"
