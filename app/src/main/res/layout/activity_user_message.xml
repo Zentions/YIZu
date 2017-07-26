@@ -31,6 +31,7 @@
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
+        android:background="@drawable/photo_camera_selector"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:weightSum="6"
@@ -61,10 +62,9 @@
             android:id="@+id/goName"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/bar"
-            android:background="@android:color/white"
+            android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/more" />
 

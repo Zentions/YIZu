@@ -3,13 +3,15 @@ package com.example.yizu.bean;
 import android.graphics.Bitmap;
 import android.media.Image;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobRelation;
 
 /**
  * Created by q on 2017/7/19.
  */
-public class Goods extends BmobObject {
+public class Goods extends BmobObject implements Serializable {
     private String goodsName;//物品名称
     private String classification;//分类
     private Bitmap[] pic;//三张照片

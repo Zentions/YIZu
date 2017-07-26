@@ -14,11 +14,9 @@ import com.example.yizu.RecordActivity;
 import com.example.yizu.bean.Record;
 
 import java.util.List;
-
 /**
- * Created by 10591 on 2017/7/20.
+ * Created by q on 2017/7/20
  */
-
 public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHolder>{
     private Context mContext;
     private List<Record> mBusinessList;
@@ -72,7 +70,7 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder,int position)
     {
         Record record=mBusinessList.get(position);
-       // holder.goodsname.setText(record.getGoodsName());
+        holder.goodsname.setText(record.getMake().getGoodsName());
         holder.TIME.setText(record.getCreatedAt());
         holder.OTHERMONEY.setText(record.getDeposit().toString());
         holder.CODE.setText(record.getObjectId());

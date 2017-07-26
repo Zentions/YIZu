@@ -1,6 +1,8 @@
 package com.example.yizu;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.IInterface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,17 +15,20 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.yizu.bean.Evaluation;
+import com.example.yizu.bean.Record;
 import com.example.yizu.tool.ActivityCollecter;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class EvaluationActivity extends AppCompatActivity {
 
     RatingBar mRatingBar;
     Button SubBtn;
     EditText etEvaluation;
-    Evaluation Evl;
+    private Evaluation Evl;
+    private Record record;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +42,11 @@ public class EvaluationActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         Evl =new Evaluation();
+        Intent intent = getIntent();
+        record = (Record)intent.getSerializableExtra("waitToEval");
+        Evl.setEval(record.getRenting());
+        Evl.setComment(record);
+        Evl.setBelongTo(record.getMake());
         SubBtn=(Button)findViewById(R.id.submitbtn);
         etEvaluation=(EditText)findViewById(R.id.evaluation);
 
@@ -58,19 +68,9 @@ public class EvaluationActivity extends AppCompatActivity {
                         Toast.makeText(EvaluationActivity.this, "您还没有评价星级", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Evl.save(new SaveListener<String>() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if (e == null) {
-
-                                Toast.makeText(EvaluationActivity.this, "评价了" + Evl.getStarRating() + "星", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else {
-                                Toast.makeText(EvaluationActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        }
-                    });
+                    saveRecord();
+                    saveEval();
+                    finish();
                 } else{
                     Toast.makeText(EvaluationActivity.this, "请输入您的评价!", Toast.LENGTH_SHORT).show();
                 }
@@ -92,5 +92,23 @@ public class EvaluationActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
+    }
+    private void saveEval(){
+        Evl.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                Toast.makeText(EvaluationActivity.this, "评价了" + Evl.getStarRating() + "星", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+    private void saveRecord(){
+        record.setEval(true);
+        record.update(record.getObjectId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+
+            }
+        });
     }
 }

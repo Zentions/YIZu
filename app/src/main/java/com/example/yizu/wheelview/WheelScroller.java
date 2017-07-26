@@ -29,32 +29,20 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 /**
- * Scroller class handles scrolling events and updates the 
+ * Created by q on 2017/7/24.
  */
 public class WheelScroller {
     /**
      * Scrolling listener interface
      */
     public interface ScrollingListener {
-        /**
-         * Scrolling callback called when scrolling is performed.
-         * @param distance the distance to scroll
-         */
+
         void onScroll(int distance);
 
-        /**
-         * Starting callback called when scrolling is started
-         */
         void onStarted();
-        
-        /**
-         * Finishing callback called after justifying
-         */
+
         void onFinished();
-        
-        /**
-         * Justifying callback called to justify a view when scrolling is ended
-         */
+
         void onJustify();
     }
     
@@ -77,11 +65,6 @@ public class WheelScroller {
     private float lastTouchedY;
     private boolean isScrollingPerformed;
 
-    /**
-     * Constructor
-     * @param context the current context
-     * @param listener the scrolling listener
-     */
     public WheelScroller(Context context, ScrollingListener listener) {
         gestureDetector = new GestureDetector(context, gestureListener);
         gestureDetector.setIsLongpressEnabled(false);
@@ -92,20 +75,13 @@ public class WheelScroller {
         this.context = context;
     }
     
-    /**
-     * Set the the specified scrolling interpolator
-     * @param interpolator the interpolator
-     */
+
     public void setInterpolator(Interpolator interpolator) {
         scroller.forceFinished(true);
         scroller = new Scroller(context, interpolator);
     }
     
-    /**
-     * Scroll the wheel
-     * @param distance the scrolling distance
-     * @param time the scrolling duration
-     */
+
     public void scroll(int distance, int time) {
         scroller.forceFinished(true);
 
@@ -117,18 +93,11 @@ public class WheelScroller {
         startScrolling();
     }
    
-    /**
-     * Stops scrolling
-     */
+
     public void stopScrolling() {
         scroller.forceFinished(true);
     }
-    
-    /**
-     * Handles Touch event 
-     * @param event the motion event
-     * @return
-     */
+
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -158,8 +127,6 @@ public class WheelScroller {
     // gesture listener
     private SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            // Do scrolling in onTouchEvent() since onScroll() are not call immediately
-            //  when user touch and move the wheel
             return true;
         }
         
@@ -177,11 +144,7 @@ public class WheelScroller {
     private final int MESSAGE_SCROLL = 0;
     private final int MESSAGE_JUSTIFY = 1;
     
-    /**
-     * Set next message to queue. Clears queue before.
-     * 
-     * @param message the message to set
-     */
+
     private void setNextMessage(int message) {
         clearMessages();
         animationHandler.sendEmptyMessage(message);
@@ -195,7 +158,7 @@ public class WheelScroller {
         animationHandler.removeMessages(MESSAGE_JUSTIFY);
     }
     
-    // animation handler
+
     private Handler animationHandler = new Handler() {
         public void handleMessage(Message msg) {
             scroller.computeScrollOffset();
@@ -205,9 +168,7 @@ public class WheelScroller {
             if (delta != 0) {
                 listener.onScroll(delta);
             }
-            
-            // scrolling is not finished when it comes to final Y
-            // so, finish it manually 
+
             if (Math.abs(currY - scroller.getFinalY()) < MIN_DELTA_FOR_SCROLLING) {
                 currY = scroller.getFinalY();
                 scroller.forceFinished(true);
@@ -222,17 +183,13 @@ public class WheelScroller {
         }
     };
     
-    /**
-     * Justifies wheel
-     */
+
     private void justify() {
         listener.onJustify();
         setNextMessage(MESSAGE_JUSTIFY);
     }
 
-    /**
-     * Starts scrolling
-     */
+
     private void startScrolling() {
         if (!isScrollingPerformed) {
             isScrollingPerformed = true;
@@ -240,9 +197,7 @@ public class WheelScroller {
         }
     }
 
-    /**
-     * Finishes scrolling
-     */
+
     void finishScrolling() {
         if (isScrollingPerformed) {
             listener.onFinished();

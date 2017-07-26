@@ -1,8 +1,5 @@
 package com.example.yizu.adapter;
 
-/**
- * Created by yikuai on 2017/7/21.
- */
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,10 +7,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-//import com.example.yizu.R;
 
 
 /**
+ * Created by q on 2017/7/22
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -39,9 +36,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * 描述：获取数量.
-     *
-     * @return the count
-     * @see android.support.v4.view.PagerAdapter#getCount()
+
      */
     @Override
     public int getCount() {
@@ -50,10 +45,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * 描述：获取索引位置的Fragment.
-     *
-     * @param position the position
-     * @return the item
-     * @see android.support.v4.app.FragmentPagerAdapter#getItem(int)
      */
     @Override
     public Fragment getItem(int position) {

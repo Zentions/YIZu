@@ -76,7 +76,8 @@ public class OrderFragment extends Fragment {
 
     void initRV() {
         BmobQuery<Record> query = new BmobQuery<Record>();
-        query.setLimit(10).order("-createdAt");
+        query.order("-createdAt");
+        query.include("make[objectId|goodsName]");
         if(POLICY==1) query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         else query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findObjects(new FindListener<Record>() {

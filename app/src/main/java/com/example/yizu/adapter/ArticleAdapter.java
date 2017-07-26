@@ -16,11 +16,9 @@ import com.example.yizu.RegisterActivity;
 import com.example.yizu.bean.Goods;
 
 import java.util.List;
-
 /**
- * Created by yikuai on 2017/7/20.
+ * Created by q on 2017/7/20
  */
-
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> {
     private Context mContext;
     private List<Goods>   mArticle;

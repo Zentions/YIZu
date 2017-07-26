@@ -104,7 +104,7 @@ public class PictureTool {
         try {
             out = new FileOutputStream(outputFile);
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

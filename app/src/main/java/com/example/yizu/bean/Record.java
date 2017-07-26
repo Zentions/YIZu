@@ -1,11 +1,13 @@
 package com.example.yizu.bean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
 /**
  * Created by q on 2017/7/19.
  */
-public class Record extends BmobObject {
+public class Record extends BmobObject implements Serializable {
     private Goods make;//物品
     private User rented;//租用方
     private User renting;//出租方
@@ -13,6 +15,15 @@ public class Record extends BmobObject {
     private Double deposit;//押金
     private Double LossOfExpense;//损耗费
     private String state;//交易状态
+    private Boolean isEval=false;//是否评价
+
+    public Boolean getEval() {
+        return isEval;
+    }
+
+    public void setEval(Boolean eval) {
+        isEval = eval;
+    }
 
     public Goods getMake() {
         return make;

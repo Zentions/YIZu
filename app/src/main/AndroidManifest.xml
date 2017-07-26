@@ -55,7 +55,8 @@
         </activity>
         <activity android:name=".SearchActivity">
         </activity>
-        <activity android:name=".RecordActivity">
+        <activity android:name=".RecordActivity"
+            android:label="交易订单">
         </activity>
         <activity
             android:name=".UserMessageActivity"

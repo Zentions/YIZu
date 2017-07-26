@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.Record;
 import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
+import com.example.yizu.tool.ShareStorage;
 
 import java.io.Serializable;
 
@@ -31,6 +35,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     TextView othermoney;
     TextView TIME;
     TextView NOW;
+    Button eval,finishBusiness;
     private User rented,renting;
     private Goods goods;
     @Override
@@ -53,11 +58,35 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         othermoney=(TextView)findViewById(R.id.OtherMoney);
         TIME=(TextView)findViewById(R.id.time) ;
         NOW=(TextView)findViewById(R.id.Now);
+        finishBusiness = (Button)findViewById(R.id.jieshujiaoyi);
+        eval = (Button)findViewById(R.id.pingjia);
         Intent intent=getIntent();
         record = (Record) intent.getSerializableExtra("record");
         query();
+        eval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecordActivity.this,EvaluationActivity.class);
+                intent.putExtra("waitToEval",record);
+                startActivity(intent);
+                finish();
+            }
+        });
+        finishBusiness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //弹出支付对话框
+            }
+        });
     }
     void show(){
+        String currentUser = ShareStorage.getShareString(RecordActivity.this,"ObjectId");
+        Log.d("debug1",currentUser);
+        Log.d("debug1",record.getState());
+        String state = record.getState();
+        if(currentUser.equals(rented.getObjectId()) && state.equals("交易中"))
+            finishBusiness.setVisibility(View.VISIBLE);
+        if(!currentUser.equals(rented.getObjectId()) && record.getEval()==false && record.getState().equals("交易成功")) eval.setVisibility(View.VISIBLE);
         rentedPersonName.setText(rented.getName());
         rentingPersonName.setText(renting.getName());
         Code.setText(record.getObjectId());
@@ -87,11 +116,12 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     }
     void query(){
         BmobQuery<Record> query = new BmobQuery<Record>();
-        query.include("rented[name],renting[name],make[goodsName]");// 希望在查询帖子信息的同时也把发布人的信息查询出来
+        query.include("rented[objectId|name],renting[objectId|name],make[objectId|goodsName]");// 希望在查询帖子信息的同时也把发布人的信息查询出来
         query.getObject(record.getObjectId(), new QueryListener<Record>() {
             @Override
             public void done(Record object, BmobException e) {
                 if(e==null){
+                    record = object;
                     rented = object.getRented();
                     renting = object.getRenting();
                     goods = object.getMake();
@@ -103,5 +133,11 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
             }
 
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        query();
     }
 }
