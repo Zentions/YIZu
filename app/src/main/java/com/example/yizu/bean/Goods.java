@@ -6,6 +6,7 @@ import android.media.Image;
 import java.io.Serializable;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
 
 /**
@@ -14,7 +15,9 @@ import cn.bmob.v3.datatype.BmobRelation;
 public class Goods extends BmobObject implements Serializable {
     private String goodsName;//物品名称
     private String classification;//分类
-    private Bitmap[] pic;//三张照片
+    private BmobFile pic1;
+    private BmobFile pic2;
+    private BmobFile pic3;//三张照片
     private String description;//描述
     private String Positioning;//定位，市
     private Double deposit;//押金
@@ -81,12 +84,28 @@ public class Goods extends BmobObject implements Serializable {
         this.classification = classification;
     }
 
-    public Bitmap[] getPic() {
-        return pic;
+    public BmobFile getPic1() {
+        return pic1;
     }
 
-    public void setPic(Bitmap[] pic) {
-        this.pic = pic;
+    public void setPic1(BmobFile pic1) {
+        this.pic1 = pic1;
+    }
+
+    public BmobFile getPic2() {
+        return pic2;
+    }
+
+    public void setPic2(BmobFile pic2) {
+        this.pic2 = pic2;
+    }
+
+    public BmobFile getPic3() {
+        return pic3;
+    }
+
+    public void setPic3(BmobFile pic3) {
+        this.pic3 = pic3;
     }
 
     public String getDescription() {

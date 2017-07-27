@@ -1,6 +1,5 @@
 package com.example.yizu;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -14,12 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
-import com.example.yizu.tool.QueryUser;
 
 import org.json.JSONObject;
 

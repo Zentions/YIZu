@@ -30,14 +30,19 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.yizu.bean.Goods;
+import com.example.yizu.bean.User;
 import com.example.yizu.control.NumberAddSubView;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
+import com.example.yizu.tool.ShareStorage;
 
 import java.io.File;
 
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 
 public class CreateMessageActivity extends AppCompatActivity {
@@ -67,8 +72,8 @@ public class CreateMessageActivity extends AppCompatActivity {
     public static final int CONTEXT_NULL_3 = 3;
     public static final int CONTEXT_NULL_4 = 5;
     int j=0;
-
-
+    private Goods myGoods = new Goods();
+    private  BmobFile bmobFile[] = new BmobFile[3];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -80,6 +85,15 @@ public class CreateMessageActivity extends AppCompatActivity {
         ZUJIN=(NumberAddSubView)findViewById(R.id.zujin1);
         YAJIN=(NumberAddSubView)findViewById(R.id.yajin1);
         fenlei = (Spinner)findViewById(R.id.spinner);
+        String userId = ShareStorage.getShareString(this,"ObjectId");
+        User user = new User();
+        user.setObjectId(userId);
+        String [] position = ShareStorage.getShareString(this,"mainShi","mainQu");
+        myGoods.setUser(user);
+        myGoods.setPositioning(position[0]);
+        myGoods.setArea(position[1]);
+        myGoods.setState("无人租用");
+        myGoods.setStarRating(0.0);
         fenlei.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -185,18 +199,20 @@ public class CreateMessageActivity extends AppCompatActivity {
         handler.handleMessage(message);
     }
     void saveGoods(){//保存商品信息
-        final Goods goods = new Goods();
-        goods.setDescription(description);
-        goods.setDeposit(yajin);
-        goods.setMoneyPer(zujin);
+        myGoods.setDescription(description);
+        myGoods.setDeposit(yajin);
+        myGoods.setMoneyPer(zujin);
         //设置属性
-        goods.setGoodsName(goodsName);
-        goods.setClassification(cardNumber);
-        goods.save(new SaveListener<String>() {
+        myGoods.setGoodsName(goodsName);
+        myGoods.setClassification(cardNumber);
+      //  myGoods.setPic1(bmobFile[0]);
+      //  myGoods.setPic2(bmobFile[1]);
+        myGoods.setPic3(bmobFile[2]);
+        myGoods.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if(e==null){
-                    goods.setObjectId(s);
+                    myGoods.setObjectId(s);
                     Toast.makeText(CreateMessageActivity.this,"提交成功！！",Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(CreateMessageActivity.this,e.toString(),Toast.LENGTH_SHORT).show();
@@ -233,9 +249,8 @@ public class CreateMessageActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     try {
                         // 将拍摄的照片显示出来
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri[currentIB]));
-
-                        img[currentIB].setImageBitmap(PictureTool.zoomBimtap(bitmap,500,500));
+                        img[currentIB].setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath[currentIB],500,500));
+                        SavePic(currentIB);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -245,22 +260,15 @@ public class CreateMessageActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     PictureTool tool = new PictureTool();
                     UriPath[currentIB] = tool.getPicFromUri(this,data.getData());
-                    displayImage(UriPath[currentIB]);
+                    img[currentIB].setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath[currentIB],500,500));
+                    SavePic(currentIB);
                 }
                 break;
             default:
                 break;
         }
     }
-    //展示图片
-    private void displayImage(String imagePath) {
-        if (imagePath != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            img[currentIB].setImageBitmap(PictureTool.zoomBimtap(bitmap,500,500));
-        } else {
-            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
-        }
-    }
+
     public void showDialog() {
         final View view = getLayoutInflater().inflate(R.layout.photo_choose_dialog, null);
         final Dialog dialog = new Dialog(this, R.style.transparentFrameWindowStyle);
@@ -332,6 +340,28 @@ public class CreateMessageActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
+    }
+    void SavePic(int i){
+        File file = new File(UriPath[i]);
+        bmobFile[i] = new BmobFile(file);
+        //  SaveUserMessage();
+        bmobFile[i].uploadblock(new UploadFileListener() {
+
+            @Override
+            public void done(BmobException e) {
+                if(e==null){
+
+                }else{
+                   Toast.makeText(CreateMessageActivity.this,e.toString(),Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            @Override
+            public void onProgress(Integer value) {
+                // 返回的上传进度（百分比）
+
+            }
+        });
     }
 }
 

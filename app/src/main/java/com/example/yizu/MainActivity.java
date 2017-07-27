@@ -139,11 +139,13 @@ public class MainActivity extends AppCompatActivity
                                 // TODO Auto-generated method stub
                                 Toast.makeText(MainActivity.this, "您选择了:"+province + "-" + city + "-" + area, Toast.LENGTH_LONG).show();
                                 positionText.setText(area);
+                                ShareStorage.setShareString(MainActivity.this,"mainShi",city+"市","mainQu",area+"区");
                             }
                             @Override
                             public void onClick() {
                                 // TODO Auto-generated method stub
                                 Toast.makeText(MainActivity.this, "当前定位:"+c_sheng +"-" + c_shi + "-" + c_qu, Toast.LENGTH_LONG).show();
+                                ShareStorage.setShareString(MainActivity.this,"mainShi",c_shi,"mainQu",c_qu);
                                 positionText.setText(c_qu);
                             }
 
@@ -221,13 +223,19 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this,OrderActivity.class);
-            intent.putExtra("flag","1");
+            intent.putExtra("flag","2");
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
+            Intent intent = new Intent(this,SetActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
+        }else if(id ==R.id.nav_release){
+            Intent intent = new Intent(this,CreateMessageActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
@@ -286,8 +294,8 @@ public class MainActivity extends AppCompatActivity
             c_shi=shi;
             c_qu=qu;
             pop(sheng,shi,qu);
-
-
+            ShareStorage.setShareString(MainActivity.this,"mainShi",c_shi,"mainQu",c_qu);
+            ShareStorage.setShareString(MainActivity.this,"Shi",c_shi,"Qu",c_qu);
         }
         @Override
         public void onConnectHotSpotMessage(String s, int i) {

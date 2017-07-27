@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.yizu.R;
 import com.example.yizu.RegisterActivity;
+import com.example.yizu.ShowActivity;
 import com.example.yizu.bean.Goods;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, RegisterActivity.class);
+                Intent intent = new Intent(mContext, ShowActivity.class);
                 mContext.startActivity(intent);
             }
         });
@@ -69,7 +70,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         holder.articleName.setText(article.getGoodsName());
         holder.articleDetailed.setText(article.getDescription());
         holder.articleMoney.setText(String.valueOf(article.getMoneyPer()));
-        Glide.with(mContext).load(article.getPic()).into(holder.articleImage);
+       // Glide.with(mContext).load(article.getPic()).into(holder.articleImage);
     }
     @Override
     public int getItemCount(){

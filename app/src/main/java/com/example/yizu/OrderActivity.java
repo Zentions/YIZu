@@ -37,9 +37,13 @@ public class OrderActivity extends AppCompatActivity {
         tabLayout=(TabLayout)findViewById(R.id.tab);
         viewPager=(ViewPager)findViewById(R.id.viewpager);
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new OrderFragment());
-        fragments.add(new OrderFragment());
-        TitleFragmentPagerAdapter adapter = new TitleFragmentPagerAdapter(getSupportFragmentManager(),fragments, new String[]{"已完成", "未完成"});
+        OrderFragment a = new OrderFragment();
+        OrderFragment b = new OrderFragment();
+        a.setCurrentPage(1);
+        b.setCurrentPage(2);
+        fragments.add(a);
+        fragments.add(b);
+        TitleFragmentPagerAdapter adapter = new TitleFragmentPagerAdapter(getSupportFragmentManager(),fragments, new String[]{"未完成", "已完成"});
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

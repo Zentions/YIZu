@@ -124,7 +124,10 @@ public class ConfirmOrderActivity extends AppCompatActivity {
                     DepMoney.setText(currentgoods.getDeposit()+"元");//押金
                     //计算本次折扣
                     Double count;
-                    if(rentingUser.getGrade()>=50&&rentingUser.getGrade()<100){
+                    if(rentingUser.getGrade()<50){
+                        count=1.0;
+                    }
+                    else if(rentingUser.getGrade()>=50&&rentingUser.getGrade()<100){
                         count=0.98;
                     }
                     else if(rentingUser.getGrade()<200){

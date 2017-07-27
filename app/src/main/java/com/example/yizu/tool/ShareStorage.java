@@ -20,9 +20,10 @@ public class ShareStorage {
         editor.apply();
         return true;
     }
-    public static boolean setShareString(Context context,String tag, String value){
+    public static boolean setShareString(Context context,String tag1, String value1,String tag2,String value2){
         SharedPreferences.Editor editor = context.getSharedPreferences("data",Context.MODE_PRIVATE).edit();
-        editor.putString(tag,value);
+        editor.putString(tag1,value1);
+        editor.putString(tag2,value2);
         editor.apply();
         return true;
     }
@@ -37,5 +38,12 @@ public class ShareStorage {
     public static String getShareString(Context context,String tag){
         SharedPreferences pref = context.getSharedPreferences("data",Context.MODE_PRIVATE);
         return  pref.getString(tag,"");
+    }
+    public static String[] getShareString(Context context,String tag1,String tag2){
+        SharedPreferences pref = context.getSharedPreferences("data",Context.MODE_PRIVATE);
+        String [] value = new String[2];
+        value[0] = pref.getString(tag1,"");
+        value[1] = pref.getString(tag2,"");
+        return  value;
     }
 }

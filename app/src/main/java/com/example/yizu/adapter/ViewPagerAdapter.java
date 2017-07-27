@@ -12,12 +12,11 @@ import java.util.List;
 /**
  * Created by q on 2017/7/22
  */
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter { //article适配器
 
     private List<Fragment> mFragmentList = null;
 
     private String[] titles;
-
 
 
     public ViewPagerAdapter(FragmentManager mFragmentManager,

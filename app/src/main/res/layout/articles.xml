@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
+<com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app = "http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="1dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ArticleRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-     
-    <FrameLayout
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ArticleRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:layout_gravity="bottom"
-            android:scaleType="fitXY"
-            android:layout_width="match_parent"
-            android:layout_height="511dp" />
-        <ImageView
-            android:scaleType="centerCrop"
-            android:background="#88ffffff"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-
-
-    </FrameLayout>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by q on 2017/7/23
  */
-public class TitleFragmentPagerAdapter extends FragmentPagerAdapter {
+public class TitleFragmentPagerAdapter extends FragmentPagerAdapter { //
 
     /**
      * The m fragment list.

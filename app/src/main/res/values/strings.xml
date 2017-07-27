@@ -18,4 +18,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string-array name="product_status">
+        <item>通过旧密码</item>
+        <item>通过手机验证</item>
+    </string-array>
 </resources>

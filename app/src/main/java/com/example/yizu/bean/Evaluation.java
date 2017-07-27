@@ -8,9 +8,19 @@ import cn.bmob.v3.BmobObject;
 public class Evaluation extends BmobObject {
     private Double StarRating;//星级
     private String  TextEvaluation;//文字评价
-    private User eval;//租用方评论
-    private Record comment;//记录的评价
+    private User eval=new User();//租用方评论
+    private Record comment=new Record();//记录的评价
     private Goods BelongTo;//属于某个物品
+
+    public Evaluation(Double StarRating,String TextEvaluation,String rentedPerson,String time){
+        this.StarRating=StarRating;
+        this.TextEvaluation=TextEvaluation;
+        //comment.setTime(time);
+        eval.setName(rentedPerson);
+    }
+    public Evaluation() {
+
+    }
 
     public Double getStarRating() {
         return StarRating;
