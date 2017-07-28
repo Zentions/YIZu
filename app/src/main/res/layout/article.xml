@@ -25,14 +25,17 @@
             android:scaleType="centerCrop"
             />
         <TextView
+            android:text="电子类 自行车"
+            android:textColor="@android:color/black"
             android:id="@+id/article_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/article_image"
             android:layout_toRightOf="@id/article_image"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:textSize="20sp"/>
         <TextView
+            android:text="￥3元/天"
             android:id="@+id/article_rentmoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +45,10 @@
             android:textColor="#dcf41e0a"
             android:textSize="16sp"/>
         <TextView
+            android:layout_margin="5dp"
             android:id="@+id/article_detailed"
+            android:text="地址：青岛市黄岛区"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/article_rentmoney"

@@ -226,7 +226,8 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("flag","2");
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-
+            Intent intent = new Intent(this,UserGoodsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(this,SetActivity.class);
             startActivity(intent);

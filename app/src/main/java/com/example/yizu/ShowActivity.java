@@ -1,12 +1,22 @@
 package com.example.yizu;
 
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -25,6 +35,11 @@ import com.example.yizu.fragment.TwoFragment;
 
 import java.util.ArrayList;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
+
 public class ShowActivity extends AppCompatActivity {
     private ArrayList<View> mImageViewList;
     private LinearLayout llContainer;
@@ -37,26 +52,20 @@ public class ShowActivity extends AppCompatActivity {
     private SimpleFragmentPagerAdapter pagerAdapter;
     private ImageAdapter imageAdapter;
     private ViewPager viewPager1,viewPager2;
-
+    private final int REQUEST_CODE = 0x1001;
     private TabLayout tabLayout;
     private TextView call,buy,name,rent,position,deposit,classification,starRating;
     private ImageView back;
-    private Goods goods;
-
+    private Goods checkedGoods;
+    private String rentedPhoneNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_show);
-        goods=new Goods();
-       goods.setGoodsName("123");
-        goods.setArea("黄岛区");
-        goods.setPositioning("青岛市");
-        goods.setMoneyPer(6.0);
-        goods.setDeposit(100.0);
-        goods.setClassification("电子产品");
-        goods.setStarRating(6.7);
-        goods.setDescription("cbjbcsjdjbcsbchxzbcnCZNhxgshcbxzhcvyedshfbefgfsdjbcjdhcusshdjsdsushfssjbfsdsdhfuhuefhsdhfbdsgahsbdbsadwegdduufhsdcysdgshsdsdbcygfyfefgysdfgfshdygffsfgyesegffgewywhfgygfehemfgjsdfgdyufgeeyfgeeyfgryef");
+        Intent intent = getIntent();
+        checkedGoods = (Goods) intent.getSerializableExtra("searchGoods");
+        if(checkedGoods.getPic2()==null) Log.d("debug1","1null");
         mImageViewList = new ArrayList<>();
         viewPager1=(ViewPager)findViewById(R.id.viewpager1);
         llContainer = (LinearLayout) findViewById(R.id.ll_container);
@@ -73,35 +82,45 @@ public class ShowActivity extends AppCompatActivity {
         starRating=(TextView)findViewById(R.id.starRating);
 
         //include_top的文件中的TextView的赋值
-        name.setText(goods.getGoodsName());
-        rent.setText(String.valueOf(goods.getMoneyPer()));
+        name.setText(checkedGoods.getGoodsName());
+        rent.setText(String.valueOf(checkedGoods.getMoneyPer()));
         rent.append("元/天");
-        position.append(goods.getArea());
-        deposit.append(String.valueOf(goods.getDeposit()));
-        classification.append(goods.getClassification());
-        starRating.append(String.valueOf(goods.getStarRating()));
-
-        initData();
+        position.append(checkedGoods.getArea());
+        deposit.append(String.valueOf(checkedGoods.getDeposit()));
+        classification.append(checkedGoods.getClassification());
+        starRating.append(String.valueOf(checkedGoods.getStarRating()));
+        queryPhoneNUM();
+        //initData();
         initControls();
        call.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent = new Intent(ShowActivity.this, LoginActivity.class);//跳转到联系租用者界面
-               startActivity(intent);
+               new AlertDialog.Builder(ShowActivity.this)
+                       .setTitle("您确定拨打电话？")
+                       .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int which) {
+                               testCallPhone();
+
+                           }
+                       })
+                       .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int which) {
+
+                           }
+                       }).show();
            }
        });
         buy.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent=new Intent(ShowActivity.this,LoginActivity.class);//跳转到购买页面
+                Intent intent=new Intent(ShowActivity.this,ConfirmOrderActivity.class);//跳转到购买页面
+                intent.putExtra("GoodsId",checkedGoods.getObjectId());
                 startActivity(intent);
             }
         });
         back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent=new Intent(ShowActivity.this,ArticlesActivity.class);//跳转到搜索结果展示页面
-                startActivity(intent);
                 finish();
             }
         });
@@ -111,8 +130,11 @@ public class ShowActivity extends AppCompatActivity {
 
 
     private void initData(){
-
-        imageAdapter = new ImageAdapter(mImageViewList);
+        BmobFile file[] = new BmobFile[3];
+        file[0] = checkedGoods.getPic1();
+        file[1] = checkedGoods.getPic2();
+        file[2] = checkedGoods.getPic3();
+        imageAdapter = new ImageAdapter(mImageViewList,this,file);
         viewPager1.setAdapter(imageAdapter);
         ivRedPoint.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -149,12 +171,7 @@ public class ShowActivity extends AppCompatActivity {
         });
 
         for (int i=0; i<3; i++){
-            //创建ImageView把mImgaeViewIds放进去
-            ImageView view = new ImageView(this);
-            //添加到ImageView的集合中
             mImageViewList.add(new page(this).getView());
-
-
             //小圆点    一个小灰点是一个ImageView
             ImageView pointView = new ImageView(this);
             pointView.setImageResource(R.drawable.shape_grey);
@@ -213,5 +230,48 @@ public class ShowActivity extends AppCompatActivity {
         });
 
     }
+    private void testCallPhone() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (PermissionChecker.checkSelfPermission(ShowActivity.this,
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                        REQUEST_CODE);
+            } else {
+                callPhone(rentedPhoneNumber);
+            }
 
+        } else {
+            callPhone(rentedPhoneNumber);
         }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE && PermissionChecker.checkSelfPermission(ShowActivity.this,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            callPhone(rentedPhoneNumber);
+        }
+    }
+    //直接拨号
+    private void callPhone(String phoneNum) {
+        Uri uri = Uri.parse("tel:" + phoneNum);
+        Intent intent = new Intent(Intent.ACTION_CALL, uri);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                == PackageManager.PERMISSION_GRANTED) {
+            startActivity(intent);
+        }
+    }
+    void queryPhoneNUM(){
+        BmobQuery<Goods> query = new BmobQuery<Goods>();
+        query.include("user[phoneNumber]");
+        query.getObject(checkedGoods.getObjectId(), new QueryListener<Goods>() {
+            @Override
+            public void done(Goods goods, BmobException e) {
+                rentedPhoneNumber = goods.getUser().getPhoneNumber();
+                checkedGoods = goods;
+                initData();
+            }
+        });
+    }
+}

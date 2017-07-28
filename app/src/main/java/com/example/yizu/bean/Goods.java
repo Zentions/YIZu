@@ -27,7 +27,15 @@ public class Goods extends BmobObject implements Serializable {
     private Double StarRating;//星级
     private User user;//拥有该物品
     private BmobRelation purchase;//用户租物品，多对多
-
+    private String Path[] = new String[3];//路径
+    public void setPath(String path,int i){
+        if(i>=3)return;
+        else Path[i] = path;
+    }
+    public String getPath(int i){
+        if(i>=3)return null;
+        else return Path[i];
+    }
     public User getUser() {
         return user;
     }

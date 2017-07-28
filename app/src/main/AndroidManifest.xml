@@ -85,12 +85,23 @@
         </activity>
         <activity android:name=".EvaluationActivity" />
         <activity android:name=".ShowActivity" />
+        <activity android:name=".RsetPasswordActivity">
+        </activity>
         <activity
-            android:name=".RsetPasswordActivity"></activity>
-        <activity
-            android:name=".RsetPassword_pActivity"></activity>
-        <activity android:name=".AboutActivity"></activity>
-        <activity android:name=".SetActivity"></activity>
+            android:name=".RsetPassword_pActivity">
+        </activity>
+        <activity android:name=".AboutActivity">
+
+        </activity>
+        <activity android:name=".SetActivity">
+
+        </activity>
+        <activity android:name=".UserGoodsActivity">
+        </activity>
+        <activity android:name=".EActivity">
+        </activity>
+        <activity android:name=".RActivity">
+        </activity>
 
         <service
             android:name="cn.bmob.push.lib.service.PushService"

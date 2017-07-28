@@ -15,7 +15,6 @@ public class WelcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        Bmob.initialize(this, "e740da9c36e83e41ae0e7d14d7e5c067", "bmob");
         BmobInstallation.getCurrentInstallation().save();
 // 启动推送服务
         BmobPush.startWork(this);

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.yizu.R;
@@ -21,14 +22,14 @@ public class FragmentTwoAdapter extends RecyclerView.Adapter<FragmentTwoAdapter.
     private Context context;
     private List<Evaluation> mEvaluation;
     static class ViewHolder extends RecyclerView.ViewHolder{
-        CardView cardView;
+        LinearLayout layout;
         TextView rentedPerson;
         TextView StarRating;
         TextView  TextEvaluation;
         TextView  evaluationTime;
         public ViewHolder(View view){
             super(view);
-            cardView=(CardView)view;
+            layout=(LinearLayout) view;
             rentedPerson=(TextView)view.findViewById(R.id.rentedPerson);
             TextEvaluation=(TextView)view.findViewById(R.id.textEvaluation);
             StarRating=(TextView)view.findViewById(R.id.starRating2);
@@ -57,7 +58,7 @@ public class FragmentTwoAdapter extends RecyclerView.Adapter<FragmentTwoAdapter.
         holder.rentedPerson.append(evaluation.getEval().getName());
         holder.StarRating.append(String.valueOf(evaluation.getStarRating()));
         holder.TextEvaluation.append(evaluation.getTextEvaluation());
-     //   holder.evaluationTime.setText(evaluation.getCreatedAt());
+        holder.evaluationTime.setText(evaluation.getCreatedAt());
     }
     @Override
     public int getItemCount(){

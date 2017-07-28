@@ -110,4 +110,7 @@ public class PictureTool {
         }
         return bitmap;
     }
+    public static Bitmap showImage(String path){
+        return BitmapFactory.decodeFile(path);
+    }
 }

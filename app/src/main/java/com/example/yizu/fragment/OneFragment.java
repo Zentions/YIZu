@@ -1,7 +1,9 @@
 package com.example.yizu.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,17 +24,6 @@ public class OneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_one, container, false);
-
-        goods=new Goods();
-        goods.setGoodsName("123");
-        goods.setArea("黄岛区");
-        goods.setPositioning("青岛市");
-        goods.setMoneyPer(6.0);
-        goods.setDeposit(100.0);
-        goods.setClassification("电子产品");
-        goods.setStarRating(6.7);
-        goods.setDescription("啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊啦啦啦啦啦啊啦拉拉啦啦啦啦啦啊啦啦啦啦啦啊");
-        //fragment_one的文件中的TextView的查找
         name1=(TextView)mView.findViewById(R.id.name1);
         rent1=(TextView)mView.findViewById(R.id.rent1);
         position1=(TextView)mView.findViewById(R.id.position1);
@@ -40,7 +31,15 @@ public class OneFragment extends Fragment {
         classification1=(TextView)mView.findViewById(R.id.classification1);
         starRating1=(TextView)mView.findViewById(R.id.starRating1);
         description=(TextView)mView.findViewById(R.id.description);
-        //fragment_one的文件中的TextView的赋值
+        initView();
+        return mView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Intent intent = getActivity().getIntent();
+        goods = (Goods)intent.getSerializableExtra("searchGoods");
         name1.append("       ");
         name1.append(goods.getGoodsName());
         rent1.append("       ");
@@ -57,8 +56,6 @@ public class OneFragment extends Fragment {
         starRating1.append(String.valueOf(goods.getStarRating()));
         description.append("       ");
         description.append(goods.getDescription());
-        initView();
-        return mView;
     }
 
     private void initView() {

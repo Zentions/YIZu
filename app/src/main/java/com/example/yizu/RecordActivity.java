@@ -116,7 +116,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     }
     void query(){
         BmobQuery<Record> query = new BmobQuery<Record>();
-        query.include("rented[objectId|name],renting[objectId|name],make[objectId|goodsName]");// 希望在查询帖子信息的同时也把发布人的信息查询出来
+        query.include("rented[objectId|name],renting[objectId|name],make");// 希望在查询帖子信息的同时也把发布人的信息查询出来
         query.getObject(record.getObjectId(), new QueryListener<Record>() {
             @Override
             public void done(Record object, BmobException e) {

@@ -23,7 +23,7 @@ public class RefreshHeader extends FrameLayout implements IHeaderView {
     ImageView refreshArrow;
     TextView refreshTextView;
     ImageView loadingView;
-    public RefreshHeader(@NonNull OrderActivity context) {
+    public RefreshHeader(@NonNull Context context) {
         super(context);
         this.context  = context;
         if (rootView == null) {

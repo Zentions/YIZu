@@ -1,6 +1,7 @@
 package com.example.yizu;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,10 +25,12 @@ public class AboutActivity extends Activity {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.user_text:
-                Toast.makeText(AboutActivity.this,"这里是用户协议", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,EActivity.class);
+                startActivity(intent);
                 break;
             case R.id.jifen_text:
-                Toast.makeText(AboutActivity.this,"这里是积分规则", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(this, RActivity.class);
+                startActivity(intent1);
                 break;
             default:
                 break;

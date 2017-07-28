@@ -18,11 +18,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.yizu.ArticlesActivity;
+import com.example.yizu.MainActivity;
 import com.example.yizu.R;
 import com.example.yizu.control.RefreshHeaderArticle;
 import com.example.yizu.control.RefreshLoadArticle;
 import com.example.yizu.adapter.ArticleAdapter;
 import com.example.yizu.bean.Goods;
+import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -32,7 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.FindListener;
 
 
@@ -56,6 +60,7 @@ public class ArticleFragment extends Fragment {
     private Double StarRating;
     private int skip;
     private int limit=6;
+
     public ArticleFragment() {
         // Required empty public constructor
     }
@@ -140,9 +145,12 @@ public class ArticleFragment extends Fragment {
         //--and条件2
         BmobQuery<Goods> eq2 = new BmobQuery<Goods>();
         eq2.addWhereEqualTo("Positioning", Positioning);//市定位
+        BmobQuery<Goods> eq5 = new BmobQuery<Goods>();
+        eq2.addWhereEqualTo("state", "无人租用");
         List<BmobQuery<Goods>> andQuerys = new ArrayList<BmobQuery<Goods>>();
         andQuerys.add(eq1);
         andQuerys.add(eq2);
+        andQuerys.add(eq5);
         switch (currentPage) {
             case 0:
                 query.and(andQuerys);

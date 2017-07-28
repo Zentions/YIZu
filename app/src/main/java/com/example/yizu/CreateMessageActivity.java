@@ -15,9 +15,12 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -27,8 +30,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.map.Text;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.User;
 import com.example.yizu.control.NumberAddSubView;
@@ -37,11 +42,13 @@ import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
 
 import java.io.File;
+import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadBatchListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
 
@@ -70,16 +77,23 @@ public class CreateMessageActivity extends AppCompatActivity {
     public static final int CONTEXT_NULL_1 = 1;
     public static final int CONTEXT_NULL_2 = 2;
     public static final int CONTEXT_NULL_3 = 3;
-    public static final int CONTEXT_NULL_4 = 5;
+    public static final int UN_FINISH = 5;
     int j=0;
+    private TextView progress[] = new TextView[3];
+    int progressPercent=0;
     private Goods myGoods = new Goods();
-    private  BmobFile bmobFile[] = new BmobFile[3];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_message);
         ActivityCollecter.addActivty(this);
+        final Toolbar toolbar = (Toolbar)findViewById(R.id.ConfirmToolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         goodsnameEdit=(EditText)findViewById(R.id.goodsname);
         goodsMessageEdit=(EditText)findViewById(R.id.goodsMessage);
         ZUJIN=(NumberAddSubView)findViewById(R.id.zujin1);
@@ -94,6 +108,9 @@ public class CreateMessageActivity extends AppCompatActivity {
         myGoods.setArea(position[1]);
         myGoods.setState("无人租用");
         myGoods.setStarRating(0.0);
+        progress[0] = (TextView)findViewById(R.id.progress1);
+        progress[1] = (TextView)findViewById(R.id.progress2);
+        progress[2] = (TextView)findViewById(R.id.progress3);
         fenlei.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -148,6 +165,9 @@ public class CreateMessageActivity extends AppCompatActivity {
                 case CONTEXT_NULL_3:
                     Toast.makeText(CreateMessageActivity.this,"未选择分类！！",Toast.LENGTH_SHORT).show();
                     break;
+                case UN_FINISH:
+                    Toast.makeText(CreateMessageActivity.this,"未上传完成！！",Toast.LENGTH_SHORT).show();
+                    break;
                 case SUCCESS:
                     saveGoods();
                     break;
@@ -195,6 +215,11 @@ public class CreateMessageActivity extends AppCompatActivity {
             handler.handleMessage(message);
             return;
         }
+        if(progressPercent<100){
+            message.what = UN_FINISH;
+            handler.handleMessage(message);
+            return;
+        }
         message.what = SUCCESS;
         handler.handleMessage(message);
     }
@@ -205,15 +230,13 @@ public class CreateMessageActivity extends AppCompatActivity {
         //设置属性
         myGoods.setGoodsName(goodsName);
         myGoods.setClassification(cardNumber);
-      //  myGoods.setPic1(bmobFile[0]);
-      //  myGoods.setPic2(bmobFile[1]);
-        myGoods.setPic3(bmobFile[2]);
         myGoods.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if(e==null){
                     myGoods.setObjectId(s);
                     Toast.makeText(CreateMessageActivity.this,"提交成功！！",Toast.LENGTH_SHORT).show();
+                    finish();
                 }else {
                     Toast.makeText(CreateMessageActivity.this,e.toString(),Toast.LENGTH_SHORT).show();
                 }
@@ -249,8 +272,8 @@ public class CreateMessageActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     try {
                         // 将拍摄的照片显示出来
-                        img[currentIB].setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath[currentIB],500,500));
-                        SavePic(currentIB);
+                        img[currentIB].setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath[currentIB],750,750));
+                        SavePic();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -260,8 +283,8 @@ public class CreateMessageActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     PictureTool tool = new PictureTool();
                     UriPath[currentIB] = tool.getPicFromUri(this,data.getData());
-                    img[currentIB].setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath[currentIB],500,500));
-                    SavePic(currentIB);
+                    img[currentIB].setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath[currentIB],750,750));
+                    SavePic();
                 }
                 break;
             default:
@@ -341,27 +364,54 @@ public class CreateMessageActivity extends AppCompatActivity {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
     }
-    void SavePic(int i){
-        File file = new File(UriPath[i]);
-        bmobFile[i] = new BmobFile(file);
-        //  SaveUserMessage();
-        bmobFile[i].uploadblock(new UploadFileListener() {
+    void SavePic(){
+        int n = 0;
+        for(int i =0;i<3;i++){
+            if(TextUtils.isEmpty(UriPath[i])) n++;
+        }
+        if(n>0){
+            return;
+        }
+        BmobFile.uploadBatch(UriPath, new UploadBatchListener() {
 
             @Override
-            public void done(BmobException e) {
-                if(e==null){
-
-                }else{
-                   Toast.makeText(CreateMessageActivity.this,e.toString(),Toast.LENGTH_SHORT).show();
+            public void onSuccess(List<BmobFile> files, List<String> urls) {
+                if(urls.size()==UriPath.length){//如果数量相等，则代表文件全部上传完成
+                   subMessage.setEnabled(true);
+                    myGoods.setPic1(files.get(0));
+                    myGoods.setPic2(files.get(1));
+                    myGoods.setPic3(files.get(2));
                 }
-
             }
-            @Override
-            public void onProgress(Integer value) {
-                // 返回的上传进度（百分比）
 
+            @Override
+            public void onError(int statuscode, String errormsg) {
+                Toast.makeText(CreateMessageActivity.this,"错误码"+statuscode +",错误描述："+errormsg,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onProgress(final int curIndex, final int curPercent, int total, int totalPercent) {
+                //1、curIndex--表示当前第几个文件正在上传
+                //2、curPercent--表示当前上传文件的进度值（百分比）
+                //3、total--表示总的上传文件数
+                //4、totalPercent--表示总的上传进度（百分比）
+                progressPercent = totalPercent;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress[curIndex-1].setText("已上传"+curPercent+"%");
+                    }
+                });
             }
         });
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

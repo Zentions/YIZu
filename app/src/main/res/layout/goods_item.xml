@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/goodsitem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/linearlayout_line">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/goodstate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:minWidth="220px"
+            android:textColor="@android:color/background_dark"
+            android:textSize="15sp" />
+
+
+        <TextView
+            android:id="@+id/goodsname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@android:color/background_dark"
+            android:minWidth="220px"
+            android:textSize="80px" />
+
+
+
+
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginLeft="7dp"
+                android:textColor="@android:color/background_dark"
+                android:minWidth="220px"
+                android:text="物品分类："
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/classification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="300px"
+                android:textSize="40px" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px">
+
+            <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="7dp"
+            android:minWidth="220px"
+            android:textColor="@android:color/background_dark"
+            android:text="详细介绍："
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="600px"
+            android:textSize="40px" />
+
+    </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:layout_marginTop="20px">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:layout_marginLeft="7dp"
+                android:minWidth="220px"
+                android:textColor="@android:color/background_dark"
+                android:text="总租用金额:"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/allmoney"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:textSize="40px" />
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:weightSum="5"
+            android:layout_marginTop="20px">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:layout_marginLeft="7dp"
+                android:minWidth="220px"
+                android:textColor="@android:color/background_dark"
+                android:text="总租用次数:"
+                android:textSize="40px" />
+
+            <TextView
+                android:id="@+id/alltimes"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:textSize="40px" />
+
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:weightSum="2"
+            android:layout_height="wrap_content">
+             <Button
+            android:id="@+id/holdon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/linearlayout_line"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="继续放租"
+            android:textColor="@android:color/background_dark"
+            android:textSize="15sp" />
+            <Button
+                android:id="@+id/end"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/linearlayout_line"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="下架商品"
+                android:textColor="@android:color/background_dark"
+                android:textSize="15sp" />
+         </TableRow>
+
+    </LinearLayout>
+
+</LinearLayout>
