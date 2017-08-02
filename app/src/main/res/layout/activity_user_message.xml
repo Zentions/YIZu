@@ -12,28 +12,26 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
+
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/userimage"
-        android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_width="80dp"
+        android:id="@+id/userimage"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:src="@drawable/logo2" />
+        android:src="@drawable/logo2"
+        android:gravity="center"/>
 
 
-    <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
+
+
 
     <LinearLayout
         android:background="@drawable/photo_camera_selector"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:id="@+id/goName"
         android:weightSum="6"
         android:orientation="horizontal">
 
@@ -58,12 +56,11 @@
             android:textColor="#222222"
             android:textSize="18sp" />
 
-        <ImageButton
-            android:id="@+id/goName"
+        <ImageView
+
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/bar"
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:src="@drawable/more" />
@@ -72,21 +69,14 @@
     </LinearLayout>
 
     <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-    <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="30dp"
         android:background="@android:color/darker_gray" />
     <LinearLayout
+        android:id="@+id/goGender"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:background="@drawable/photo_camera_selector"
         android:weightSum="6"
         android:orientation="horizontal">
 
@@ -110,14 +100,11 @@
             android:textColor="#222222"
             android:textSize="18sp" />
 
-        <ImageButton
-            android:id="@+id/goGender"
+        <ImageView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/bar"
             android:layout_weight="1"
-            android:background="@android:color/white"
             android:scaleType="centerInside"
             android:src="@drawable/more" />
 
@@ -125,22 +112,15 @@
     </LinearLayout>
 
     <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-    <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="30dp"
+
         android:background="@android:color/darker_gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:weightSum="6"
+        android:background="@drawable/photo_camera_selector"
         android:orientation="horizontal">
 
 
@@ -165,23 +145,18 @@
             android:textSize="18sp" />
 
     </LinearLayout>
+
     <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-    <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="30dp"
-        android:background="@android:color/darker_gray" />
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:weightSum="6"
+        android:background="@drawable/photo_camera_selector"
         android:orientation="horizontal">
 
 
@@ -206,19 +181,12 @@
             android:textSize="18sp" />
 
     </LinearLayout>
-    <View
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
+
     <Button
         android:id="@+id/exit_user_message"
         android:text="退出当前登录"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"
         android:background="#5fb7ef"
         android:gravity="center"

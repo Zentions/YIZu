@@ -1,11 +1,24 @@
 package com.example.yizu.tool;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,6 +26,9 @@ import android.widget.Toast;
 
 import com.example.yizu.CreateMessageActivity;
 import com.example.yizu.R;
+import com.example.yizu.UserMessageActivity;
+
+import java.io.File;
 
 /**
  * Created by 10591 on 2017/7/27.
@@ -20,10 +36,6 @@ import com.example.yizu.R;
 
 public class ShowDialog {
         public static void  showCustomizeDialog(final Activity activity, String title, String message) {
-    /* @setView 装入自定义View ==> R.layout.dialog_customize
-     * 由于dialog_customize.xml只放置了一个EditView，因此和图8一样
-     * dialog_customize.xml可自定义更复杂的View
-     */
         AlertDialog.Builder customizeDialog =
                 new AlertDialog.Builder(activity);
         final View dialogView = LayoutInflater.from(activity)
@@ -42,19 +54,14 @@ public class ShowDialog {
         customizeDialog.show();
 
     }
-    public static void  showZhuceDialog(final Activity activity, String title, String rules) {
-    /* @setView 装入自定义View ==> R.layout.dialog_customize
-     * 由于dialog_customize.xml只放置了一个EditView，因此和图8一样
-     * dialog_customize.xml可自定义更复杂的View
-     */
+    public static void  showZhuceDialog(final Activity activity,String rules) {
         final AlertDialog.Builder customizeDialog =
                 new AlertDialog.Builder(activity);
         final View dialogView = LayoutInflater.from(activity)
                 .inflate(R.layout.zhuce_dialog,null);
-        TextView textView = (TextView)dialogView.findViewById(R.id.title_message_zhuce);
-        textView.setText(title);
-        TextView textView1=(TextView)dialogView.findViewById(R.id.rules);
-        textView1.setText(rules);
+        TextView textView = (TextView)dialogView.findViewById(R.id.rules);
+        textView.setText(rules);
+        Button cancel=(Button) dialogView.findViewById(R.id.button_cancel);
         new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
@@ -63,14 +70,16 @@ public class ShowDialog {
             }
         };
         customizeDialog.setView(dialogView);
-        customizeDialog.show();
-
+      //  customizeDialog.show();
+        final Dialog dialog = customizeDialog.show();
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                  dialog.dismiss();
+            }
+        });
     }
     public static void showLoseDialog(final Activity activity, String title, String message) {
-    /* @setView 装入自定义View ==> R.layout.dialog_customize
-     * 由于dialog_customize.xml只放置了一个EditView，因此和图8一样
-     * dialog_customize.xml可自定义更复杂的View
-     */
         final AlertDialog.Builder customizeDialog =
                 new AlertDialog.Builder(activity);
         final View dialogView = LayoutInflater.from(activity)
@@ -91,3 +100,4 @@ public class ShowDialog {
         customizeDialog.show();
     }
 }
+

@@ -1,5 +1,6 @@
 package com.example.yizu.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
@@ -32,8 +33,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     private Context mContext;
     private List<Goods>   mArticle;
     private int max_count = 6;//最大显示数
-    private final int NORMAL_TYPE = 0;
-    private final int FOOT_TYPE = 1;
     static class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         ImageView articleImage;
@@ -51,6 +50,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     }
     public ArticleAdapter(List<Goods> articleList){
         mArticle=articleList;
+
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent,int viewType) {

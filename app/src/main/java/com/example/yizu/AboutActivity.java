@@ -7,12 +7,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.yizu.tool.ActivityCollecter;
+
 public class AboutActivity extends Activity {
     private ImageView about_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        ActivityCollecter.addActivty(this);
         about_back=(ImageView)findViewById(R.id.about_back);
         about_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,4 +42,9 @@ public class AboutActivity extends Activity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
+    }
 }

@@ -88,9 +88,6 @@ public class ArticleFragment extends Fragment {
         avloadingIndicatorView_BallPulse=(AVLoadingIndicatorView)view.findViewById(R.id.avloadingIndicatorView_BallClipRotatePulse);
         recyclerView = (RecyclerView) view.findViewById(R.id.ArticleRecyclerView);
         refreshLayout=(TwinklingRefreshLayout)view.findViewById(R.id.ArticleRefresh);
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        adapter = new ArticleAdapter(articleList);
-        recyclerView.setAdapter(adapter);
         refreshLayout.setEnableRefresh(false);
         refreshLayout.setOverScrollBottomShow(true);
         return view;
@@ -108,10 +105,13 @@ public class ArticleFragment extends Fragment {
         area = position[1];
         Intent intent = activity.getIntent();
         goodsName = intent.getStringExtra("name");
-        GridLayoutManager layoutManager = new GridLayoutManager(activity, 1);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         adapter = new ArticleAdapter(articleList);
         recyclerView.setAdapter(adapter);
+//        GridLayoutManager layoutManager = new GridLayoutManager(activity, 1);
+//        recyclerView.setLayoutManager(layoutManager);
+//        adapter = new ArticleAdapter(articleList);
+//        recyclerView.setAdapter(adapter);
         queryGoods();
         refreshLayout.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
@@ -146,7 +146,7 @@ public class ArticleFragment extends Fragment {
         BmobQuery<Goods> eq2 = new BmobQuery<Goods>();
         eq2.addWhereEqualTo("Positioning", Positioning);//市定位
         BmobQuery<Goods> eq5 = new BmobQuery<Goods>();
-        eq2.addWhereEqualTo("state", "无人租用");
+        eq2.addWhereEqualTo("state", "可租用");
         List<BmobQuery<Goods>> andQuerys = new ArrayList<BmobQuery<Goods>>();
         andQuerys.add(eq1);
         andQuerys.add(eq2);

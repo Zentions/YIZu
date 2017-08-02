@@ -32,6 +32,9 @@ import com.example.yizu.adapter.page;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.fragment.OneFragment;
 import com.example.yizu.fragment.TwoFragment;
+import com.example.yizu.tool.ActivityCollecter;
+import com.example.yizu.tool.PictureTool;
+import com.example.yizu.tool.ShowDialog;
 
 import java.util.ArrayList;
 
@@ -63,6 +66,7 @@ public class ShowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_show);
+        ActivityCollecter.addActivty(this);
         Intent intent = getIntent();
         checkedGoods = (Goods) intent.getSerializableExtra("searchGoods");
         if(checkedGoods.getPic2()==null) Log.d("debug1","1null");
@@ -113,9 +117,13 @@ public class ShowActivity extends AppCompatActivity {
         buy.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent=new Intent(ShowActivity.this,ConfirmOrderActivity.class);//跳转到购买页面
-                intent.putExtra("GoodsId",checkedGoods.getObjectId());
-                startActivity(intent);
+                if(checkedGoods.getState().equals("可租用")){
+                    Intent intent=new Intent(ShowActivity.this,ConfirmOrderActivity.class);//跳转到购买页面
+                    intent.putExtra("GoodsId",checkedGoods.getObjectId());
+                    startActivityForResult(intent,2);
+                }else{
+                    ShowDialog.showZhuceDialog(ShowActivity.this,"亲，该物品已经被租用了！");
+                }
             }
         });
         back.setOnClickListener(new View.OnClickListener(){
@@ -273,5 +281,23 @@ public class ShowActivity extends AppCompatActivity {
                 initData();
             }
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {//处理结果
+        switch (requestCode) {
+            case 2:
+                if(resultCode==RESULT_OK){
+                    if(data!=null && data.getStringExtra("state").equals("1"))checkedGoods.setState("正在租用");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
     }
 }

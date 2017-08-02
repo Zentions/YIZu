@@ -19,6 +19,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,25 +39,31 @@ import com.baidu.mapapi.map.Text;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.User;
 import com.example.yizu.control.NumberAddSubView;
+import com.example.yizu.service.StateChangeService;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.List;
 
+import cn.bmob.v3.BmobRealTimeData;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import cn.bmob.v3.listener.ValueEventListener;
 
 
 public class CreateMessageActivity extends AppCompatActivity {
     private Button subMessage;
     EditText goodsnameEdit;
     EditText goodsMessageEdit;
+    ImageView back;
     NumberAddSubView ZUJIN;
     NumberAddSubView YAJIN;
     Spinner fenlei;
@@ -82,23 +90,19 @@ public class CreateMessageActivity extends AppCompatActivity {
     private TextView progress[] = new TextView[3];
     int progressPercent=0;
     private Goods myGoods = new Goods();
+    BmobRealTimeData rtd = new BmobRealTimeData();//数据监听
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_message);
         ActivityCollecter.addActivty(this);
-        final Toolbar toolbar = (Toolbar)findViewById(R.id.ConfirmToolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar!=null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
         goodsnameEdit=(EditText)findViewById(R.id.goodsname);
         goodsMessageEdit=(EditText)findViewById(R.id.goodsMessage);
         ZUJIN=(NumberAddSubView)findViewById(R.id.zujin1);
         YAJIN=(NumberAddSubView)findViewById(R.id.yajin1);
         fenlei = (Spinner)findViewById(R.id.spinner);
+        back = (ImageView)findViewById(R.id.release_back);
         String userId = ShareStorage.getShareString(this,"ObjectId");
         User user = new User();
         user.setObjectId(userId);
@@ -106,11 +110,17 @@ public class CreateMessageActivity extends AppCompatActivity {
         myGoods.setUser(user);
         myGoods.setPositioning(position[0]);
         myGoods.setArea(position[1]);
-        myGoods.setState("无人租用");
+        myGoods.setState("可租用");
         myGoods.setStarRating(0.0);
         progress[0] = (TextView)findViewById(R.id.progress1);
         progress[1] = (TextView)findViewById(R.id.progress2);
         progress[2] = (TextView)findViewById(R.id.progress3);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         fenlei.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -148,6 +158,7 @@ public class CreateMessageActivity extends AppCompatActivity {
                 }
             });
         }
+        monitorState();
     }
     private Handler handler = new Handler(){
         @Override
@@ -235,8 +246,11 @@ public class CreateMessageActivity extends AppCompatActivity {
             public void done(String s, BmobException e) {
                 if(e==null){
                     myGoods.setObjectId(s);
-                    Toast.makeText(CreateMessageActivity.this,"提交成功！！",Toast.LENGTH_SHORT).show();
-                    finish();
+                    if (rtd.isConnected()){
+                        rtd.subRowUpdate("Goods", s);
+                        Toast.makeText(CreateMessageActivity.this,"提交成功！！",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }else {
                     Toast.makeText(CreateMessageActivity.this,e.toString(),Toast.LENGTH_SHORT).show();
                 }
@@ -405,13 +419,20 @@ public class CreateMessageActivity extends AppCompatActivity {
             }
         });
     }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    private void  monitorState(){
+        rtd.start(new ValueEventListener() {
+            @Override
+            public void onDataChange(JSONObject data) {
+                Intent intent = new Intent(CreateMessageActivity.this, StateChangeService.class);
+                startService(intent);
+            }
+
+            @Override
+            public void onConnectCompleted(Exception ex) {
+                Log.d("debug1", "连接成功:"+rtd.isConnected());
+
+            }
+        });
     }
 }
 

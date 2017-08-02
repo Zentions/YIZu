@@ -14,7 +14,16 @@ import android.widget.Toast;
 
 import com.example.yizu.db.HistoryRecord;
 import com.example.yizu.tool.ActivityCollecter;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -26,15 +35,18 @@ public class SearchActivity extends AppCompatActivity {
     ImageButton back,clear;
     TextView t[] = new TextView[5];
     EditText editText;
+    Button yuYIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        SpeechUtility.createUtility(this, SpeechConstant.APPID +"=5975f0a0");
         ActivityCollecter.addActivty(this);
-        back = (ImageButton)findViewById(R.id.back);
+        back = (ImageButton)findViewById(R.id.fanhui);
         search = (Button)findViewById(R.id.search);
         clear = (ImageButton)findViewById(R.id.clear);
         editText = (EditText)findViewById(R.id.context);
+        yuYIn=(Button)findViewById(R.id.yuyin);
         t[0] = (TextView)findViewById(R.id.his1);
         t[1] = (TextView)findViewById(R.id.his2);
         t[2]= (TextView)findViewById(R.id.his3);
@@ -70,8 +82,56 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        yuYIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnVoice();
+            }
+        });
         addListener();
         initHis();
+    }
+    //TODO 开始说话：
+    private void btnVoice(){
+        RecognizerDialog dialog = new RecognizerDialog(SearchActivity.this,null);
+        dialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+        dialog.setParameter(SpeechConstant.ACCENT, "mandarin");
+        dialog.setListener(new RecognizerDialogListener() {
+            @Override
+            public void onResult(RecognizerResult recognizerResult, boolean b) {
+                printResult(recognizerResult);
+            }
+            @Override
+            public void onError(SpeechError speechError) {
+            }
+        });
+        dialog.show();
+        Toast.makeText(this, "请开始说话", Toast.LENGTH_SHORT).show();
+    }
+    //回调结果：
+    private void printResult(RecognizerResult results) {
+        String text = parseIatResult(results.getResultString());
+        // 自动填写地址
+        text=text.substring(0,text.length()-1);
+        editText.append(text);
+
+    }
+    public static String parseIatResult(String json) {
+        StringBuffer ret = new StringBuffer();
+        try {
+            JSONTokener tokener = new JSONTokener(json);
+            JSONObject joResult = new JSONObject(tokener);
+            JSONArray words = joResult.getJSONArray("ws");
+            for (int i = 0; i < words.length(); i++) {
+                // 转写结果词，默认使用第一个结果
+                JSONArray items = words.getJSONObject(i).getJSONArray("cw");
+                JSONObject obj = items.getJSONObject(0);
+                ret.append(obj.getString("w"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret.toString();
     }
     void initHis(){
 

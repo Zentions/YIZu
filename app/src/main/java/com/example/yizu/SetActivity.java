@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yizu.tool.ActivityCollecter;
+
 
 public class SetActivity extends Activity {
 
@@ -30,6 +32,7 @@ public class SetActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.set_activity);
+        ActivityCollecter.addActivty(this);
         set_back=(ImageView)findViewById(R.id.set_back);
         clear_number=(TextView)findViewById(R.id.clear_number);
 
@@ -130,7 +133,9 @@ public class SetActivity extends Activity {
         }
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
+    }
 }

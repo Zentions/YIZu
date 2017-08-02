@@ -42,7 +42,7 @@
         android:layout_height="65dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/tubiao"
-        android:src="@drawable/phone"
+        android:src="@drawable/yizulogo"
         />
         <TextView
             android:layout_width="match_parent"
@@ -159,12 +159,12 @@
                 android:background="@color/devide_line" />
 
             <RelativeLayout
-                android:background="@color/whites"
+                android:id="@+id/jifen_text"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/jifen_text"
-                android:onClick="onClick"
-                android:clickable="true">
+                android:background="@color/whites"
+                android:clickable="true"
+                android:onClick="onClick">
 
                 <ImageView
                     android:id="@+id/jifen_huodong"
@@ -176,13 +176,13 @@
                     android:src="@drawable/jifen" />
 
                 <TextView
-                    android:textSize="18dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/jifen_huodong"
-                    android:text="积分规则" />
+                    android:text="积分规则"
+                    android:textSize="18dp" />
 
                 <ImageView
                     android:layout_width="30dp"
@@ -196,12 +196,17 @@
             </RelativeLayout>
 
         </LinearLayout>
-     <LinearLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/two"
-         android:layout_marginTop="265dp">
+          <ImageView
+              android:layout_width="150dp"
+              android:src="@drawable/saoyisao_logo"
+              android:layout_height="150dp"
+              android:layout_below="@+id/two"
+              android:layout_marginTop="20dp"
+              android:layout_centerHorizontal="true" />
          <TextView
+             android:id="@+id/copyRight"
+             android:layout_alignParentBottom="true"
+             android:layout_marginBottom="20dp"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="copyright © 20016-2017 YI租\nAll Rights Reserved"
@@ -209,7 +214,7 @@
              android:gravity="center"
              />
 
-     </LinearLayout>
+
 
     </RelativeLayout>
 

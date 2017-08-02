@@ -5,23 +5,24 @@
     android:layout_marginRight="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/title_message_zhuce"
-        android:text="注册条件:"
-        android:gravity="left|center"
-        android:background="@drawable/linearlayout_line"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
 
-        />
     <TextView
         android:id="@+id/rules"
         android:text="随便几个字"
         android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
+        android:background="@drawable/linearlayout_line"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        />
+    <Button
+        android:id="@+id/button_cancel"
+        android:text="我知道了"
+        android:gravity="center"
         android:background="@drawable/linearlayout_line"
         android:textSize="18sp"
         android:textColor="@color/black"

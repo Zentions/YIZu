@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +35,12 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     TextView deposit;
     TextView othermoney;
     TextView TIME;
+    TextView Connect;
     TextView NOW;
     Button eval,finishBusiness;
     private User rented,renting;
     private Goods goods;
+    private TableRow row;//跳转物品界面
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         rentedPersonName = (TextView)findViewById(R.id.rentedPersonname);
         rentingPersonName=(TextView)findViewById(R.id.rentingPersonname);
         Code=(TextView)findViewById(R.id.code);
+        Connect=(TextView)findViewById(R.id.connect);
         GoodsName=(TextView)findViewById(R.id.goodsName) ;
         Rentmoney=(TextView)findViewById(R.id.RentMoney);
         deposit=(TextView)findViewById(R.id.Deposit );
@@ -60,9 +64,17 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         NOW=(TextView)findViewById(R.id.Now);
         finishBusiness = (Button)findViewById(R.id.jieshujiaoyi);
         eval = (Button)findViewById(R.id.pingjia);
+        row = (TableRow)findViewById(R.id.LookForGoods);
         Intent intent=getIntent();
         record = (Record) intent.getSerializableExtra("record");
         query();
+        Connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent2=new Intent(RecordActivity.this,.class);
+//                startActivity(intent2);
+            }
+        });
         eval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +88,12 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
             @Override
             public void onClick(View v) {
                 //弹出支付对话框
+            }
+        });
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //跳转物品
             }
         });
     }

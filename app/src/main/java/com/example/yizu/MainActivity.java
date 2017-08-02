@@ -8,10 +8,14 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -28,8 +32,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yizu.adapter.RecommendAdapter;
+import com.example.yizu.bean.Goods;
+import com.example.yizu.bean.ShareModel;
 import com.example.yizu.bean.User;
 
 import com.baidu.location.BDLocation;
@@ -40,10 +49,13 @@ import com.example.yizu.control.ChangeAddressPopwindow;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
+import com.example.yizu.tool.ShowDialog;
 import com.example.yizu.tool.ToastShow;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -51,15 +63,33 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.framework.utils.UIHandler;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import cn.sharesdk.framework.PlatformActionListener;
+
+
+
+import android.os.Handler.Callback;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,PlatformActionListener,Callback {
+
+
+    private static  final String text = "这是YI租的下载地址";
+    private static  final String imageurl = "http://139.199.224.112/logo.png";
+    private static  final String title = "江苏华漫";
+    private static  final String url = "http://139.199.224.112/YI.apk";
+    public static final String SHARE_APP_KEY = "21b0f35691b8";
+    private SharePopupWindow share;
+
     private CoordinatorLayout right;
     private NavigationView left;
     private boolean isDrawer=false;
     CircleImageView user_picture;
-    private TextView title;
+    private LinearLayout title1;
     public LocationClient mLocationClient;
     private TextView positionText;
     static  String c_sheng,c_shi,c_qu;
@@ -68,6 +98,14 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     private String Path=null;
     private long exitTime;
+    ///////////////////////////
+    private TwinklingRefreshLayout twinklingRefreshLayout;
+    private TextView skill,electronic,home,study,clothes,transportation,place,service;
+    private List<Goods> recommendList=new ArrayList<>();
+    private RecyclerView recyclerView;
+    private RecommendAdapter recommendAdapter;
+    private Goods goods1=new Goods(),goods2=new Goods(),goods3=new Goods(),goods4=new Goods(),goods5=new Goods(),goods6=new Goods();
+    ///////////////////
     private ToastShow toastShow = new ToastShow(this);
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -77,6 +115,9 @@ public class MainActivity extends AppCompatActivity
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(new MyLocationListener());
         setContentView(R.layout.activity_main);
+
+        ShareSDK.initSDK(this);
+
         ActivityCollecter.addActivty(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,7 +127,107 @@ public class MainActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         right = (CoordinatorLayout) findViewById(R.id.right1);
         left = (NavigationView) findViewById(R.id.nav_view);
-        title = (TextView)findViewById(R.id.MianTitle);
+        title1 = (LinearLayout) findViewById(R.id.MianTitle);
+        ////////////////////////////////
+        skill=(TextView)findViewById(R.id.skill);
+        electronic=(TextView)findViewById(R.id.electronic);
+        home=(TextView)findViewById(R.id.home);
+        study=(TextView)findViewById(R.id.study);
+        clothes=(TextView)findViewById(R.id.clothes);
+        transportation=(TextView)findViewById(R.id.transportation);
+        place=(TextView)findViewById(R.id.place);
+        service=(TextView)findViewById(R.id.service);
+        recyclerView=(RecyclerView)findViewById(R.id.recommendRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        goods1.setClassification("电子产品");
+        goods1.setGoodsName("123");
+        goods1.setStarRating(7.8);
+        goods1.setMoneyPer(5.0);
+        goods2.setClassification("dhhsbq");
+        goods2.setGoodsName("jxsx3");
+        goods2.setStarRating(9.8);
+        goods2.setMoneyPer(7.0);
+        goods3.setClassification("电子产品");
+        goods3.setGoodsName("123");
+        goods3.setStarRating(7.8);
+        goods3.setMoneyPer(5.0);
+        goods4.setClassification("dhhsbq");
+        goods4.setGoodsName("jxsx3");
+        goods4.setStarRating(9.8);
+        goods4.setMoneyPer(7.0);
+        goods5.setClassification("电子产品");
+        goods5.setGoodsName("123");
+        goods5.setStarRating(7.8);
+        goods5.setMoneyPer(5.0);
+        goods6.setClassification("dhhsbq");
+        goods6.setGoodsName("jxsx3");
+        goods6.setStarRating(9.8);
+        goods6.setMoneyPer(7.0);
+        recommendList.add(goods1);
+        recommendList.add(goods2);
+        recommendList.add(goods3);
+        recommendList.add(goods4);
+        recommendList.add(goods5);
+        recommendList.add(goods6);
+
+        twinklingRefreshLayout = (TwinklingRefreshLayout)findViewById(R.id.recommendRefresh);
+        twinklingRefreshLayout.setEnableLoadmore(true);
+        // twinklingRefreshLayout.setOverScrollBottomShow(false);
+        twinklingRefreshLayout.setEnableRefresh(false);
+        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 1);
+        recyclerView.setLayoutManager(layoutManager);
+        recommendAdapter = new RecommendAdapter(recommendList);
+        recyclerView.setAdapter(recommendAdapter);
+        skill.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                ShowDialog.showZhuceDialog(MainActivity.this,"33333");
+                //Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到技能分类的页面
+                //startActivityForResult(intent,1);
+            }
+        });
+        electronic.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到数码产品分类的页面
+                startActivityForResult(intent,1);
+            }
+        });
+        home.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到家居分类的页面
+                startActivityForResult(intent,1);
+            }
+        });
+        study.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到学习用品分类的页面
+                startActivityForResult(intent,1);
+            }
+        });
+        clothes.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到服饰分类的页面
+                startActivityForResult(intent,1);
+            }
+        });
+        transportation.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到交通工具分类的页面
+                startActivityForResult(intent,1);
+            }
+        });
+        place.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到场地分类的页面
+                startActivityForResult(intent,1);
+            }
+        });
+        service.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到服务分类的页面
+                startActivityForResult(intent,1);
+            }
+        });
+/////////////////////////////////////
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -187,7 +328,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerStateChanged(int newState) {}
         });
-        title.setOnClickListener(new View.OnClickListener() {
+        title1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,SearchActivity.class);
@@ -237,8 +378,19 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
         else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+            share = new SharePopupWindow(MainActivity.this);
+            share.setPlatformActionListener(MainActivity.this);
+            ShareModel model = new ShareModel();
+            model.setImageUrl(imageurl);
+            model.setText(text);
+            model.setTitle(title);
+            model.setUrl(url);
+            share.initShareParams(model);
+            share.showShareWindow();
+            // 显示窗口 (设置layout在PopupWindow中显示的位置)
+            share.showAtLocation(
+                    MainActivity.this.findViewById(R.id.drawer_layout),
+                    Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
 
         }
         return true;
@@ -361,6 +513,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
+        ShareSDK.stopSDK(this);
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -405,5 +558,51 @@ public class MainActivity extends AppCompatActivity
             array.recycle();
             window.setStatusBarColor(color);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (share != null) {
+            share.dismiss();
+        }
+    }
+
+
+
+    @Override
+    public void onCancel(Platform arg0, int arg1) {
+        Message msg = new Message();
+        msg.what = 0;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    @Override
+    public void onComplete(Platform plat, int action,
+                           HashMap<String, Object> res) {
+        Message msg = new Message();
+        msg.arg1 = 1;
+        msg.arg2 = action;
+        msg.obj = plat;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    @Override
+    public void onError(Platform arg0, int arg1, Throwable arg2) {
+        Message msg = new Message();
+        msg.what = 1;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        int what = msg.what;
+        if (what == 1) {
+            Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
+        }
+        if (share != null) {
+            share.dismiss();
+        }
+        return false;
     }
 }

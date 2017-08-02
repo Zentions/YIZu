@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
+import com.wingsofts.threedlayout.ThreeDLayout;
 
 import java.io.File;
 
@@ -54,8 +56,8 @@ public class UserMessageActivity extends AppCompatActivity {
     TextView GRADE;
     TextView GENDER;
     ImageView USERIMAGE;
-    ImageButton GoName;
-    ImageButton GoGender;
+    LinearLayout GoName;
+    LinearLayout GoGender;
     Button button;
     TextView PHONENUM;
 
@@ -74,13 +76,22 @@ public class UserMessageActivity extends AppCompatActivity {
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+      //  final ThreeDLayout layout=(ThreeDLayout)findViewById(R.id.td_header);
+       // layout.setTouchable(true);
+//        layout.setTouchMode(ThreeDLayout.MODE_BOTH_X_Y);
+//        layout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                layout.startHorizontalAnimate(1000);
+//            }
+//        });
         NAME=(TextView)findViewById(R.id.name);
         GRADE=(TextView)findViewById(R.id.grade);
         GENDER=(TextView)findViewById(R.id.gender);
         USERIMAGE=(ImageView)findViewById(R.id.userimage);
-        GoGender = (ImageButton)findViewById(R.id.goGender);
+        GoGender = (LinearLayout) findViewById(R.id.goGender);
         PHONENUM = (TextView)findViewById(R.id.phoneNum);
-        GoName = (ImageButton)findViewById(R.id.goName);
+        GoName = (LinearLayout) findViewById(R.id.goName);
         button= (Button)findViewById(R.id.exit_user_message);
 
         GoName.setOnClickListener(new View.OnClickListener() {//启动修改名字
@@ -226,7 +237,6 @@ public class UserMessageActivity extends AppCompatActivity {
     public void showDialog() {//弹出对话框
         final View view = getLayoutInflater().inflate(R.layout.photo_choose_dialog, null);
         final Dialog dialog = new Dialog(this, R.style.transparentFrameWindowStyle);
-        View inflate = LayoutInflater.from(this).inflate(R.layout.photo_choose_dialog, null);
         //初始化控件
         Button picture = (Button) view.findViewById(R.id.Picture_Map);
         Button camera = (Button) view.findViewById(R.id.Picture_Camera);

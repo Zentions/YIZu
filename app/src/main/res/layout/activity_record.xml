@@ -8,13 +8,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:stretchColumns="0,3">
     <TextView
         android:text="    "
         android:layout_width="wrap_content"
@@ -32,7 +25,8 @@
                 android:gravity="center"
                 android:textSize="24sp"
                 />
-            <TableRow android:layout_marginTop="20px"
+            <TableRow
+                android:layout_marginTop="20px"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="15dp"
                 android:weightSum="2">
@@ -53,32 +47,38 @@
                     android:gravity="right"
                     />
 
-            </TableRow>
-            <TableRow android:layout_marginTop="20px"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="15dp"
-                android:weightSum="2">
 
-                <TextView
-                    android:text="租用用户："
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:layout_weight="1"
-                    />
-                <TextView
-                    android:id="@+id/rentingPersonname"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="18sp"
-                    android:gravity="right"
-                    />
             </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20px"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="租用用户："
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/rentingPersonname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textSize="18sp" />
+
+    </TableRow>
 
     <TableRow android:layout_marginTop="20px"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="15dp"
+        android:id="@+id/LookForGoods"
         android:weightSum="2">
 
         <TextView
@@ -93,9 +93,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/Blue"
             android:textSize="18sp"
             android:gravity="right"
             />
+
 
     </TableRow>
 
@@ -240,8 +242,35 @@
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 />
-       </TableLayout>
-    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:gravity="bottom"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:text="对此订单有疑问?|"
+            android:textColor="@color/Blue"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/connect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="联系客服"
+            android:textColor="@color/Blue"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 </TableLayout>
 
 

@@ -76,7 +76,13 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 />
-
+			<com.example.yizu.wheelview.WheelView
+				android:id="@+id/wv_address_city"
+				android:layout_width="0dip"
+				android:layout_weight="1"
+				android:layout_height="match_parent"
+				android:layout_gravity="center_vertical"
+				/>
 			<com.example.yizu.wheelview.WheelView
                 android:id="@+id/wv_address_area"
                 android:layout_width="0dip"
@@ -85,13 +91,7 @@
                 android:layout_gravity="center_vertical"
                 />
 
-			<com.example.yizu.wheelview.WheelView
-                android:id="@+id/wv_address_city"
-                android:layout_width="0dip"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                />
+
 		</LinearLayout>
 
     </LinearLayout>
