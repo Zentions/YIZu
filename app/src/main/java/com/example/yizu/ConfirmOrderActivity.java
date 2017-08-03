@@ -280,6 +280,7 @@ public class ConfirmOrderActivity extends AppCompatActivity {
         record.setRenting(rentingUser);
         record.setRented(rentedUser);
         record.setMoney(needMoney);
+        record.setEval(false);
         record.setDeposit(currentgoods.getDeposit());
         record.setState("交易中");
         record.save(new SaveListener<String>() {

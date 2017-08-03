@@ -79,25 +79,6 @@ public class ShowDialog {
             }
         });
     }
-    public static void showLoseDialog(final Activity activity, String title, String message) {
-        final AlertDialog.Builder customizeDialog =
-                new AlertDialog.Builder(activity);
-        final View dialogView = LayoutInflater.from(activity)
-                .inflate(R.layout.lose_dialog,null);
-        TextView textView = (TextView)dialogView.findViewById(R.id.title_message_lose);
-        textView.setText(title);
-        Button button = (Button)dialogView.findViewById(R.id.confirm_lose);
-        button.setText(message);
-        customizeDialog.setPositiveButton("确定",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 获取EditView中的输入内容
-                        EditText edit_text =
-                                (EditText) dialogView.findViewById(R.id.edit_message_lose);
-                    }
-                });
-        customizeDialog.show();
-    }
+
 }
 

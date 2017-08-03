@@ -167,7 +167,10 @@
         <service
             android:name=".service.StateChangeService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".settlementActivity">
+        </activity>
     </application>
 
 </manifest>

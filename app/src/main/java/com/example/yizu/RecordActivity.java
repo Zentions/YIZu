@@ -1,14 +1,20 @@
 package com.example.yizu;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +24,11 @@ import com.example.yizu.bean.Record;
 import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.ShareStorage;
+import com.example.yizu.tool.ShowDialog;
 
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -65,7 +74,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         finishBusiness = (Button)findViewById(R.id.jieshujiaoyi);
         eval = (Button)findViewById(R.id.pingjia);
         row = (TableRow)findViewById(R.id.LookForGoods);
-        Intent intent=getIntent();
+        final Intent intent=getIntent();
         record = (Record) intent.getSerializableExtra("record");
         query();
         Connect.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +96,48 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         finishBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //弹出支付对话框
+                   if(record.getState().equals("交易成功")){
+                       ShowDialog.showZhuceDialog(RecordActivity.this,"亲，该交易已结束！");
+                       return;
+                   }
+                    final AlertDialog.Builder customizeDialog =
+                            new AlertDialog.Builder(RecordActivity.this);
+                    final View dialogView = LayoutInflater.from(RecordActivity.this)
+                            .inflate(R.layout.lose_dialog,null);
+                    final EditText text = (EditText) dialogView.findViewById(R.id.edit_message_lose);
+                    Button button = (Button)dialogView.findViewById(R.id.confirm_lose);
+                    final TextView tip = (TextView)dialogView.findViewById(R.id.tip);
+                    new DialogInterface.OnClickListener() {
+                    @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            arg0.dismiss();
+                        }
+                    };
+                    customizeDialog.setView(dialogView);
+                    final Dialog dialog = customizeDialog.show();
+                    button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String temp = text.getText().toString().trim();
+                        if(!isNumeric(temp)){
+                            tip.setText("请输入合适的损耗率！！！");
+                            return;
+                        }
+                        Double loss = record.getDeposit()*Double.parseDouble(temp);
+                        if(loss <0 ||loss > 20){
+                            tip.setText("损耗率过大或不合法！！！");
+                            return;
+                        }
+                        loss = loss/100.0;
+                        record.setLossOfExpense(loss);
+                        Intent SettleIntent = new Intent(RecordActivity.this,settlementActivity.class);
+                        SettleIntent.putExtra("goSettle",record);
+                        SettleIntent.putExtra("GoodsId",record.getMake().getObjectId());
+                        SettleIntent.putExtra("rate",temp);
+                        startActivityForResult(SettleIntent,1);
+                        dialog.dismiss();
+                    }
+                });
             }
         });
         row.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +149,6 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     }
     void show(){
         String currentUser = ShareStorage.getShareString(RecordActivity.this,"ObjectId");
-        Log.d("debug1",currentUser);
-        Log.d("debug1",record.getState());
         String state = record.getState();
         if(currentUser.equals(rented.getObjectId()) && state.equals("交易中"))
             finishBusiness.setVisibility(View.VISIBLE);
@@ -156,6 +204,30 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     @Override
     protected void onRestart() {
         super.onRestart();
-        query();
+        show();
     }
+    public boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if (resultCode==RESULT_OK){
+                    String state = data.getStringExtra("return");
+                    if(state.equals("1")){
+                        record.setState("交易成功");
+                    }
+                }
+                break;
+            default:break;
+        }
+    }
+
 }
