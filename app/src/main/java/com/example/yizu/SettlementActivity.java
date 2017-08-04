@@ -13,12 +13,13 @@ import android.widget.Toast;
 
 import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.Record;
+import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class settlementActivity extends AppCompatActivity implements View.OnClickListener{
+public class SettlementActivity extends AppCompatActivity implements View.OnClickListener{
     private Record record;
     private Goods goods;
     private String rate;
@@ -69,6 +70,7 @@ public class settlementActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        updateUser();
         updateGoods();
     }
     void updateRecord(){
@@ -78,7 +80,7 @@ public class settlementActivity extends AppCompatActivity implements View.OnClic
             public void done(BmobException e) {
                 if(e==null){
                     ////支付成功的动画
-                    Toast.makeText(settlementActivity.this,"交易成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettlementActivity.this,"交易成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent();
                     intent.putExtra("return","1");
                     setResult(RESULT_OK,intent);
@@ -89,7 +91,7 @@ public class settlementActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
-    void updateGoods(){
+    private void updateGoods(){
         goods.setState("租用结束");
         goods.update(goods.getObjectId(), new UpdateListener() {
             @Override
@@ -99,6 +101,17 @@ public class settlementActivity extends AppCompatActivity implements View.OnClic
                 }else {
                     //支付失败的动画
                 }
+            }
+        });
+
+    }
+    private void updateUser(){
+        User user = record.getRented();
+        user.setGrade(user.getGrade()+3);
+        user.update(user.getObjectId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+
             }
         });
     }

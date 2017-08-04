@@ -61,7 +61,10 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                final Goods goods = mGoodsList.get(position);
                 Intent intent=new Intent(mContext,GoodsItemActivity.class);
+                intent.putExtra("myGoods",goods);
                 mContext.startActivity(intent);
             }
         });

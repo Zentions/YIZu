@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
@@ -51,6 +52,7 @@ import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
 import com.example.yizu.tool.ShowDialog;
 import com.example.yizu.tool.ToastShow;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 
@@ -62,6 +64,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
@@ -105,7 +108,8 @@ public class MainActivity extends AppCompatActivity
     private List<Goods> recommendList=new ArrayList<>();
     private RecyclerView recyclerView;
     private RecommendAdapter recommendAdapter;
-
+    private int limit = 10;
+    private int skip = 0;
     private Goods goods1=new Goods(),goods2=new Goods(),goods3=new Goods(),goods4=new Goods(),goods5=new Goods(),goods6=new Goods();
     ///////////////////
     private ToastShow toastShow = new ToastShow(this);
@@ -141,37 +145,6 @@ public class MainActivity extends AppCompatActivity
         tools[7]=(TextView)findViewById(R.id.service);
         recyclerView=(RecyclerView)findViewById(R.id.recommendRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        goods1.setClassification("电子产品");
-        goods1.setGoodsName("123");
-        goods1.setStarRating(7.8);
-        goods1.setMoneyPer(5.0);
-        goods2.setClassification("dhhsbq");
-        goods2.setGoodsName("jxsx3");
-        goods2.setStarRating(9.8);
-        goods2.setMoneyPer(7.0);
-        goods3.setClassification("电子产品");
-        goods3.setGoodsName("123");
-        goods3.setStarRating(7.8);
-        goods3.setMoneyPer(5.0);
-        goods4.setClassification("dhhsbq");
-        goods4.setGoodsName("jxsx3");
-        goods4.setStarRating(9.8);
-        goods4.setMoneyPer(7.0);
-        goods5.setClassification("电子产品");
-        goods5.setGoodsName("123");
-        goods5.setStarRating(7.8);
-        goods5.setMoneyPer(5.0);
-        goods6.setClassification("dhhsbq");
-        goods6.setGoodsName("jxsx3");
-        goods6.setStarRating(9.8);
-        goods6.setMoneyPer(7.0);
-        recommendList.add(goods1);
-        recommendList.add(goods2);
-        recommendList.add(goods3);
-        recommendList.add(goods4);
-        recommendList.add(goods5);
-        recommendList.add(goods6);
-
         twinklingRefreshLayout = (TwinklingRefreshLayout)findViewById(R.id.recommendRefresh);
         twinklingRefreshLayout.setEnableLoadmore(true);
         twinklingRefreshLayout.setOverScrollBottomShow(false);
@@ -192,7 +165,24 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
+        twinklingRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter(){
+            @Override
+            public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
+                refreshLayout.finishRefreshing();
+            }
 
+            @Override
+            public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        queryGoods();
+                        refreshLayout.finishLoadmore();
+                    }
+                },1000);
+            }
+        });
+        queryGoods();
 /////////////////////////////////////
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -570,5 +560,23 @@ public class MainActivity extends AppCompatActivity
             share.dismiss();
         }
         return false;
+    }
+    public  void queryGoods() {
+        BmobQuery<Goods> query = new BmobQuery<Goods>();
+        query.order("-StarRating");
+        query.setSkip(skip).setLimit(limit);
+        skip+=6;
+        query.findObjects(new FindListener<Goods>()
+        {
+            @Override
+            public void done(List<Goods> goodsList, BmobException e) {
+                if (goodsList == null) {
+                    Toast.makeText(MainActivity.this, "无此物品的相关信息！", Toast.LENGTH_SHORT).show();
+                } else {
+                    recommendList.addAll(goodsList);
+                    recommendAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 }

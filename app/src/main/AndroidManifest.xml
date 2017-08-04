@@ -102,9 +102,10 @@
         </activity>
         <activity android:name=".RActivity">
         </activity>
-        <activity android:name=".settlementActivity">
+        <activity android:name=".SettlementActivity">
         </activity>
-        <activity android:name=".GoodsItemActivity">
+        <activity android:name=".GoodsItemActivity"
+            android:theme="@style/goodsStyle">
         </activity>
         <activity
             android:name="cn.sharesdk.framework.ShareSDKUIShell"

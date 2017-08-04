@@ -4,24 +4,44 @@
     android:id="@+id/activity_goods_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:fitsSystemWindows="true"
     tools:context="com.example.yizu.GoodsItemActivity">
     <ImageView
-        android:id="@+id/itemImage1"
+        android:fitsSystemWindows="true"
+        android:id="@+id/itemPic"
         android:layout_width="400dp"
         android:layout_height="250dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/zuijin"/>
+    <ImageView
+        android:id="@+id/goodsBack"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/back1"/>
     <TextView
-        android:layout_marginLeft="20dp"
+    android:layout_marginLeft="20dp"
+    android:textColor="#000000"
+    android:textSize="16dp"
+    android:layout_below="@+id/itemPic"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="5dp"
+    android:id="@+id/itemName1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="物品名称："/>
+    <TextView
         android:textColor="#000000"
         android:textSize="16dp"
-        android:layout_below="@+id/itemImage1"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/itemPic"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:id="@+id/itemName1"
+        android:id="@+id/itemName2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="物品名称："/>
+        android:layout_height="wrap_content"/>
     <View
         android:layout_below="@+id/itemName1"
         android:background="#e0e0e0"
@@ -38,6 +58,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="物品分类："/>
+    <TextView
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/itemName1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/itemClassification2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_below= "@+id/itemClassification1"
         android:background="#e0e0e0"
@@ -54,6 +85,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="物品状态："/>
+    <TextView
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/itemClassification1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/itemState2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_below= "@+id/itemState1"
         android:background="#e0e0e0"
@@ -70,6 +112,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/itemState1"
         android:text="详细介绍："/>
+    <TextView
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/itemState1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/itemdetail2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_below= "@+id/detail"
         android:background="#e0e0e0"
@@ -86,6 +139,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/detail"
         android:text="总租用金额："/>
+    <TextView
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/detail"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/itemtotalRentMoney2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_below= "@+id/totalRentMoney"
         android:background="#e0e0e0"
@@ -102,6 +166,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/totalRentMoney"
         android:text="总租用次数："/>
+    <TextView
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/totalRentMoney"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/itemtotalRentTimes2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_below= "@+id/totalRentTimes"
         android:background="#e0e0e0"

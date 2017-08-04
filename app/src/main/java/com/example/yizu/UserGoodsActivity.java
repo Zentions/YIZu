@@ -88,9 +88,16 @@ public class UserGoodsActivity extends AppCompatActivity {
 
     void initRV() {
         BmobQuery<Goods> query = new BmobQuery<Goods>();
+        BmobQuery<Goods> q1 = new BmobQuery<Goods>();
         User me = new User();
         me.setObjectId(ShareStorage.getShareString(this,"ObjectId"));
-        query.addWhereEqualTo("user",me);
+        q1.addWhereEqualTo("user",me);
+        BmobQuery<Goods> q2 = new BmobQuery<Goods>();
+        q2.addWhereNotEqualTo("state","已下架");
+        List<BmobQuery<Goods>> queries = new ArrayList<BmobQuery<Goods>>();
+        queries.add(q1);
+        queries.add(q2);
+        query.and(queries);
         query.findObjects(new FindListener<Goods>() {
                 @Override
                 public void done(List<Goods> object, BmobException e) {

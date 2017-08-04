@@ -80,7 +80,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         Connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ShowDialog.showZhuceDialog(RecordActivity.this,"欢迎拨打客服17806236254咨询");
             }
         });
         eval.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +129,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
                         }
                         loss = loss/100.0;
                         record.setLossOfExpense(loss);
-                        Intent SettleIntent = new Intent(RecordActivity.this,settlementActivity.class);
+                        Intent SettleIntent = new Intent(RecordActivity.this,SettlementActivity.class);
                         SettleIntent.putExtra("goSettle",record);
                         SettleIntent.putExtra("GoodsId",record.getMake().getObjectId());
                         SettleIntent.putExtra("rate",temp);
@@ -185,7 +185,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
     }
     void query(){
         BmobQuery<Record> query = new BmobQuery<Record>();
-        query.include("rented[objectId|name],renting[objectId|name],make");// 希望在查询帖子信息的同时也把发布人的信息查询出来
+        query.include("rented[objectId|name|grade],renting[objectId|name|grade],make");// 希望在查询帖子信息的同时也把发布人的信息查询出来
         query.getObject(record.getObjectId(), new QueryListener<Record>() {
             @Override
             public void done(Record object, BmobException e) {
