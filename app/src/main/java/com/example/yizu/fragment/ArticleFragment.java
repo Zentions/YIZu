@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -53,14 +54,14 @@ public class ArticleFragment extends Fragment {
     private List<Goods> articleList = new ArrayList<>();
     private ArticleAdapter adapter;
     private RecyclerView recyclerView;
-    private String goodsName;
+    private String Name;
     private ArticlesActivity activity;
     private String Positioning;//市
     private String area;//区
     private Double StarRating;
     private int skip;
     private int limit=6;
-
+    private String flag;
     public ArticleFragment() {
         // Required empty public constructor
     }
@@ -104,14 +105,13 @@ public class ArticleFragment extends Fragment {
         Positioning = position[0];
         area = position[1];
         Intent intent = activity.getIntent();
-        goodsName = intent.getStringExtra("name");
+        Name = intent.getStringExtra("SNTSearch");
+        flag = intent.getStringExtra("SearchFlag");
+        Log.d("debug1",Name);
+        Log.d("debug1",flag);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         adapter = new ArticleAdapter(articleList);
         recyclerView.setAdapter(adapter);
-//        GridLayoutManager layoutManager = new GridLayoutManager(activity, 1);
-//        recyclerView.setLayoutManager(layoutManager);
-//        adapter = new ArticleAdapter(articleList);
-//        recyclerView.setAdapter(adapter);
         queryGoods();
         refreshLayout.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
@@ -141,7 +141,11 @@ public class ArticleFragment extends Fragment {
     public  void queryGoods() {
         BmobQuery<Goods> query = new BmobQuery<Goods>();
         BmobQuery<Goods> eq1 = new BmobQuery<Goods>();
-        eq1.addWhereEqualTo("goodsName", goodsName);//物品名
+        if(flag.equals("1")){
+            eq1.addWhereEqualTo("classification", Name);//分类
+        }else{
+            eq1.addWhereEqualTo("goodsName", Name);//物品名
+        }
         //--and条件2
         BmobQuery<Goods> eq2 = new BmobQuery<Goods>();
         eq2.addWhereEqualTo("Positioning", Positioning);//市定位

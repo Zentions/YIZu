@@ -102,6 +102,10 @@
         </activity>
         <activity android:name=".RActivity">
         </activity>
+        <activity android:name=".settlementActivity">
+        </activity>
+        <activity android:name=".GoodsItemActivity">
+        </activity>
         <activity
             android:name="cn.sharesdk.framework.ShareSDKUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -169,8 +173,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".settlementActivity">
-        </activity>
+
     </application>
 
 </manifest>

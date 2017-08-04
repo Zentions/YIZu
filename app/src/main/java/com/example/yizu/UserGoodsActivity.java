@@ -1,6 +1,7 @@
 package com.example.yizu;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.yizu.adapter.UserGoodsAdapter;
@@ -33,16 +36,10 @@ import cn.bmob.v3.listener.FindListener;
 public class UserGoodsActivity extends AppCompatActivity {
     private List<Goods> mList = new ArrayList<>();
     private TwinklingRefreshLayout swipeRefresh;
-    LinearLayout linearLayout;
     RecyclerView recyclerView;
     UserGoodsAdapter adapter;
     View view;
     UserGoodsActivity userGoodsActivity;
-
-    public UserGoodsActivity() {
-        // Required empty public constructor
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +56,11 @@ public class UserGoodsActivity extends AppCompatActivity {
         swipeRefresh.setHeaderView(new RefreshHeader(this));
         swipeRefresh.setBottomView(new RefreshLoad(this));
         recyclerView = (RecyclerView) findViewById(R.id.usergoodsRecyclerView);
-        linearLayout = (LinearLayout)findViewById(R.id.goodsitem);
         GridLayoutManager layoutManager = new GridLayoutManager(userGoodsActivity, 1);
         recyclerView.setLayoutManager(layoutManager);
         adapter=new UserGoodsAdapter(mList);
         recyclerView.setAdapter(adapter);
+
         initRV();
         swipeRefresh.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
@@ -84,7 +81,7 @@ public class UserGoodsActivity extends AppCompatActivity {
                     public void run() {
                         refreshLayout.finishLoadmore();
                     }
-                },2000);
+                },1000);
             }
         });
     }
@@ -104,10 +101,10 @@ public class UserGoodsActivity extends AppCompatActivity {
                 }
             });
 
-        }
-        public void refreshGoods(){
-            initRV();
-        }
+    }
+    public void refreshGoods(){
+        initRV();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -116,12 +113,6 @@ public class UserGoodsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollecter.removeActivity(this);
     }
 }
 

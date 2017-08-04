@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.yizu.LoginActivity;
 import com.example.yizu.R;
 import com.example.yizu.ShowActivity;
 import com.example.yizu.bean.Goods;
@@ -58,7 +59,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ShowActivity.class);//跳转到详情页面
+                Intent intent = new Intent(mContext, LoginActivity.class);//跳转到详情页面
                 mContext.startActivity(intent);
             }
         });
@@ -73,7 +74,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         holder.recommendMoney.setText(String.valueOf(recommend.getMoneyPer()));
         holder.recommendMoney.append("元/天");
         holder.recommend_score.append(String.valueOf(recommend.getStarRating()));
-         Glide.with(mContext).load(recommend.getPic1()).into(holder.recommendImage);
+      //   Glide.with(mContext).load(recommend.getPic1()).into(holder.recommendImage);
     }
     @Override
     public int getItemCount(){

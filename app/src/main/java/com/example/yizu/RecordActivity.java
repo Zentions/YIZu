@@ -80,8 +80,7 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
         Connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent2=new Intent(RecordActivity.this,.class);
-//                startActivity(intent2);
+
             }
         });
         eval.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +143,10 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
             @Override
             public void onClick(View v) {
                 //跳转物品
+                if(goods==null)return;
+                Intent intent = new Intent(RecordActivity.this, ShowActivity.class);
+                intent.putExtra("searchGoods",goods);
+                startActivity(intent);
             }
         });
     }

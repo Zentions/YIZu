@@ -100,10 +100,12 @@ public class MainActivity extends AppCompatActivity
     private long exitTime;
     ///////////////////////////
     private TwinklingRefreshLayout twinklingRefreshLayout;
-    private TextView skill,electronic,home,study,clothes,transportation,place,service;
+    private TextView tools[] = new TextView[8];
+    private String classification[] = {"工具类","数码类","家居类","学习类","服饰类","交通类","场地类","服务类"};
     private List<Goods> recommendList=new ArrayList<>();
     private RecyclerView recyclerView;
     private RecommendAdapter recommendAdapter;
+
     private Goods goods1=new Goods(),goods2=new Goods(),goods3=new Goods(),goods4=new Goods(),goods5=new Goods(),goods6=new Goods();
     ///////////////////
     private ToastShow toastShow = new ToastShow(this);
@@ -129,14 +131,14 @@ public class MainActivity extends AppCompatActivity
         left = (NavigationView) findViewById(R.id.nav_view);
         title1 = (LinearLayout) findViewById(R.id.MianTitle);
         ////////////////////////////////
-        skill=(TextView)findViewById(R.id.skill);
-        electronic=(TextView)findViewById(R.id.electronic);
-        home=(TextView)findViewById(R.id.home);
-        study=(TextView)findViewById(R.id.study);
-        clothes=(TextView)findViewById(R.id.clothes);
-        transportation=(TextView)findViewById(R.id.transportation);
-        place=(TextView)findViewById(R.id.place);
-        service=(TextView)findViewById(R.id.service);
+        tools[0]=(TextView)findViewById(R.id.skill);
+        tools[1]=(TextView)findViewById(R.id.electronic);
+        tools[2]=(TextView)findViewById(R.id.home);
+        tools[3]=(TextView)findViewById(R.id.study);
+        tools[4]=(TextView)findViewById(R.id.clothes);
+        tools[5]=(TextView)findViewById(R.id.transportation);
+        tools[6]=(TextView)findViewById(R.id.place);
+        tools[7]=(TextView)findViewById(R.id.service);
         recyclerView=(RecyclerView)findViewById(R.id.recommendRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         goods1.setClassification("电子产品");
@@ -172,61 +174,25 @@ public class MainActivity extends AppCompatActivity
 
         twinklingRefreshLayout = (TwinklingRefreshLayout)findViewById(R.id.recommendRefresh);
         twinklingRefreshLayout.setEnableLoadmore(true);
-        // twinklingRefreshLayout.setOverScrollBottomShow(false);
+        twinklingRefreshLayout.setOverScrollBottomShow(false);
         twinklingRefreshLayout.setEnableRefresh(false);
         GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 1);
         recyclerView.setLayoutManager(layoutManager);
         recommendAdapter = new RecommendAdapter(recommendList);
         recyclerView.setAdapter(recommendAdapter);
-        skill.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                ShowDialog.showZhuceDialog(MainActivity.this,"33333");
-                //Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到技能分类的页面
-                //startActivityForResult(intent,1);
-            }
-        });
-        electronic.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到数码产品分类的页面
-                startActivityForResult(intent,1);
-            }
-        });
-        home.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到家居分类的页面
-                startActivityForResult(intent,1);
-            }
-        });
-        study.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到学习用品分类的页面
-                startActivityForResult(intent,1);
-            }
-        });
-        clothes.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到服饰分类的页面
-                startActivityForResult(intent,1);
-            }
-        });
-        transportation.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到交通工具分类的页面
-                startActivityForResult(intent,1);
-            }
-        });
-        place.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到场地分类的页面
-                startActivityForResult(intent,1);
-            }
-        });
-        service.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent=new Intent(MainActivity.this,PhoneVerificationActivity.class);//跳转到服务分类的页面
-                startActivityForResult(intent,1);
-            }
-        });
+        for(int i = 0;i<8;i++){
+            final int finalI = i;
+            tools[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(MainActivity.this,ArticlesActivity.class);//跳转到技能分类的页面
+                    intent.putExtra("SNTSearch",classification[finalI]);
+                    intent.putExtra("SearchFlag","1");
+                    startActivity(intent);
+                }
+            });
+        }
+
 /////////////////////////////////////
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

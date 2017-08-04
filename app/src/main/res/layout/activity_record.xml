@@ -75,7 +75,8 @@
 
     </TableRow>
 
-    <TableRow android:layout_marginTop="20px"
+    <TableRow
+        android:layout_marginTop="20px"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="15dp"
         android:id="@+id/LookForGoods"
