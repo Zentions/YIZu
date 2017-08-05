@@ -118,12 +118,17 @@ public class RecordActivity extends AppCompatActivity implements Serializable{
                     @Override
                     public void onClick(View v) {
                         String temp = text.getText().toString().trim();
+                        if(temp==null){
+                            tip.setText("损耗率不能为空！！！");
+                            return;
+                        }
                         if(!isNumeric(temp)){
                             tip.setText("请输入合适的损耗率！！！");
                             return;
                         }
-                        Double loss = record.getDeposit()*Double.parseDouble(temp);
-                        if(loss <0 ||loss > 20){
+                        double lossRate = Double.parseDouble(temp);
+                        Double loss = record.getDeposit()*lossRate;
+                        if(lossRate <0 ||lossRate > 20){
                             tip.setText("损耗率过大或不合法！！！");
                             return;
                         }

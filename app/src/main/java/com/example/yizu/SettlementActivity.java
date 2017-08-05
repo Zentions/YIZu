@@ -1,5 +1,6 @@
 package com.example.yizu;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.Record;
 import com.example.yizu.bean.User;
+import com.example.yizu.control.ResultAnimation;
 import com.example.yizu.tool.ActivityCollecter;
 
 import cn.bmob.v3.exception.BmobException;
@@ -25,6 +27,8 @@ public class SettlementActivity extends AppCompatActivity implements View.OnClic
     private String rate;
     TextView rateView,rateMoneyView,totalView;
     Button sub_tn;
+    private ResultAnimation resultAnimation;
+    private ValueAnimator valueAnimator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +74,6 @@ public class SettlementActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        updateUser();
         updateGoods();
     }
     void updateRecord(){
@@ -78,20 +81,28 @@ public class SettlementActivity extends AppCompatActivity implements View.OnClic
         record.update(record.getObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
+                resultAnimation =new ResultAnimation(SettlementActivity.this);
                 if(e==null){
-                    ////支付成功的动画
-                    Toast.makeText(SettlementActivity.this,"交易成功",Toast.LENGTH_SHORT).show();
+                    resultAnimation.setmResultType(1);
+                    valueAnimator=new ValueAnimator();
+                    setContentView(resultAnimation);
+                    resultAnimation.onAnimationUpdate(valueAnimator);
                     Intent intent = new Intent();
                     intent.putExtra("return","1");
                     setResult(RESULT_OK,intent);
-                    finish();
+               //     finish();
                 }else {
-                    //支付失败的动画
+
+                    resultAnimation.setmResultType(2);
+                    valueAnimator=new ValueAnimator();
+                    setContentView(resultAnimation);
+                    resultAnimation.onAnimationUpdate(valueAnimator);
+
                 }
             }
         });
     }
-    private void updateGoods(){
+    void updateGoods(){
         goods.setState("租用结束");
         goods.update(goods.getObjectId(), new UpdateListener() {
             @Override
@@ -99,19 +110,12 @@ public class SettlementActivity extends AppCompatActivity implements View.OnClic
                 if(e==null){
                     updateRecord();
                 }else {
-                    //支付失败的动画
+                    resultAnimation.setmResultType(2);
+                    valueAnimator=new ValueAnimator();
+                    setContentView(resultAnimation);
+                    resultAnimation.onAnimationUpdate(valueAnimator);
+
                 }
-            }
-        });
-
-    }
-    private void updateUser(){
-        User user = record.getRented();
-        user.setGrade(user.getGrade()+3);
-        user.update(user.getObjectId(), new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-
             }
         });
     }

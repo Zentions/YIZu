@@ -4,10 +4,8 @@
     android:id="@+id/activity_goods_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.example.yizu.GoodsItemActivity">
     <ImageView
-        android:fitsSystemWindows="true"
         android:id="@+id/itemPic"
         android:layout_width="400dp"
         android:layout_height="250dp"
@@ -15,7 +13,7 @@
         android:src="@drawable/zuijin"/>
     <ImageView
         android:id="@+id/goodsBack"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="10dp"
         android:layout_width="30dp"
         android:layout_height="30dp"

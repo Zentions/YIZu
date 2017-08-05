@@ -20,6 +20,7 @@ import com.example.yizu.tool.PictureTool;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.zackratos.ultimatebar.UltimateBar;
 
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class GoodsItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_item);
+        UltimateBar bar = new UltimateBar(this);
+        bar.setImmersionBar();
         itemName1=(TextView)findViewById(R.id.itemName2);
         itemClassification1=(TextView)findViewById(R.id.itemClassification2);
         itemState1=(TextView)findViewById(R.id.itemState2);

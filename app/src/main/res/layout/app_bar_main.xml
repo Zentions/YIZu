@@ -41,14 +41,15 @@
                             android:layout_marginLeft="0dp"
                             />
 
-                        <TextView
+                        <com.xiaosu.VerticalRollingTextView
+                            android:id="@+id/scrollText"
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:textColor="#ffffff"
                             android:layout_marginLeft="7dp"
                             android:textSize="15sp"
-                            android:text="xxxxxxxxxx"/>
+                            android:duration="2000"/>
                     </LinearLayout>
                     <View android:layout_height="2px"
                         android:background="#ffffff"

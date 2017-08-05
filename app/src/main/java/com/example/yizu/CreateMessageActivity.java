@@ -90,7 +90,7 @@ public class CreateMessageActivity extends AppCompatActivity {
     private TextView progress[] = new TextView[3];
     int progressPercent=0;
     private Goods myGoods = new Goods();
-    BmobRealTimeData rtd = new BmobRealTimeData();//数据监听
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -158,7 +158,7 @@ public class CreateMessageActivity extends AppCompatActivity {
                 }
             });
         }
-        monitorState();
+       // monitorState();
     }
     private Handler handler = new Handler(){
         @Override
@@ -246,11 +246,8 @@ public class CreateMessageActivity extends AppCompatActivity {
             public void done(String s, BmobException e) {
                 if(e==null){
                     myGoods.setObjectId(s);
-                    if (rtd.isConnected()){
-                        rtd.subRowUpdate("Goods", s);
-                        Toast.makeText(CreateMessageActivity.this,"提交成功！！",Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
+                    Toast.makeText(CreateMessageActivity.this,"提交成功！！",Toast.LENGTH_SHORT).show();
+                    finish();
                 }else {
                     Toast.makeText(CreateMessageActivity.this,e.toString(),Toast.LENGTH_SHORT).show();
                 }
@@ -419,21 +416,7 @@ public class CreateMessageActivity extends AppCompatActivity {
             }
         });
     }
-    private void  monitorState(){
-        rtd.start(new ValueEventListener() {
-            @Override
-            public void onDataChange(JSONObject data) {
-                Intent intent = new Intent(CreateMessageActivity.this, StateChangeService.class);
-                startService(intent);
-            }
 
-            @Override
-            public void onConnectCompleted(Exception ex) {
-                Log.d("debug1", "连接成功:"+rtd.isConnected());
-
-            }
-        });
-    }
 }
 
 

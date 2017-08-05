@@ -1,6 +1,7 @@
 package com.example.yizu;
 
 import android.Manifest;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -47,6 +49,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.yizu.control.ChangeAddressPopwindow;
+import com.example.yizu.db.HistoryRecord;
+import com.example.yizu.service.StateChangeService;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
@@ -54,6 +58,8 @@ import com.example.yizu.tool.ShowDialog;
 import com.example.yizu.tool.ToastShow;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.xiaosu.DataSetAdapter;
+import com.xiaosu.VerticalRollingTextView;
 
 
 import java.util.ArrayList;
@@ -61,11 +67,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobRealTimeData;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.ValueEventListener;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.framework.utils.UIHandler;
@@ -77,9 +85,11 @@ import cn.sharesdk.framework.PlatformActionListener;
 
 import android.os.Handler.Callback;
 
+import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,PlatformActionListener,Callback {
-
 
     private static  final String text = "这是YI租的下载地址";
     private static  final String imageurl = "http://139.199.224.112/logo.png";
@@ -95,6 +105,8 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout title1;
     public LocationClient mLocationClient;
     private TextView positionText;
+    private VerticalRollingTextView scroll;
+    List<String> textArray = new ArrayList<String>();
     static  String c_sheng,c_shi,c_qu;
     private User user;
     TextView myNum,myName;
@@ -110,8 +122,7 @@ public class MainActivity extends AppCompatActivity
     private RecommendAdapter recommendAdapter;
     private int limit = 10;
     private int skip = 0;
-    private Goods goods1=new Goods(),goods2=new Goods(),goods3=new Goods(),goods4=new Goods(),goods5=new Goods(),goods6=new Goods();
-    ///////////////////
+    BmobRealTimeData rtd = new BmobRealTimeData();//数据监听
     private ToastShow toastShow = new ToastShow(this);
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -135,6 +146,7 @@ public class MainActivity extends AppCompatActivity
         left = (NavigationView) findViewById(R.id.nav_view);
         title1 = (LinearLayout) findViewById(R.id.MianTitle);
         ////////////////////////////////
+        monitorState();
         tools[0]=(TextView)findViewById(R.id.skill);
         tools[1]=(TextView)findViewById(R.id.electronic);
         tools[2]=(TextView)findViewById(R.id.home);
@@ -153,6 +165,15 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
         recommendAdapter = new RecommendAdapter(recommendList);
         recyclerView.setAdapter(recommendAdapter);
+        scroll = (VerticalRollingTextView)findViewById(R.id.scrollText);
+        initList();
+        scroll.setDataSetAdapter(new DataSetAdapter<String>(textArray) {
+            @Override
+            protected String text(String s) {
+                return s;
+            }
+        });
+        scroll.run();
         for(int i = 0;i<8;i++){
             final int finalI = i;
             tools[i].setOnClickListener(new View.OnClickListener() {
@@ -293,6 +314,7 @@ public class MainActivity extends AppCompatActivity
         });
         String ObjectId = ShareStorage.getShareString(this,"ObjectId");
         queryUser(ObjectId);
+        setMonitorObject();
     }
 
     public void onBackPressed() {
@@ -413,13 +435,17 @@ public class MainActivity extends AppCompatActivity
     }
     public void pop(String x1,String x2,final String x3)
     {
-        Toast.makeText(this,"当前定位为:"+x1+"-"+x2+"-"+x3, Toast.LENGTH_SHORT).show();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                positionText.setText(x3);
-            }
-        });
+        String [] pos = ShareStorage.getShareString(this,"mainShi","mainQu");
+        if(!pos[0].equals(x2) || !pos[1].equals(x3)){
+            Toast.makeText(this,"当前定位为:"+x1+"-"+x2+"-"+x3, Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    positionText.setText(x3);
+                }
+            });
+        }
+
     }
     private void queryUser(String ObjectID){//根据id查询用户
         BmobQuery<User> query = new BmobQuery<User>();
@@ -578,5 +604,53 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+    }
+    //监视我的物品的状态变化
+    private void  monitorState(){
+        rtd.start(new ValueEventListener() {
+            @Override
+            public void onDataChange(JSONObject data) {
+                Intent intent = new Intent(MainActivity.this, StateChangeService.class);
+                startService(intent);
+            }
+
+            @Override
+            public void onConnectCompleted(Exception ex) {
+                Log.d("debug1", "连接成功:"+rtd.isConnected());
+
+            }
+        });
+    }
+    //给用户的每一个物品设置监听
+    private void setMonitorObject(){
+        String userId = ShareStorage.getShareString(this,"ObjectId");
+        User me = new User();
+        me.setObjectId(userId);
+        BmobQuery<Goods> query = new BmobQuery<Goods>();
+        query.addWhereEqualTo("user",me);
+        query.findObjects(new FindListener<Goods>()
+        {
+            @Override
+            public void done(List<Goods> goodsList, BmobException e) {
+                if (rtd.isConnected()){
+                    for(Goods g: goodsList){
+                        rtd.subRowUpdate("Goods", g.getObjectId());
+                    }
+                }
+            }
+        });
+
+    }
+    //初始化滚动textview
+    private void initList(){
+        String id = ShareStorage.getShareString(this,"ObjectId");
+        List<HistoryRecord> list = DataSupport.where("objectId = ?",id).order("date desc").limit(5).find(HistoryRecord.class);
+        for(HistoryRecord record:list){
+            textArray.add(record.getRecord());
+        }
+        if(textArray.size()==0){
+            textArray.add("欢迎观临YI租在线");
+            textArray.add("点我搜索");
+        }
     }
 }

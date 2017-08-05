@@ -1,17 +1,30 @@
 package com.example.yizu;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.IntegerRes;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.yizu.bean.User;
 import com.example.yizu.control.DynamicButton;
 import com.example.yizu.tool.ActivityCollecter;
+import com.example.yizu.tool.ShareStorage;
+
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 
 public class RsetPasswordActivity extends Activity {
@@ -40,15 +53,65 @@ public class RsetPasswordActivity extends Activity {
             }
         });
 
+
         sure.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                morphToSuccess(sure);
+                final String oldp = oldpassord.getText().toString().trim();
+                final String newp = newpassword.getText().toString().trim();
+                final String newpr= newpassword_r.getText().toString().trim();
+                if(TextUtils.isEmpty(oldp)){
+                    Toast.makeText(RsetPasswordActivity.this, "旧密码不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(newp) ||TextUtils.isEmpty(newpr)) {
+                    Toast.makeText(getApplicationContext(), "密码不能为空",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!newp.equals(newpr)) {
+                    Toast.makeText(getApplicationContext(), "密码不一致",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (newp.length()<6) {
+                    Toast.makeText(getApplicationContext(), "密码长度应大于等于6",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                BmobQuery<User> query = new BmobQuery<User>();
+                query.setLimit(1);
+                String objectId = ShareStorage.getShareString(RsetPasswordActivity.this,"ObjectId");
+                query.getObject(objectId, new QueryListener<User>() {
+                    @Override
+                    public void done(User user, BmobException e) {
+                        if (e == null) {
+                            if (user.getPassword().equals(oldp)) {
+                                user.setPassword(newp);
+                                user.update(user.getObjectId(), new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        sure.setEnabled(false);
+                                        morphToSuccess(sure);
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(RsetPasswordActivity.this, "旧密码错误！", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(RsetPasswordActivity.this, "网络异常！", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
         morphToSquare(sure,0);
 
     }
+
+
+
+
     private void morphToSquare(final DynamicButton btnMorph, long duration) {
         DynamicButton.PropertyParam square = DynamicButton.PropertyParam.build()
                 .duration(duration)
@@ -56,6 +119,7 @@ public class RsetPasswordActivity extends Activity {
                 .setColor(color(R.color.mb_blue))
                 .setPressedColor(color(R.color.mb_blue_dark))
                 .text("确认修改");
+
         btnMorph.startChange(square);
     }
 

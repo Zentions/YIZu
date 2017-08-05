@@ -13,6 +13,15 @@ import java.util.Date;
 public class HistoryRecord extends DataSupport{
     private String record;
     private Date date;
+    private String objectId;
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
 
     public Date getDate() {
         return date;

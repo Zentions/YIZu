@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.yizu.db.HistoryRecord;
 import com.example.yizu.tool.ActivityCollecter;
+import com.example.yizu.tool.ShareStorage;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
@@ -37,6 +38,7 @@ public class SearchActivity extends AppCompatActivity {
     TextView t[] = new TextView[5];
     EditText editText;
     Button yuYIn;
+    private String objectId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,7 @@ public class SearchActivity extends AppCompatActivity {
         t[2]= (TextView)findViewById(R.id.his3);
         t[3] = (TextView)findViewById(R.id.his4);
         t[4] = (TextView)findViewById(R.id.his5);
+        objectId = ShareStorage.getShareString(this,"ObjectId");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +80,7 @@ public class SearchActivity extends AppCompatActivity {
                     return;
                 }
                 historyRecord.setRecord(temp);
+                historyRecord.setObjectId(objectId);
                 historyRecord.save();
                 Log.e("debug1",temp);
                 Intent intent=new Intent(SearchActivity.this,ArticlesActivity.class);
@@ -138,7 +142,7 @@ public class SearchActivity extends AppCompatActivity {
     }
     void initHis(){
 
-        List<HistoryRecord> list = DataSupport.order("date desc").limit(5).find(HistoryRecord.class);
+        List<HistoryRecord> list = DataSupport.where("objectId = ?",objectId).order("date desc").limit(5).find(HistoryRecord.class);
         int i;
         for(i=0;i<list.size();i++){
             HistoryRecord historyRecord = list.get(i);

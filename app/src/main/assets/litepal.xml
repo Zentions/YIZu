@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value = "schoolPartner"/>
-    <version value = "5"/>
+    <version value = "6"/>
     <list>
         <mapping class = " com.example.yizu.db.HistoryRecord"/>
     </list>
