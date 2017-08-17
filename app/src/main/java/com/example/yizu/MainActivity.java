@@ -132,11 +132,10 @@ public class MainActivity extends AppCompatActivity
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(new MyLocationListener());
         setContentView(R.layout.activity_main);
-
-        ShareSDK.initSDK(this);
-
         ActivityCollecter.addActivty(this);
-
+        //
+        positionText = (TextView) findViewById(R.id.position);
+        requestLocation();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -146,7 +145,6 @@ public class MainActivity extends AppCompatActivity
         left = (NavigationView) findViewById(R.id.nav_view);
         title1 = (LinearLayout) findViewById(R.id.MianTitle);
         ////////////////////////////////
-        monitorState();
         tools[0]=(TextView)findViewById(R.id.skill);
         tools[1]=(TextView)findViewById(R.id.electronic);
         tools[2]=(TextView)findViewById(R.id.home);
@@ -166,6 +164,21 @@ public class MainActivity extends AppCompatActivity
         recommendAdapter = new RecommendAdapter(recommendList);
         recyclerView.setAdapter(recommendAdapter);
         scroll = (VerticalRollingTextView)findViewById(R.id.scrollText);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        user_picture = (CircleImageView) headerView.findViewById(R.id.roundImageView);
+        myName = (TextView) headerView.findViewById(R.id.myName);
+        myNum = (TextView) headerView.findViewById(R.id.myNum);
+        ShareSDK.initSDK(this);
+        String ObjectId = ShareStorage.getShareString(this,"ObjectId");
+        queryUser(ObjectId);
+        monitorState();
+        queryGoods();
         initList();
         scroll.setDataSetAdapter(new DataSetAdapter<String>(textArray) {
             @Override
@@ -203,35 +216,6 @@ public class MainActivity extends AppCompatActivity
                 },1000);
             }
         });
-        queryGoods();
-/////////////////////////////////////
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        user_picture = (CircleImageView) headerView.findViewById(R.id.roundImageView);
-        myName = (TextView) headerView.findViewById(R.id.myName);
-        myNum = (TextView) headerView.findViewById(R.id.myNum);
-        positionText = (TextView) findViewById(R.id.position);
-        List<String> permissionList = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.READ_PHONE_STATE);
-        }
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (!permissionList.isEmpty()) {
-            String [] permissions = permissionList.toArray(new String[permissionList.size()]);
-            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
-        } else {
-            requestLocation();
-        }
 
         right.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -257,7 +241,7 @@ public class MainActivity extends AppCompatActivity
                                 // TODO Auto-generated method stub
                                 Toast.makeText(MainActivity.this, "您选择了:"+province + "-" + city + "-" + area, Toast.LENGTH_LONG).show();
                                 positionText.setText(area);
-                                ShareStorage.setShareString(MainActivity.this,"mainShi",city+"市","mainQu",area+"区");
+                                ShareStorage.setShareString(MainActivity.this,"mainShi",city+"市","mainQu",area);
                             }
                             @Override
                             public void onClick() {
@@ -312,8 +296,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        String ObjectId = ShareStorage.getShareString(this,"ObjectId");
-        queryUser(ObjectId);
         setMonitorObject();
     }
 
@@ -391,28 +373,6 @@ public class MainActivity extends AppCompatActivity
         mLocationClient.setLocOption(option);
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0) {
-                    for (int result : grantResults) {
-                        if (result != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(this, "必须同意所有权限才能使用本程序", Toast.LENGTH_SHORT).show();
-                            finish();
-                            return;
-                        }
-                    }
-                    requestLocation();
-                } else {
-                    Toast.makeText(this, "发生未知错误", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                break;
-            default:
-        }
-    }
 
     public class MyLocationListener implements BDLocationListener {
 
@@ -589,7 +549,21 @@ public class MainActivity extends AppCompatActivity
     }
     public  void queryGoods() {
         BmobQuery<Goods> query = new BmobQuery<Goods>();
-        query.order("-StarRating");
+        BmobQuery<Goods> q1 = new BmobQuery<Goods>();
+        User me = new User();
+        me.setObjectId(ShareStorage.getShareString(this,"ObjectId"));
+        q1.addWhereNotEqualTo("user",me);
+        BmobQuery<Goods> q2 = new BmobQuery<Goods>();
+        q2.order("-StarRating");
+        q2.addWhereEqualTo("state","可租用");
+        BmobQuery<Goods> q3 = new BmobQuery<Goods>();
+        String pos = ShareStorage.getShareString(this,"mainShi");
+        q3.addWhereEqualTo("Positioning", pos);//市定位
+        List<BmobQuery<Goods>> queries = new ArrayList<BmobQuery<Goods>>();
+        queries.add(q1);
+        queries.add(q2);
+        queries.add(q3);
+        query.and(queries);
         query.setSkip(skip).setLimit(limit);
         skip+=6;
         query.findObjects(new FindListener<Goods>()
@@ -604,6 +578,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
     }
     //监视我的物品的状态变化
     private void  monitorState(){
@@ -623,9 +598,9 @@ public class MainActivity extends AppCompatActivity
     }
     //给用户的每一个物品设置监听
     private void setMonitorObject(){
-        String userId = ShareStorage.getShareString(this,"ObjectId");
+        String id = ShareStorage.getShareString(this,"ObjectId");
         User me = new User();
-        me.setObjectId(userId);
+        me.setObjectId(id);
         BmobQuery<Goods> query = new BmobQuery<Goods>();
         query.addWhereEqualTo("user",me);
         query.findObjects(new FindListener<Goods>()

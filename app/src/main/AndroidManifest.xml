@@ -74,7 +74,7 @@
         </activity>
         <activity
             android:name=".PhoneVerificationActivity"
-            android:label="找回密码">
+            android:label="重置密码">
         </activity>
         <activity android:name=".LoginActivity">
         </activity>

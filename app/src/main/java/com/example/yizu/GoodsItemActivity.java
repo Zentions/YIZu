@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.Record;
+import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 
 import org.json.JSONArray;
@@ -43,6 +44,7 @@ public class GoodsItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_item);
+        ActivityCollecter.addActivty(this);
         UltimateBar bar = new UltimateBar(this);
         bar.setImmersionBar();
         itemName1=(TextView)findViewById(R.id.itemName2);
@@ -82,7 +84,7 @@ public class GoodsItemActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(goods.getState().equals("租用结束")){
+                if(goods.getState().equals("租用结束") || goods.getState().equals("可租用")){
                     Toast.makeText(GoodsItemActivity.this,"下架成功！！！",Toast.LENGTH_SHORT).show();
                     goods.setState("已下架");
                     itemState1.setText("已下架");
@@ -161,5 +163,11 @@ public class GoodsItemActivity extends AppCompatActivity {
 
            }
        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollecter.removeActivity(this);
     }
 }

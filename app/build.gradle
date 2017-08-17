@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.example.yizu"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -70,5 +70,6 @@ dependencies {
     compile 'com.github.githubwing:ThreeDLayout:1.0.0'
     compile 'org.zackratos:ultimatebar:1.0.3'
     compile 'com.xiaosu:VerticalRollingTextView:1.2.0'
+    compile 'com.zhihu.android:matisse:0.4.3'
     testCompile 'junit:junit:4.12'
 }

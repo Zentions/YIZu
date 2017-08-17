@@ -12,22 +12,30 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_height="80dp"
-        android:layout_width="80dp"
-        android:id="@+id/userimage"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:src="@drawable/logo2"
-        android:gravity="center"/>
-
+    <FrameLayout
+        android:paddingTop="20dp"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <com.example.yizu.control.WaveView
+            android:id="@+id/wave"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:id="@+id/userimage"
+            android:layout_gravity="center|bottom"
+            android:src="@drawable/logo2"
+            android:gravity="center"/>
+    </FrameLayout>
 
 
 
 
     <LinearLayout
+        android:layout_marginTop="30dp"
         android:background="@drawable/photo_camera_selector"
         android:layout_width="match_parent"
         android:layout_height="40dp"

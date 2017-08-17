@@ -45,7 +45,6 @@ public class OrderFragment extends Fragment {
     View view;
     private int currentPage = 1;
     private String code;
-    private int POLICY =1;
     OrderActivity orderActivity;
     public OrderFragment() {
         // Required empty public constructor
@@ -88,7 +87,6 @@ public class OrderFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        POLICY = 2;
                         refreshBusiness();
                         refreshLayout.finishRefreshing();
                     }
@@ -134,8 +132,6 @@ public class OrderFragment extends Fragment {
         query.and(andQuerys);
         query.order("-createdAt");
         query.include("make[objectId|goodsName]");
-        if(POLICY==1) query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        else query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findObjects(new FindListener<Record>() {
             @Override
             public void done(List<Record> object, BmobException e) {

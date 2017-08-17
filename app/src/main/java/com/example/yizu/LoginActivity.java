@@ -82,6 +82,10 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void done(List<User> userList, BmobException e) {
                             if (e == null) {
+                                if(userList.size()==0){
+                                    Toast.makeText(LoginActivity.this,"手机号不存在",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 User user =userList.get(0);
                                 if (user.getPassword().equals(up)) {
                                     editor = pref.edit();

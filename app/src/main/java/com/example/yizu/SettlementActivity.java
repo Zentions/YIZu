@@ -119,4 +119,5 @@ public class SettlementActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
 }

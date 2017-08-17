@@ -4,7 +4,7 @@ import android.graphics.drawable.GradientDrawable;
 
 /**
  * 主要是为了使用属性动画而设计的类
- * Created by tom on 15/10/31.
+ * Created by tom on 17/7/31.
  */
 public class CustomGradientDrawable extends GradientDrawable{
 
@@ -50,7 +50,7 @@ public class CustomGradientDrawable extends GradientDrawable{
         this.mColor=mColor;
     }
 
-    public int getColor(){
+    public int getMColor(){
         return mColor;
     }
 }

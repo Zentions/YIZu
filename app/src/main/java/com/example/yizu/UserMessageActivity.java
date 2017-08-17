@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +37,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.yizu.bean.User;
+import com.example.yizu.control.WaveView;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
@@ -49,17 +53,19 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserMessageActivity extends AppCompatActivity {
     User user;
     TextView NAME;
     TextView GRADE;
     TextView GENDER;
-    ImageView USERIMAGE;
+    CircleImageView USERIMAGE;
     LinearLayout GoName;
     LinearLayout GoGender;
     Button button;
     TextView PHONENUM;
+    WaveView waveView;
 
     public static final int TAKE_PHOTO = 11;
     public static final int CHOOSE_PHOTO = 12;
@@ -88,12 +94,21 @@ public class UserMessageActivity extends AppCompatActivity {
         NAME=(TextView)findViewById(R.id.name);
         GRADE=(TextView)findViewById(R.id.grade);
         GENDER=(TextView)findViewById(R.id.gender);
-        USERIMAGE=(ImageView)findViewById(R.id.userimage);
+        USERIMAGE=(CircleImageView)findViewById(R.id.userimage);
+        waveView = (WaveView)findViewById(R.id.wave);
         GoGender = (LinearLayout) findViewById(R.id.goGender);
         PHONENUM = (TextView)findViewById(R.id.phoneNum);
         GoName = (LinearLayout) findViewById(R.id.goName);
         button= (Button)findViewById(R.id.exit_user_message);
-
+        final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2,-2);
+        lp.gravity = Gravity.BOTTOM|Gravity.CENTER;
+        waveView.setOnWaveAnimationListener(new WaveView.OnWaveAnimationListener() {
+            @Override
+            public void OnWaveAnimation(float y) {
+                lp.setMargins(0,0,0,(int)y+20);
+                USERIMAGE.setLayoutParams(lp);
+            }
+        });
         GoName.setOnClickListener(new View.OnClickListener() {//启动修改名字
             @Override
             public void onClick(View v) {
