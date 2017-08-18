@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
@@ -17,7 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yizu.bean.Goods;
 import com.example.yizu.tool.ActivityCollecter;
+
+import java.io.File;
+import java.math.BigDecimal;
+
+import cn.bmob.v3.BmobQuery;
 
 
 public class SetActivity extends Activity {
@@ -25,7 +32,6 @@ public class SetActivity extends Activity {
     private ImageView set_back;
     private TextView clear_number;
     private String cache;
-    private Integer cache_number;
     private final int REQUEST_CODE = 0x1001;
     private final  static String phonenumer="17854262835";
     @Override
@@ -36,9 +42,8 @@ public class SetActivity extends Activity {
         set_back=(ImageView)findViewById(R.id.set_back);
         clear_number=(TextView)findViewById(R.id.clear_number);
 
-        cache_number=5;
-        cache=cache_number.toString()+"M";
-        clear_number.setText(cache);
+
+        clear_number.setText(calculMenory());
 
         set_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,9 +94,9 @@ public class SetActivity extends Activity {
                 startActivity(intent);
                 break;
             case R.id.qingchu:
+                clearAllCache();
                 Toast.makeText(SetActivity.this,"缓存清除成功", Toast.LENGTH_SHORT).show();
-                cache_number=0;
-                clear_number.setText(cache_number.toString()+"M");
+                clear_number.setText(0+"K");
                 break;
             default:
                 break;
@@ -138,4 +143,89 @@ public class SetActivity extends Activity {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
     }
+    private String calculMenory(){
+        //Context.getExternalCacheDir() --> SDCard/Android/data/你的应用包名/cache/目录，一般存放临时缓存数据
+        long cacheSize = 0;
+        try {
+            cacheSize = getFolderSize(getCacheDir());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Context.getExternalFilesDir() --> SDCard/Android/data/你的应用的包名/files/ 目录，一般放一些长时间保存的数据
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            try {
+                cacheSize += getFolderSize(getExternalCacheDir());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return getFormatSize(cacheSize);
+    }
+    private long getFolderSize(File file){
+        long size = 0;
+        try {
+            File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                // 如果下面还有文件
+                if (fileList[i].isDirectory()) {
+                    size = size + getFolderSize(fileList[i]);
+                } else {
+                    size = size + fileList[i].length();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+    private String getFormatSize(double size) {
+        double kiloByte = size / 1024;
+        if (kiloByte < 1) {
+            return size + "Byte";
+        }
+
+        double megaByte = kiloByte / 1024;
+        if (megaByte < 1) {
+            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+            return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "KB";
+        }
+
+        double gigaByte = megaByte / 1024;
+        if (gigaByte < 1) {
+            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "MB";
+        }
+
+        double teraBytes = gigaByte / 1024;
+        if (teraBytes < 1) {
+            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+                + "TB";
+    }
+    private void clearAllCache() {
+        BmobQuery.clearAllCachedResults();
+        deleteDir(getCacheDir());
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            deleteDir(getExternalCacheDir());
+        }
+    }
+    private boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.yizu.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.example.yizu.ShowActivity;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.tool.PictureTool;
 
+import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
@@ -89,8 +91,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     }
     void downImage(final Goods goods, final ViewHolder holder){
         BmobFile bmobfile = goods.getPic1();
+        File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile.getFilename());
         if(bmobfile!= null) {
-            bmobfile.download(new DownloadFileListener() {
+            bmobfile.download(saveFile,new DownloadFileListener() {
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {

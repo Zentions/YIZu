@@ -6,6 +6,7 @@ package com.example.yizu.adapter;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.example.yizu.R;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.tool.PictureTool;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import cn.bmob.v3.Bmob;
@@ -68,11 +70,13 @@ public class ImageAdapter extends PagerAdapter {//上栏
         container.removeView((View)object);
    }
     void downImage(BmobFile bmobfile, final ImageView view){
+        File saveFile = new File(context.getExternalFilesDir(null), bmobfile.getFilename());
         if(bmobfile!= null) {
-            bmobfile.download(new DownloadFileListener() {
+            bmobfile.download(saveFile,new DownloadFileListener() {
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {
+                        Log.d("debug1",s);
                         view.setImageBitmap(PictureTool.showImage(s));
                     }else {
                         Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show();

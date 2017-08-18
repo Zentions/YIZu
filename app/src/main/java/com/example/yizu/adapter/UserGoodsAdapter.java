@@ -2,7 +2,9 @@ package com.example.yizu.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.example.yizu.UserGoodsActivity;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.tool.PictureTool;
 
+import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
@@ -87,12 +90,14 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
     }
     void downImage(final Goods goods, final ViewHolder holder){
         BmobFile bmobfile = goods.getPic1();
+        File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile.getFilename());
         if(bmobfile!= null) {
-            bmobfile.download(new DownloadFileListener() {
+            bmobfile.download(saveFile,new DownloadFileListener() {
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {
                         goods.setPath(s, 0);
+                        Log.d("debug1",s);
                         //  holder.articleImage.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(goods.getPath(0), 300, 300));
                         holder.itemImage.setImageBitmap(PictureTool.showImage(goods.getPath(0)));
                     } else Toast.makeText(mContext, e.getErrorCode(), Toast.LENGTH_LONG).show();

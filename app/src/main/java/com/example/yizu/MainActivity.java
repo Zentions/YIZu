@@ -1,10 +1,7 @@
 package com.example.yizu;
 
-import android.Manifest;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,8 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,7 +55,6 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.xiaosu.DataSetAdapter;
 import com.xiaosu.VerticalRollingTextView;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,7 +107,6 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     private String Path=null;
     private long exitTime;
-    ///////////////////////////
     private TwinklingRefreshLayout twinklingRefreshLayout;
     private TextView tools[] = new TextView[8];
     private String classification[] = {"工具类","数码类","家居类","学习类","服饰类","交通类","场地类","服务类"};
@@ -144,7 +137,7 @@ public class MainActivity extends AppCompatActivity
         right = (CoordinatorLayout) findViewById(R.id.right1);
         left = (NavigationView) findViewById(R.id.nav_view);
         title1 = (LinearLayout) findViewById(R.id.MianTitle);
-        ////////////////////////////////
+
         tools[0]=(TextView)findViewById(R.id.skill);
         tools[1]=(TextView)findViewById(R.id.electronic);
         tools[2]=(TextView)findViewById(R.id.home);
@@ -196,6 +189,7 @@ public class MainActivity extends AppCompatActivity
                     intent.putExtra("SNTSearch",classification[finalI]);
                     intent.putExtra("SearchFlag","1");
                     startActivity(intent);
+
                 }
             });
         }
@@ -414,6 +408,8 @@ public class MainActivity extends AppCompatActivity
             public void done(User object, BmobException e) {
                 if(e==null){
                     user = object;
+                    myNum.setText(user.getPhoneNumber());
+                    myName.setText(user.getName());
                     BmobFile bmobfile = user.getTouXiang();
                     if(bmobfile!= null){
                         bmobfile.download(new DownloadFileListener() {

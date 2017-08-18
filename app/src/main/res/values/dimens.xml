@@ -22,4 +22,5 @@
     <dimen name="mb_height_56">40dp</dimen>
     <dimen name="mb_height_8">8dp</dimen>
     <dimen name="mb_height_4">4dp</dimen>
+    <dimen name="grid_expected_size">120dp</dimen>
 </resources>
