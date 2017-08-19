@@ -89,25 +89,33 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
         return mGoodsList.size();
     }
     void downImage(final Goods goods, final ViewHolder holder){
-        BmobFile bmobfile = goods.getPic1();
-        File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile.getFilename());
-        if(bmobfile!= null) {
-            bmobfile.download(saveFile,new DownloadFileListener() {
-                @Override
-                public void done(String s, BmobException e) {
-                    if (e == null) {
-                        goods.setPath(s, 0);
-                        Log.d("debug1",s);
-                        //  holder.articleImage.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(goods.getPath(0), 300, 300));
-                        holder.itemImage.setImageBitmap(PictureTool.showImage(goods.getPath(0)));
-                    } else Toast.makeText(mContext, e.getErrorCode(), Toast.LENGTH_LONG).show();
-                }
+        BmobFile[] bmobfile = new BmobFile[3];
+        bmobfile[0] = goods.getPic1();
+        bmobfile[1] = goods.getPic2();
+        bmobfile[2] = goods.getPic3();
+        for(int i = 0;i<3;i++){
+            File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile[i].getFilename());
+            if(bmobfile[i]!= null) {
+                final int finalI = i;
+                bmobfile[i].download(saveFile,new DownloadFileListener() {
+                    @Override
+                    public void done(String s, BmobException e) {
+                        if (e == null) {
+                            goods.setPath(s, finalI);
+                            Log.d("debug1",s);
+                            //  holder.articleImage.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(goods.getPath(0), 300, 300));
+                            if(finalI==0){
+                                holder.itemImage.setImageBitmap(PictureTool.showImage(goods.getPath(0)));
+                            }
+                        } else Toast.makeText(mContext, e.getErrorCode(), Toast.LENGTH_LONG).show();
+                    }
 
-                @Override
-                public void onProgress(Integer integer, long l) {
+                    @Override
+                    public void onProgress(Integer integer, long l) {
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 

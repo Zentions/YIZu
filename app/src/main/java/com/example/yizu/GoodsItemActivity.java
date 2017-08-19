@@ -1,11 +1,14 @@
 package com.example.yizu;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dalong.carrousellayout.CarrouselLayout;
 import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.Record;
 import com.example.yizu.tool.ActivityCollecter;
@@ -35,18 +39,17 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class GoodsItemActivity extends AppCompatActivity {
     private TextView itemName1,itemClassification1,itemState1,detail,totalRentMoney,totalRentTimes;
-    private ImageView pic;
+    private ImageView pic1,pic2,pic3;
     private Button button;
     private Button button1;
     private ImageView back;
+    private CarrouselLayout carrousel;
     Goods goods;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_item);
         ActivityCollecter.addActivty(this);
-        UltimateBar bar = new UltimateBar(this);
-        bar.setImmersionBar();
         itemName1=(TextView)findViewById(R.id.itemName2);
         itemClassification1=(TextView)findViewById(R.id.itemClassification2);
         itemState1=(TextView)findViewById(R.id.itemState2);
@@ -56,13 +59,25 @@ public class GoodsItemActivity extends AppCompatActivity {
         back = (ImageView)findViewById(R.id.goodsBack);
         button=(Button)findViewById(R.id.holdon);
         button1=(Button)findViewById(R.id.end);
-        pic = (ImageView) findViewById(R.id.itemPic);
+        pic1 = (ImageView) findViewById(R.id.p1);
+        pic2 = (ImageView) findViewById(R.id.p2);
+        pic3 = (ImageView) findViewById(R.id.p3);
         Intent intent = getIntent();
         goods = (Goods)intent.getSerializableExtra("myGoods");
         itemName1.setText(goods.getGoodsName());
         itemClassification1.setText(goods.getClassification());
         detail.setText(goods.getDescription());
-        pic.setImageBitmap(PictureTool.showImage(goods.getPath(0)));
+        pic1.setImageBitmap(PictureTool.showImage(goods.getPath(0)));
+        pic2.setImageBitmap(PictureTool.showImage(goods.getPath(1)));
+        pic3.setImageBitmap(PictureTool.showImage(goods.getPath(2)));
+        carrousel= (CarrouselLayout) findViewById(R.id.itemPic);
+       // DisplayMetrics dm = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+     //   windowManager.getDefaultDisplay().getMetrics(dm);
+        int width=windowManager.getDefaultDisplay().getWidth();
+        carrousel.setR(width/3)//设置R的大小
+                .setAutoRotation(true)//是否自动切换
+                .setAutoRotationTime(2000);//自动切换的时间  单位毫秒
         totalMoney();
         totalTime();
         queryState();

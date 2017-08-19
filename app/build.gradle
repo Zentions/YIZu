@@ -72,6 +72,6 @@ dependencies {
     compile 'com.xiaosu:VerticalRollingTextView:1.2.0'
     compile 'com.github.StevenDXC:DxLoadingButton:1.5'
     compile 'com.github.githubwing:DragPhotoView:1.0.1'
-    compile 'com.github.florent37:materialtextfield:1.0.7'
+    compile 'com.dalong:carrousellayout:1.0.0'
     testCompile 'junit:junit:4.12'
 }
