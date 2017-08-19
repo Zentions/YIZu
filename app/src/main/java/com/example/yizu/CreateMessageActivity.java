@@ -2,6 +2,7 @@ package com.example.yizu;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -311,6 +312,7 @@ public class CreateMessageActivity extends AppCompatActivity {
         Button picture = (Button) view.findViewById(R.id.Picture_Map);
         Button camera = (Button) view.findViewById(R.id.Picture_Camera);
         Button cancel = (Button) view.findViewById(R.id.Picture_Cancel);
+        Button bigPic = (Button)view.findViewById(R.id.lookBigPic);
         dialog.setContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         Window window = dialog.getWindow();
@@ -359,6 +361,13 @@ public class CreateMessageActivity extends AppCompatActivity {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri[currentIB]);
                 startActivityForResult(intent, TAKE_PHOTO);
+                dialog.dismiss();
+            }
+        });
+        bigPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPhotoActivity(img[0]);
                 dialog.dismiss();
             }
         });
@@ -416,7 +425,20 @@ public class CreateMessageActivity extends AppCompatActivity {
             }
         });
     }
-
+    public  void startPhotoActivity(ImageView imageView) {
+        Intent intent = new Intent(this, DragPhotoActivity.class);
+        int location[] = new int[2];
+        imageView.getLocationOnScreen(location);
+        intent.putExtra("left", location[0]);
+        intent.putExtra("top", location[1]);
+        intent.putExtra("height", imageView.getHeight());
+        intent.putExtra("width", imageView.getWidth());
+        Bundle b=new Bundle();
+        b.putStringArray("PicPath", UriPath);
+        intent.putExtras(b);
+        startActivity(intent);
+        overridePendingTransition(0,0);
+    }
 }
 
 

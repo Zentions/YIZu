@@ -82,15 +82,6 @@ public class UserMessageActivity extends AppCompatActivity {
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-      //  final ThreeDLayout layout=(ThreeDLayout)findViewById(R.id.td_header);
-       // layout.setTouchable(true);
-//        layout.setTouchMode(ThreeDLayout.MODE_BOTH_X_Y);
-//        layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                layout.startHorizontalAnimate(1000);
-//            }
-//        });
         NAME=(TextView)findViewById(R.id.name);
         GRADE=(TextView)findViewById(R.id.grade);
         GENDER=(TextView)findViewById(R.id.gender);
@@ -256,6 +247,7 @@ public class UserMessageActivity extends AppCompatActivity {
         Button picture = (Button) view.findViewById(R.id.Picture_Map);
         Button camera = (Button) view.findViewById(R.id.Picture_Camera);
         Button cancel = (Button) view.findViewById(R.id.Picture_Cancel);
+        Button bigPic = (Button)view.findViewById(R.id.lookBigPic);
         dialog.setContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         Window window = dialog.getWindow();
@@ -275,11 +267,7 @@ public class UserMessageActivity extends AppCompatActivity {
         picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(UserMessageActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(UserMessageActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                } else {
-                    openAlbum();
-                }
+                openAlbum();
                 dialog.dismiss();
 
             }
@@ -304,6 +292,13 @@ public class UserMessageActivity extends AppCompatActivity {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(intent, TAKE_PHOTO);
+                dialog.dismiss();
+            }
+        });
+        bigPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPhotoActivity(USERIMAGE);
                 dialog.dismiss();
             }
         });
@@ -342,6 +337,22 @@ public class UserMessageActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
+    }
+    public  void startPhotoActivity(ImageView imageView) {
+        Intent intent = new Intent(this, DragPhotoActivity.class);
+        int location[] = new int[2];
+        imageView.getLocationOnScreen(location);
+        intent.putExtra("left", location[0]);
+        intent.putExtra("top", location[1]);
+        intent.putExtra("height", imageView.getHeight());
+        intent.putExtra("width", imageView.getWidth());
+        Bundle b=new Bundle();
+        String [] p = new String[1];
+        p[0] = UriPath;
+        b.putStringArray("PicPath", p);
+        intent.putExtras(b);
+        startActivity(intent);
+        overridePendingTransition(0,0);
     }
 }
 

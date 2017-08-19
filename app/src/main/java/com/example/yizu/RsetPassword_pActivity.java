@@ -1,16 +1,9 @@
 package com.example.yizu;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DimenRes;
-import android.support.annotation.IntegerRes;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,9 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dx.dxloadingbutton.lib.LoadingButton;
 import com.example.yizu.bean.User;
-import com.example.yizu.control.DynamicButton;
-import com.example.yizu.control.ResultAnimation;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.ShareStorage;
 
@@ -32,7 +24,6 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -42,7 +33,7 @@ public class RsetPassword_pActivity extends Activity{
     private EditText yanzhengma;
     private EditText newpassword1;
     private EditText newpassword_r1;
-    private DynamicButton sure1;
+    private LoadingButton sure1;
     private Button btn_yanzhengma;
     private int i=60;
     private String countryCode="86";
@@ -56,7 +47,7 @@ public class RsetPassword_pActivity extends Activity{
         yanzhengma=(EditText) findViewById(R.id.yanzhengma);
         newpassword1=(EditText) findViewById(R.id.newpassword1);
         newpassword_r1=(EditText) findViewById(R.id.newpsaaword_r1);
-        sure1=(DynamicButton) findViewById(R.id.ps_sure1);
+        sure1=(LoadingButton) findViewById(R.id.ps_sure1);
         btn_yanzhengma=(Button)findViewById(R.id.btn_yanzhengma);
         number = ShareStorage.getShareString(RsetPassword_pActivity.this,"PN");
         rps_back2.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +56,6 @@ public class RsetPassword_pActivity extends Activity{
                 finish();
             }
         });
-        final ResultAnimation animation = (ResultAnimation)findViewById(R.id.result);
 
         EventHandler eventHandler = new EventHandler() {
             @Override
@@ -84,10 +74,12 @@ public class RsetPassword_pActivity extends Activity{
         sure1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                sure1.startLoading();
                 String code = yanzhengma.getText().toString().trim();
                 if (TextUtils.isEmpty(code)) {
                     Toast.makeText(getApplicationContext(), "验证码不能为空",
                             Toast.LENGTH_SHORT).show();
+                    sure1.loadingFailed();
                     return;
                 }
                 SMSSDK.submitVerificationCode(countryCode, number, code);
@@ -137,7 +129,7 @@ public class RsetPassword_pActivity extends Activity{
                 }).start();
             }
         });
-        morphToSquare(sure1,0);
+
     }
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -167,8 +159,14 @@ public class RsetPassword_pActivity extends Activity{
                                     @Override
                                     public void done(BmobException e) {
                                         btn_yanzhengma.setClickable(false);
-                                        sure1.setEnabled(false);
-                                        morphToSuccess(sure1);
+                                        sure1.loadingSuccessful();
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                sure1.reset();
+                                            }
+                                        }, 1000);
+
                                     }
                                 });
 
@@ -183,13 +181,14 @@ public class RsetPassword_pActivity extends Activity{
                     }
                 } else if (result == SMSSDK.RESULT_ERROR) {
                     try {
+                        sure1.loadingFailed();
                         Throwable throwable = (Throwable) data;
                         throwable.printStackTrace();
                         JSONObject object = new JSONObject(throwable.getMessage());
                         String des = object.optString("detail");//错误描述
                         int status = object.optInt("status");//错误代码
                         if (status > 0 && !TextUtils.isEmpty(des)) {
-                            Log.e("asd", "des: " + des);
+                            Log.e("debug1", "des: " + des);
                             Toast.makeText(RsetPassword_pActivity.this, des, Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -202,47 +201,6 @@ public class RsetPassword_pActivity extends Activity{
         }
 
     };
-
-
-    private void morphToSquare(final DynamicButton btnMorph, long duration) {
-        DynamicButton.PropertyParam square = DynamicButton.PropertyParam.build()
-                .duration(duration)
-                .setCornerRadius(dimen(R.dimen.mb_corner_radius_2))
-                .setColor(color(R.color.mb_blue))
-                .setPressedColor(color(R.color.mb_blue_dark))
-                .text("确认修改");
-        btnMorph.startChange(square);
-    }
-
-
-    private void morphToSuccess(final DynamicButton btnMorph) {
-        DynamicButton.PropertyParam circle = DynamicButton.PropertyParam.build()
-                .duration(500)
-                .setCornerRadius(dimen(R.dimen.mb_height_75))
-                .setWidth(dimen(R.dimen.mb_height_75))
-                .setHeight(dimen(R.dimen.mb_height_75))
-                .setColor(color(R.color.mb_green))
-                .icon(drawable(R.drawable.ic_done))
-                .setPressedColor(color(R.color.mb_green_dark));
-
-        btnMorph.startChange(circle);
-    }
-
-    public int dimen(@DimenRes int resId) {
-        return (int) getResources().getDimension(resId);
-    }
-
-    public int color(@ColorRes int resId) {
-        return getResources().getColor(resId);
-    }
-
-    public int integer(@IntegerRes int resId) {
-        return getResources().getInteger(resId);
-    }
-
-    public Drawable drawable(int resId){
-        return getResources().getDrawable(resId);
-    }
 
     @Override
     protected void onDestroy() {

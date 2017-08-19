@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity
                             public void done(String s, BmobException e) {
                                 show();
                                 if(e==null) {
-                                    user_picture.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(s,300,300));
+                                    user_picture.setImageBitmap(PictureTool.showImage(Path));
                                     Path = s;
                                 }
                                 else  Toast.makeText(MainActivity.this,e.getErrorCode(),Toast.LENGTH_LONG);
@@ -614,14 +614,12 @@ public class MainActivity extends AppCompatActivity
     }
     //初始化滚动textview
     private void initList(){
+        textArray.add("欢迎观临YI租在线");
+        textArray.add("点我搜索");
         String id = ShareStorage.getShareString(this,"ObjectId");
         List<HistoryRecord> list = DataSupport.where("objectId = ?",id).order("date desc").limit(5).find(HistoryRecord.class);
         for(HistoryRecord record:list){
             textArray.add(record.getRecord());
-        }
-        if(textArray.size()==0){
-            textArray.add("欢迎观临YI租在线");
-            textArray.add("点我搜索");
         }
     }
 }

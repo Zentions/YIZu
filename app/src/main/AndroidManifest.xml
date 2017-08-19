@@ -104,9 +104,21 @@
         </activity>
         <activity android:name=".SettlementActivity">
         </activity>
-        <activity android:name=".GoodsItemActivity"
+        <activity
+            android:name=".GoodsItemActivity"
             android:theme="@style/goodsStyle">
         </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.yizu"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
             android:name="cn.sharesdk.framework.ShareSDKUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -174,7 +186,8 @@
             android:enabled="true"
             android:exported="true" />
 
-
+        <activity android:name=".DragPhotoActivity">
+        </activity>
     </application>
 
 </manifest>
