@@ -181,7 +181,7 @@ public class ArticleFragment extends Fragment {
         {
             @Override
             public void done(List<Goods> goodsList, BmobException e) {
-                if (goodsList == null) {
+                if (goodsList.size()==0 ||goodsList == null) {
                     Toast.makeText(activity, "无此物品的相关信息！", Toast.LENGTH_SHORT).show();
                 } else {
                     //articleList.clear();

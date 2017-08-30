@@ -75,7 +75,7 @@ public class GoodsItemActivity extends AppCompatActivity {
         WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
      //   windowManager.getDefaultDisplay().getMetrics(dm);
         int width=windowManager.getDefaultDisplay().getWidth();
-        carrousel.setR(width/3)//设置R的大小
+        carrousel.setR(width/3+60)//设置R的大小
                 .setAutoRotation(true)//是否自动切换
                 .setAutoRotationTime(2000);//自动切换的时间  单位毫秒
         totalMoney();

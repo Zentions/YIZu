@@ -32,6 +32,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,8 +62,8 @@ public class UserMessageActivity extends AppCompatActivity {
     TextView GRADE;
     TextView GENDER;
     CircleImageView USERIMAGE;
-    LinearLayout GoName;
-    LinearLayout GoGender;
+    RelativeLayout GoName;
+    RelativeLayout GoGender;
     Button button;
     TextView PHONENUM;
     WaveView waveView;
@@ -87,9 +88,9 @@ public class UserMessageActivity extends AppCompatActivity {
         GENDER=(TextView)findViewById(R.id.gender);
         USERIMAGE=(CircleImageView)findViewById(R.id.userimage);
         waveView = (WaveView)findViewById(R.id.wave);
-        GoGender = (LinearLayout) findViewById(R.id.goGender);
+        GoGender = (RelativeLayout) findViewById(R.id.goGender);
         PHONENUM = (TextView)findViewById(R.id.phoneNum);
-        GoName = (LinearLayout) findViewById(R.id.goName);
+        GoName = (RelativeLayout) findViewById(R.id.goName);
         button= (Button)findViewById(R.id.exit_user_message);
         final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2,-2);
         lp.gravity = Gravity.BOTTOM|Gravity.CENTER;

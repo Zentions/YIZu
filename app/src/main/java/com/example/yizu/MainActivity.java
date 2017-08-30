@@ -81,6 +81,7 @@ import android.os.Handler.Callback;
 
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
+import org.zackratos.ultimatebar.UltimateBar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,PlatformActionListener,Callback {
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity
     private CoordinatorLayout right;
     private NavigationView left;
     private boolean isDrawer=false;
-    CircleImageView user_picture;
+    private CircleImageView user_picture;
     private LinearLayout title1;
     public LocationClient mLocationClient;
     private TextView positionText;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity
     private List<Goods> recommendList=new ArrayList<>();
     private RecyclerView recyclerView;
     private RecommendAdapter recommendAdapter;
-    private int limit = 10;
+    private int limit = 6;
     private int skip = 0;
     BmobRealTimeData rtd = new BmobRealTimeData();//数据监听
     private ToastShow toastShow = new ToastShow(this);
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ActivityCollecter.addActivty(this);
         //
+
         positionText = (TextView) findViewById(R.id.position);
         requestLocation();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -152,10 +154,16 @@ public class MainActivity extends AppCompatActivity
         twinklingRefreshLayout.setEnableLoadmore(true);
         twinklingRefreshLayout.setOverScrollBottomShow(false);
         twinklingRefreshLayout.setEnableRefresh(false);
-        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 1);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         recyclerView.setLayoutManager(layoutManager);
         recommendAdapter = new RecommendAdapter(recommendList);
         recyclerView.setAdapter(recommendAdapter);
+        recyclerView.setNestedScrollingEnabled(false);
         scroll = (VerticalRollingTextView)findViewById(R.id.scrollText);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -417,7 +425,7 @@ public class MainActivity extends AppCompatActivity
                             public void done(String s, BmobException e) {
                                 show();
                                 if(e==null) {
-                                    user_picture.setImageBitmap(PictureTool.showImage(Path));
+                                    user_picture.setImageBitmap(PictureTool.showImage(s));
                                     Path = s;
                                 }
                                 else  Toast.makeText(MainActivity.this,e.getErrorCode(),Toast.LENGTH_LONG);
@@ -464,11 +472,12 @@ public class MainActivity extends AppCompatActivity
             {
 
                 if((System.currentTimeMillis()-exitTime) > 2000) {
-                    toastShow.toastShow ("再按一次退出程序");
+                    toastShow.toastShow ("再按一次退出YI租");
                     exitTime = System.currentTimeMillis();
                 }
                 else {
-                    moveTaskToBack(false);
+                    //moveTaskToBack(false);
+                    finish();
                 }
 
                 return true;
@@ -614,12 +623,8 @@ public class MainActivity extends AppCompatActivity
     }
     //初始化滚动textview
     private void initList(){
-        textArray.add("欢迎观临YI租在线");
+        textArray.add("欢迎使用YI租在线");
         textArray.add("点我搜索");
-        String id = ShareStorage.getShareString(this,"ObjectId");
-        List<HistoryRecord> list = DataSupport.where("objectId = ?",id).order("date desc").limit(5).find(HistoryRecord.class);
-        for(HistoryRecord record:list){
-            textArray.add(record.getRecord());
-        }
     }
+
 }

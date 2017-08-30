@@ -28,6 +28,7 @@ import android.util.Log;
 import com.dx.dxloadingbutton.lib.LoadingButton;
 import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
+import com.example.yizu.tool.PhoneNumberConfirm;
 import com.iflytek.cloud.thirdparty.L;
 
 import java.util.List;
@@ -81,7 +82,14 @@ public class LoginActivity extends AppCompatActivity {
                 login.startLoading();
                 final String un = userNameEdit.getText().toString().trim();
                 final String up = passwordEdit.getText().toString().trim();
+                if(!PhoneNumberConfirm.isMobileNO(un)){
+                    login.loadingFailed();
+                    Toast.makeText(LoginActivity.this, "您输入的手机号有误！",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (TextUtils.isEmpty(un) || TextUtils.isEmpty(up)) {
+                    login.loadingFailed();
                     Toast.makeText(LoginActivity.this, "用户名或密码不能为空",
                             Toast.LENGTH_SHORT).show();
                 } else {
@@ -129,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                                             login.loadingFailed();
                                         }
                                     }
-                                },3000);
+                                },1000);
 
                             } else {
                                 login.loadingFailed();

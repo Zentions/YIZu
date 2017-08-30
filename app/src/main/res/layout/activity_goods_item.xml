@@ -17,18 +17,18 @@
         <ImageView
             android:id="@+id/p1"
             android:scaleType="centerCrop"
-            android:layout_width="120dp"
-            android:layout_height="120dp" />
+            android:layout_width="150dp"
+            android:layout_height="150dp" />
         <ImageView
             android:id="@+id/p2"
             android:scaleType="centerCrop"
-            android:layout_width="120dp"
-            android:layout_height="120dp" />
+            android:layout_width="150dp"
+            android:layout_height="150dp" />
         <ImageView
             android:id="@+id/p3"
             android:scaleType="centerCrop"
-            android:layout_width="120dp"
-            android:layout_height="120dp" />
+            android:layout_width="150dp"
+            android:layout_height="150dp" />
     </com.dalong.carrousellayout.CarrouselLayout>
     <ImageView
         android:id="@+id/goodsBack"
@@ -37,11 +37,17 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/back1"/>
+    <View
+        android:id="@+id/SLine"
+        android:layout_below="@+id/itemPic"
+        android:background="#e0e0e0"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"></View>
     <TextView
     android:layout_marginLeft="20dp"
     android:textColor="#000000"
     android:textSize="16dp"
-    android:layout_below="@+id/itemPic"
+    android:layout_below="@+id/SLine"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="5dp"
     android:id="@+id/itemName1"
@@ -53,7 +59,7 @@
         android:textSize="16dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_below="@+id/itemPic"
+        android:layout_below="@+id/SLine"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:id="@+id/itemName2"
@@ -118,33 +124,7 @@
         android:background="#e0e0e0"
         android:layout_width="wrap_content"
         android:layout_height="1dp"></View>
-    <TextView
-        android:layout_marginLeft="20dp"
-        android:textColor="#000000"
-        android:textSize="16dp"
-        android:id="@+id/detail"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/itemState1"
-        android:text="详细介绍："/>
-    <TextView
-        android:textColor="#000000"
-        android:textSize="16dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:layout_below="@+id/itemState1"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/itemdetail2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <View
-        android:layout_below= "@+id/detail"
-        android:background="#e0e0e0"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"></View>
+
     <TextView
         android:layout_marginLeft="20dp"
         android:textColor="#000000"
@@ -154,14 +134,14 @@
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/detail"
+        android:layout_below="@+id/itemState1"
         android:text="总租用金额："/>
     <TextView
         android:textColor="#000000"
         android:textSize="16dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_below="@+id/detail"
+        android:layout_below="@+id/itemState1"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:id="@+id/itemtotalRentMoney2"
@@ -199,7 +179,31 @@
         android:background="#e0e0e0"
         android:layout_width="wrap_content"
         android:layout_height="1dp"></View>
-
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:id="@+id/detail"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/totalRentTimes"
+        android:text="详细介绍："/>
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:textColor="#000000"
+        android:layout_marginBottom="5dp"
+        android:textSize="16dp"
+        android:layout_below="@+id/detail"
+        android:id="@+id/itemdetail2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <View
+        android:layout_below= "@+id/itemdetail2"
+        android:background="#e0e0e0"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"></View>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"

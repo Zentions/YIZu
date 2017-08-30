@@ -7,9 +7,7 @@
     android:onClick="onClick"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="1dp"
-
-    android:background="@drawable/linearlayout_line">
+    android:layout_marginTop="1dp">
 
    <RelativeLayout
        android:layout_width="wrap_content"

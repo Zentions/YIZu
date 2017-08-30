@@ -66,7 +66,7 @@
         </activity>
         <activity
             android:name=".UserMessageActivity"
-            android:label="详细信息">
+            android:label="个人中心">
         </activity>
         <activity android:name=".ArticlesActivity">
         </activity>
@@ -80,27 +80,35 @@
         </activity>
         <activity android:name=".CreateMessageActivity">
         </activity>
-        <activity android:name=".OrderActivity">
+        <activity android:name=".OrderActivity"
+            android:label="我的订单">
         </activity>
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".ConfirmOrderActivity">
+        <activity android:name=".ConfirmOrderActivity"
+            android:label="确认订单">
         </activity>
-        <activity android:name=".EvaluationActivity" />
+        <activity android:name=".EvaluationActivity"
+            android:label="评价"/>
         <activity android:name=".ShowActivity" />
         <activity android:name=".RsetPasswordActivity">
         </activity>
         <activity android:name=".RsetPassword_pActivity">
         </activity>
-        <activity android:name=".AboutActivity">
+        <activity android:name=".AboutActivity"
+            android:label="关于YI租">
         </activity>
-        <activity android:name=".SetActivity">
+        <activity android:name=".SetActivity"
+            android:label="设置">
         </activity>
-        <activity android:name=".UserGoodsActivity">
+        <activity android:name=".UserGoodsActivity"
+            android:label="我的物品">
         </activity>
-        <activity android:name=".EActivity">
+        <activity android:name=".EActivity"
+            android:label="用户服务协议">
         </activity>
-        <activity android:name=".RActivity">
+        <activity android:name=".RActivity"
+            android:label="积分规则">
         </activity>
         <activity android:name=".SettlementActivity">
         </activity>
@@ -129,55 +137,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <service
-            android:name="cn.bmob.push.lib.service.PushService"
-            android:exported="true"
-            android:label="PushService"
-            android:process=":bmobpush">
-            <intent-filter>
-                <action android:name="cn.bmob.push.lib.service.PushService" />
-            </intent-filter>
-        </service>
-
-        <!-- 用于进程保活 -->
-        <service
-            android:name="cn.bmob.push.lib.service.PushNotifyService"
-            android:process=":bmobpush" />
-
-        <receiver android:name="cn.bmob.push.PushReceiver">
-            <intent-filter>
-
-                <!-- 系统启动完成后会调用 -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <!-- 解锁完成后会调用 -->
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <!-- 监听网络连通性 -->
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-
-        <!-- 接收心跳和唤醒的广播，要和PushService运行在同个进程 -->
-        <receiver
-            android:name="cn.bmob.push.PushNotifyReceiver"
-            android:process=":bmobpush">
-            <intent-filter>
-
-                <!-- 接收心跳广播的action -->
-                <action android:name="cn.bmob.push.action.HEARTBEAT" />
-                <!-- 接收唤醒广播的action -->
-                <action android:name="cn.bmob.push.action.NOTIFY" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".MyPushMessageReceiver">
-            <intent-filter>
-                <action android:name="cn.bmob.push.action.MESSAGE" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".broadcast.StateChangeReceiver"
-            android:enabled="true"
-            android:exported="true" />
 
         <service
             android:name=".service.StateChangeService"

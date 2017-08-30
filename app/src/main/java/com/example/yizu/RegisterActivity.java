@@ -96,6 +96,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     return;
                                 } else {
                                     final User user = new User();
+                                    user.setName("YI租用户");
+                                    user.setGender("男");
                                     user.setPassword(password.getText().toString().trim());
                                     user.setPhoneNumber(etPhoneNumber.getText().toString().trim());
                                     user.setGrade(0);

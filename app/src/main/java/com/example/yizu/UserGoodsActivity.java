@@ -98,6 +98,7 @@ public class UserGoodsActivity extends AppCompatActivity {
         queries.add(q1);
         queries.add(q2);
         query.and(queries);
+        query.order("-createdAt");
         query.findObjects(new FindListener<Goods>() {
                 @Override
                 public void done(List<Goods> object, BmobException e) {
