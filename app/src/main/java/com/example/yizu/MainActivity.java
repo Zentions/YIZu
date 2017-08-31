@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
     List<String> textArray = new ArrayList<String>();
     static  String c_sheng,c_shi,c_qu;
     private User user;
-    TextView myNum,myName;
+    TextView myName;
     DrawerLayout drawer;
     private String Path=null;
     private long exitTime;
@@ -174,7 +174,6 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         user_picture = (CircleImageView) headerView.findViewById(R.id.roundImageView);
         myName = (TextView) headerView.findViewById(R.id.myName);
-        myNum = (TextView) headerView.findViewById(R.id.myNum);
         ShareSDK.initSDK(this);
         String ObjectId = ShareStorage.getShareString(this,"ObjectId");
         queryUser(ObjectId);
@@ -416,7 +415,6 @@ public class MainActivity extends AppCompatActivity
             public void done(User object, BmobException e) {
                 if(e==null){
                     user = object;
-                    myNum.setText(user.getPhoneNumber());
                     myName.setText(user.getName());
                     BmobFile bmobfile = user.getTouXiang();
                     if(bmobfile!= null){
@@ -445,7 +443,6 @@ public class MainActivity extends AppCompatActivity
     }
     private void show(){
         if(user.getName()!=null) myName.setText(user.getName());
-        myNum.setText(user.getPhoneNumber());
     }
 
     @Override
@@ -592,6 +589,7 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(JSONObject data) {
                 Intent intent = new Intent(MainActivity.this, StateChangeService.class);
                 startService(intent);
+
             }
 
             @Override
@@ -612,6 +610,8 @@ public class MainActivity extends AppCompatActivity
         {
             @Override
             public void done(List<Goods> goodsList, BmobException e) {
+//                if(e!=null) return;
+//                if(goodsList.size()==0) return;
                 if (rtd.isConnected()){
                     for(Goods g: goodsList){
                         rtd.subRowUpdate("Goods", g.getObjectId());

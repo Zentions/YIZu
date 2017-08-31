@@ -147,20 +147,22 @@ public class SetActivity extends Activity {
         //Context.getExternalCacheDir() --> SDCard/Android/data/你的应用包名/cache/目录，一般存放临时缓存数据
         long cacheSize = 0;
         try {
-            cacheSize = getFolderSize(getCacheDir());
+            cacheSize = getFolderSize(getExternalCacheDir());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //Context.getExternalFilesDir() --> SDCard/Android/data/你的应用的包名/files/ 目录，一般放一些长时间保存的数据
+        //Context.getExternalFilesDir() -->  目录SDCard/Android/data/你的应用的包名/files/，一般放一些长时间保存的数据
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             try {
-                cacheSize += getFolderSize(getExternalCacheDir());
+                cacheSize += getFolderSize(getExternalFilesDir(null));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return getFormatSize(cacheSize);
     }
+
+
     private long getFolderSize(File file){
         long size = 0;
         try {
@@ -213,6 +215,7 @@ public class SetActivity extends Activity {
         deleteDir(getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             deleteDir(getExternalCacheDir());
+            deleteDir(getExternalFilesDir(null));
         }
     }
     private boolean deleteDir(File dir) {

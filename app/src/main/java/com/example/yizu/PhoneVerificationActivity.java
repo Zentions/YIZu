@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
+import com.example.yizu.tool.PhoneNumberConfirm;
 
 import org.json.JSONObject;
 
@@ -35,7 +36,6 @@ public class PhoneVerificationActivity extends AppCompatActivity implements View
     private EditText etPhoneNumber, etCode,password,againPass;
     private String countryCode="86";
     private int i = 60;//倒计时
-    TextView textView2;
 
 
     @Override
@@ -53,10 +53,8 @@ public class PhoneVerificationActivity extends AppCompatActivity implements View
         etCode = (EditText) findViewById(R.id.etCode);
         btnSendMsg = (Button) findViewById(R.id.btnSendMsg);
         btnSubmitCode = (Button) findViewById(R.id.btnSubmitCode);
-        textView2=(TextView)findViewById(R.id.mima);
         password = (EditText)findViewById(R.id.password);
         againPass = (EditText)findViewById(R.id.againassword);
-        textView2.setText("新  密  码：");
         EventHandler eventHandler = new EventHandler() {
             @Override
             public void afterEvent(int event, int result, Object data) {
@@ -161,6 +159,11 @@ public class PhoneVerificationActivity extends AppCompatActivity implements View
                 //发送验证码之前的判断
                 if (TextUtils.isEmpty(phoneNum)) {
                     Toast.makeText(getApplicationContext(), "手机号码不能为空",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!PhoneNumberConfirm.isMobileNO(phoneNum)){
+                    Toast.makeText(getApplicationContext(), "手机号码有误",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }

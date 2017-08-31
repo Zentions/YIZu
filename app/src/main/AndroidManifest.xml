@@ -80,34 +80,42 @@
         </activity>
         <activity android:name=".CreateMessageActivity">
         </activity>
-        <activity android:name=".OrderActivity"
+        <activity
+            android:name=".OrderActivity"
             android:label="我的订单">
         </activity>
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".ConfirmOrderActivity"
+        <activity
+            android:name=".ConfirmOrderActivity"
             android:label="确认订单">
         </activity>
-        <activity android:name=".EvaluationActivity"
-            android:label="评价"/>
+        <activity
+            android:name=".EvaluationActivity"
+            android:label="评价" />
         <activity android:name=".ShowActivity" />
         <activity android:name=".RsetPasswordActivity">
         </activity>
         <activity android:name=".RsetPassword_pActivity">
         </activity>
-        <activity android:name=".AboutActivity"
+        <activity
+            android:name=".AboutActivity"
             android:label="关于YI租">
         </activity>
-        <activity android:name=".SetActivity"
+        <activity
+            android:name=".SetActivity"
             android:label="设置">
         </activity>
-        <activity android:name=".UserGoodsActivity"
+        <activity
+            android:name=".UserGoodsActivity"
             android:label="我的物品">
         </activity>
-        <activity android:name=".EActivity"
+        <activity
+            android:name=".EActivity"
             android:label="用户服务协议">
         </activity>
-        <activity android:name=".RActivity"
+        <activity
+            android:name=".RActivity"
             android:label="积分规则">
         </activity>
         <activity android:name=".SettlementActivity">
@@ -145,6 +153,7 @@
 
         <activity android:name=".DragPhotoActivity">
         </activity>
+
     </application>
 
 </manifest>

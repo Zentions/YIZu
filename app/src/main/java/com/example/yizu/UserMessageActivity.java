@@ -152,7 +152,7 @@ public class UserMessageActivity extends AppCompatActivity {
         UriPath = intent.getStringExtra("path");
         show();
         if(!UriPath.equals("null"))
-        USERIMAGE.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(UriPath,300,300));
+        USERIMAGE.setImageBitmap(PictureTool.showImage(UriPath));
     }
 
     private void show(){

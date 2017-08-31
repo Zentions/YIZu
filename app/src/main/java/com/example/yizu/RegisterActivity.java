@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.yizu.bean.User;
 import com.example.yizu.tool.ActivityCollecter;
+import com.example.yizu.tool.PhoneNumberConfirm;
 
 import org.json.JSONObject;
 
@@ -159,6 +160,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 //发送验证码之前的判断
                 if (TextUtils.isEmpty(phoneNum)) {
                     Toast.makeText(getApplicationContext(), "手机号码不能为空",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!PhoneNumberConfirm.isMobileNO(phoneNum)){
+                    Toast.makeText(getApplicationContext(), "手机号码有误",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }

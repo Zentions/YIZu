@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             } else {
                                 login.loadingFailed();
-                                Toast.makeText(LoginActivity.this, "网络异常！", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                             }
 
                         }

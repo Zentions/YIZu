@@ -25,7 +25,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/photo_camera_selector"
+        android:background="@drawable/photo_gallery_selector"
         android:id="@+id/Picture_Camera"
         android:paddingBottom="10dip"
         android:paddingTop="10dip"
@@ -37,10 +37,10 @@
         android:background="#DAD9DB" />
 
     <Button
+        android:id="@+id/lookBigPic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/photo_camera_selector"
-        android:id="@+id/lookBigPic"
         android:paddingBottom="10dip"
         android:paddingTop="10dip"
         android:text="查看大图"

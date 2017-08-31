@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,14 +41,14 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
         TextView Goodsname;
         TextView Classification;
         ImageView itemImage;
-        LinearLayout layout;
+        RelativeLayout layout;
         public ViewHolder(View itemView) {
             super(itemView);
             Goodsname=(TextView)itemView.findViewById(R.id.itemName);
             Goodstate=(TextView)itemView.findViewById(R.id.itemState);
             Classification=(TextView)itemView.findViewById(R.id.itemClassification);
             itemImage=(ImageView) itemView.findViewById(R.id.itemImage);
-            layout = (LinearLayout)itemView.findViewById(R.id.goodsitem);
+            layout = (RelativeLayout)itemView.findViewById(R.id.goodsitem);
         }
 
     }
@@ -78,9 +79,9 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Goods goods=mGoodsList.get(position);
-        holder.Goodsname.setText(goods.getGoodsName());
-        holder.Goodstate.setText(goods.getState());
-        holder.Classification.setText(goods.getClassification());
+        holder.Goodsname.setText("物品名称:"+goods.getGoodsName());
+        holder.Goodstate.setText("状态:"+goods.getState());
+        holder.Classification.setText("分类:"+goods.getClassification());
       ;downImage(goods,holder);
     }
 

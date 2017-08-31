@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.User;
 import com.example.yizu.control.RefreshHeader;
 import com.example.yizu.control.RefreshLoad;
+import com.example.yizu.service.StateChangeService;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.ShareStorage;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -56,7 +58,7 @@ public class UserGoodsActivity extends AppCompatActivity {
         swipeRefresh.setHeaderView(new RefreshHeader(this));
         swipeRefresh.setBottomView(new RefreshLoad(this));
         recyclerView = (RecyclerView) findViewById(R.id.usergoodsRecyclerView);
-        GridLayoutManager layoutManager = new GridLayoutManager(userGoodsActivity, 1);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         adapter=new UserGoodsAdapter(mList);
         recyclerView.setAdapter(adapter);
@@ -98,7 +100,6 @@ public class UserGoodsActivity extends AppCompatActivity {
         queries.add(q1);
         queries.add(q2);
         query.and(queries);
-        query.order("-createdAt");
         query.findObjects(new FindListener<Goods>() {
                 @Override
                 public void done(List<Goods> object, BmobException e) {
@@ -127,7 +128,9 @@ public class UserGoodsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
+
     }
+
 }
 
 

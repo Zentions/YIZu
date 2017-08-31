@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.yizu.ArticlesActivity;
 import com.example.yizu.MainActivity;
 import com.example.yizu.R;
+import com.example.yizu.bean.User;
 import com.example.yizu.control.RefreshHeaderArticle;
 import com.example.yizu.control.RefreshLoadArticle;
 import com.example.yizu.adapter.ArticleAdapter;
@@ -151,10 +152,15 @@ public class ArticleFragment extends Fragment {
         eq2.addWhereEqualTo("Positioning", Positioning);//市定位
         BmobQuery<Goods> eq5 = new BmobQuery<Goods>();
         eq2.addWhereEqualTo("state", "可租用");
+        BmobQuery<Goods> q3 = new BmobQuery<Goods>();
+        User me = new User();
+        me.setObjectId(ShareStorage.getShareString(activity,"ObjectId"));
+        q3.addWhereNotEqualTo("user",me);
         List<BmobQuery<Goods>> andQuerys = new ArrayList<BmobQuery<Goods>>();
         andQuerys.add(eq1);
         andQuerys.add(eq2);
         andQuerys.add(eq5);
+        andQuerys.add(q3);
         switch (currentPage) {
             case 0:
                 query.and(andQuerys);
