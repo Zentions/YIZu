@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.example.yizu.tool.ShareStorage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
 
 public class WelcomeActivity extends Activity {
-
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +51,20 @@ public class WelcomeActivity extends Activity {
 
     }
     void goLogin(){
+        final boolean isFirstIn = ShareStorage.getBoolean("isFirstIn",true,getApplicationContext());
         new Handler().postDelayed(new Runnable() {
+
             @Override
             public void run() {
-                Intent StartIntent = new Intent(WelcomeActivity.this,LoginActivity.class);
-                startActivity(StartIntent);
-                finish();
+                if (isFirstIn) {
+                    intent = new Intent(WelcomeActivity.this, GuideActivity.class);
+                    WelcomeActivity.this.startActivity(intent);
+                    WelcomeActivity.this.finish();
+                } else {
+                    intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+                    WelcomeActivity.this.startActivity(intent);
+                    WelcomeActivity.this.finish();
+                }
             }
         }, 2000);
     }

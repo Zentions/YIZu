@@ -106,41 +106,59 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
         return lruCache.get(url);
     }
     public void setItemBitmaps(final Goods goods, final ViewHolder holder) {
-        final BmobFile bmobfile = goods.getPic1();
-        if(bmobfile!=null){
-            File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile.getFilename());
-            Bitmap cache = getBitmapFromMemoryCache(bmobfile.getUrl());
-            if (cache != null) {//内存缓存
-                holder.itemImage.setImageBitmap(cache);
-            } else {
-                String filePath = saveFile.getPath();
-                final Bitmap localCache = PictureTool.showImage(filePath);
-                if (localCache != null) {//本地缓存
-                    holder.itemImage.setImageBitmap(localCache);
-                    lruCache.put(bmobfile.getUrl(), localCache);
-                } else {//请求网络
-                    bmobfile.download(saveFile, new DownloadFileListener() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if (e == null) {
-                                goods.setPath(s, 0);
-                                //  holder.articleImage.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(goods.getPath(0), 300, 300));
-                                Bitmap bitmap = PictureTool.showImage(goods.getPath(0));
-                                holder.itemImage.setImageBitmap(bitmap);
-                                lruCache.put(bmobfile.getUrl(), bitmap);
-                            } else
-                                Toast.makeText(mContext, e.getErrorCode(), Toast.LENGTH_LONG).show();
+        final BmobFile[] bmobfile = new BmobFile[3];
+        bmobfile[0] = goods.getPic1();
+        bmobfile[1] = goods.getPic2();
+        bmobfile[2] = goods.getPic3();
+        for(int i = 0;i<3;i++){
+            if(bmobfile[i]!=null){
+                final int finalI = i;
+                File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile[i].getFilename());
+                Bitmap cache = getBitmapFromMemoryCache(bmobfile[i].getUrl());
+                if (cache != null) {//内存缓存
+                    goods.setPath(saveFile.getPath(), finalI);
+                    if(finalI==0){
+                        holder.itemImage.setImageBitmap(cache);
+                    }
+                } else {
+                    String filePath = saveFile.getPath();
+                    final Bitmap localCache = PictureTool.showImage(filePath);
+                    if (localCache != null) {//本地缓存
+                        goods.setPath(filePath, finalI);
+                        if(finalI==0) {
+                            holder.itemImage.setImageBitmap(localCache);
+                            lruCache.put(bmobfile[i].getUrl(), localCache);
                         }
 
-                        @Override
-                        public void onProgress(Integer integer, long l) {
+                    } else {//请求网络
 
-                        }
-                    });
+                        bmobfile[i].download(saveFile, new DownloadFileListener() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e == null) {
+                                    goods.setPath(s, finalI);
+                                    //  holder.articleImage.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(goods.getPath(0), 300, 300));
+                                    if(finalI==0){
+                                        Bitmap bitmap = PictureTool.showImage(goods.getPath(finalI));
+                                        holder.itemImage.setImageBitmap(bitmap);
+                                        lruCache.put(bmobfile[finalI].getUrl(), bitmap);
+                                    }
+
+                                } else
+                                    Toast.makeText(mContext, e.getErrorCode(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onProgress(Integer integer, long l) {
+
+                            }
+                        });
+                    }
                 }
-            }
 
+            }
         }
+
 
     }
 

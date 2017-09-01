@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ import com.example.yizu.bean.Goods;
 import com.example.yizu.bean.ShareModel;
 import com.example.yizu.bean.User;
 import com.example.yizu.control.ChangeAddressPopwindow;
+import com.example.yizu.control.RefreshHeader;
 import com.example.yizu.service.StateChangeService;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
@@ -107,6 +109,9 @@ public class MainActivity extends AppCompatActivity
     private RecommendAdapter recommendAdapter;
     private int limit = 6;
     private int skip = 0;
+    private RelativeLayout Refresh;
+    private TextView tools[] = new TextView[8];
+    private String classification[] = {"工具类","数码类","家居类","学习类","服饰类","交通类","场地类","服务类"};
     BmobRealTimeData rtd = new BmobRealTimeData();//数据监听
     private ToastShow toastShow = new ToastShow(this);
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -130,14 +135,22 @@ public class MainActivity extends AppCompatActivity
         right = (CoordinatorLayout) findViewById(R.id.right1);
         left = (NavigationView) findViewById(R.id.nav_view);
         title1 = (LinearLayout) findViewById(R.id.MianTitle);
-
-
+        Refresh=(RelativeLayout)findViewById(R.id.refresh);
+        tools[0]=(TextView)findViewById(R.id.skill);
+        tools[1]=(TextView)findViewById(R.id.electronic);
+        tools[2]=(TextView)findViewById(R.id.home);
+        tools[3]=(TextView)findViewById(R.id.study);
+        tools[4]=(TextView)findViewById(R.id.clothes);
+        tools[5]=(TextView)findViewById(R.id.transportation);
+        tools[6]=(TextView)findViewById(R.id.place);
+        tools[7]=(TextView)findViewById(R.id.service);
         recyclerView=(RecyclerView)findViewById(R.id.recommendRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         twinklingRefreshLayout = (TwinklingRefreshLayout)findViewById(R.id.recommendRefresh);
-        twinklingRefreshLayout.setEnableLoadmore(true);
+        twinklingRefreshLayout.setEnableLoadmore(false);
         twinklingRefreshLayout.setOverScrollBottomShow(false);
-        twinklingRefreshLayout.setEnableRefresh(false);
+        twinklingRefreshLayout.setEnableRefresh(true);
+        twinklingRefreshLayout.setHeaderView(new RefreshHeader(this));
         GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 1);
         recyclerView.setLayoutManager(layoutManager);
         recommendAdapter = new RecommendAdapter(recommendList);
@@ -165,22 +178,26 @@ public class MainActivity extends AppCompatActivity
             }
         });
         scroll.run();
-
+        Refresh.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                queryGoods();
+            }
+        });
         twinklingRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                refreshLayout.finishRefreshing();
-            }
-
-            @Override
-            public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         queryGoods();
-
+                        refreshLayout.finishRefreshing();
                     }
                 },1000);
+            }
+
+            @Override
+            public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
+                refreshLayout.finishRefreshing();
             }
         });
 
@@ -194,6 +211,19 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+        for(int i = 0;i<8;i++){
+            final int finalI = i;
+            tools[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(MainActivity.this,ArticlesActivity.class);//跳转到技能分类的页面
+                    intent.putExtra("SNTSearch",classification[finalI]);
+                    intent.putExtra("SearchFlag","1");
+                    startActivity(intent);
+
+                }
+            });
+        }
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -560,17 +590,18 @@ public class MainActivity extends AppCompatActivity
             public void done(List<Goods> goodsList, BmobException e) {
                 if (goodsList == null) {
                     Toast.makeText(MainActivity.this, "无此物品的相关信息！", Toast.LENGTH_SHORT).show();
-                    twinklingRefreshLayout.finishLoadmore();
                 } else {
                     twinklingRefreshLayout.finishLoadmore();
                     if(goodsList.size()==0 && skip > 6){
                         Toast.makeText(MainActivity.this, "没有更多了！", Toast.LENGTH_SHORT).show();
+                        skip = 0;
                         return;
                     }
-                    int num = recommendList.size();
+                    if(goodsList.size()==0) return;
+                    recommendList.clear();
                     recommendList.addAll(goodsList);
                     //recommendAdapter.notifyDataSetChanged();
-                    recommendAdapter.notifyItemRangeChanged(num,recommendList.size()-num);
+                    recommendAdapter.notifyDataSetChanged();
                 }
             }
         });

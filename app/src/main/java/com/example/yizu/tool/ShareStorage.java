@@ -67,4 +67,13 @@ public class ShareStorage {
         Log.d("debug1","$"+set.toString());
         return set.toArray();
     }
+    public static void putBoolean(String key, boolean value, Context context){
+        SharedPreferences sp = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        sp.edit().putBoolean(key,value).commit();
+    }
+
+    public static boolean getBoolean(String key, boolean defValue, Context context){
+        SharedPreferences sp = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        return sp.getBoolean(key,defValue);
+    }
 }
