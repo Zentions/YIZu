@@ -29,8 +29,12 @@ import org.json.JSONTokener;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity {
     Button search;
@@ -39,6 +43,8 @@ public class SearchActivity extends AppCompatActivity {
     EditText editText;
     Button yuYIn;
     private String objectId;
+    private TextView tools[] = new TextView[8];
+    private String classification[] = {"工具类","数码类","家居类","学习类","服饰类","交通类","场地类","服务类"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,14 @@ public class SearchActivity extends AppCompatActivity {
         t[2]= (TextView)findViewById(R.id.his3);
         t[3] = (TextView)findViewById(R.id.his4);
         t[4] = (TextView)findViewById(R.id.his5);
+        tools[0]=(TextView)findViewById(R.id.skill);
+        tools[1]=(TextView)findViewById(R.id.electronic);
+        tools[2]=(TextView)findViewById(R.id.home);
+        tools[3]=(TextView)findViewById(R.id.study);
+        tools[4]=(TextView)findViewById(R.id.clothes);
+        tools[5]=(TextView)findViewById(R.id.transportation);
+        tools[6]=(TextView)findViewById(R.id.place);
+        tools[7]=(TextView)findViewById(R.id.service);
         objectId = ShareStorage.getShareString(this,"ObjectId");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,15 +155,27 @@ public class SearchActivity extends AppCompatActivity {
         return ret.toString();
     }
     void initHis(){
-
-        List<HistoryRecord> list = DataSupport.where("objectId = ?",objectId).order("date desc").limit(5).find(HistoryRecord.class);
-        int i;
-        for(i=0;i<list.size();i++){
-            HistoryRecord historyRecord = list.get(i);
-            t[i].setText(historyRecord.getRecord());
+        List<HistoryRecord> list = DataSupport.where("objectId = ?",objectId).order("date desc").limit(20).find(HistoryRecord.class);
+        int i,cnt =0;
+        Map<String,Integer> map = new HashMap<String,Integer>();
+        for(i=list.size()-1;i>=0;i--){
+            map.put(list.get(i).getRecord(),i);
         }
-        for(;i<5;i++){
-            t[i].setText("");
+        List<Map.Entry<String, Integer>> listc = new ArrayList<Map.Entry<String, Integer>>(map.entrySet());
+        Collections.sort(listc, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String,Integer> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+        int index =0;
+        for (Map.Entry<String, Integer> mapc : listc) {
+            t[index].setText(mapc.getKey());
+            index ++;
+            if(index>4)break;
+        }
+        for(;index<5;index++){
+            t[index].setText("");
         }
     }
     void addListener(){
@@ -162,6 +188,19 @@ public class SearchActivity extends AppCompatActivity {
                     intent.putExtra("SNTSearch",t[finalI].getText());
                     intent.putExtra("SearchFlag","2");
                     startActivity(intent);
+                }
+            });
+        }
+        for(int i = 0;i<8;i++){
+            final int finalI = i;
+            tools[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(SearchActivity.this,ArticlesActivity.class);//跳转到技能分类的页面
+                    intent.putExtra("SNTSearch",classification[finalI]);
+                    intent.putExtra("SearchFlag","1");
+                    startActivity(intent);
+
                 }
             });
         }

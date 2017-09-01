@@ -13,30 +13,30 @@
         android:padding="5dip"
         android:text="分享YI租到"
         android:textSize="20sp"
-        android:background="#dddddd"
+        android:background="#ffffff"
         android:gravity="center"
-        android:textColor="#ffffff"
+        android:textColor="#cccccc"
         />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#ffffff" />
 
     <GridView
         android:id="@+id/share_gridview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
+        android:background="#ffffff"
         android:numColumns="3"
-        android:background="#dddddd"
         android:padding="10dip"
         android:stretchMode="columnWidth"
         android:verticalSpacing="20dip" />
-    
-     <Button
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#ffffff" />
+
+    <Button
         android:id="@+id/btn_cancel"
-         android:background="#ffffff"
+         android:background="@drawable/linearlayout_line"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:text="取消"

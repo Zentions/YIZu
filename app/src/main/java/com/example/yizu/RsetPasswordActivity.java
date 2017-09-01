@@ -72,7 +72,7 @@ public class RsetPasswordActivity extends Activity {
                     return;
                 }
                 if (newp.length()<6) {
-                    Toast.makeText(getApplicationContext(), "密码长度应大于等于6",
+                    Toast.makeText(getApplicationContext(), "密码长度不少于6位",
                             Toast.LENGTH_SHORT).show();
                     sure.loadingFailed();
                     return;

@@ -7,54 +7,56 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Handler.Callback;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.yizu.adapter.RecommendAdapter;
-import com.example.yizu.bean.Goods;
-import com.example.yizu.bean.ShareModel;
-import com.example.yizu.bean.User;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.example.yizu.adapter.RecommendAdapter;
+import com.example.yizu.bean.Goods;
+import com.example.yizu.bean.ShareModel;
+import com.example.yizu.bean.User;
 import com.example.yizu.control.ChangeAddressPopwindow;
-import com.example.yizu.db.HistoryRecord;
 import com.example.yizu.service.StateChangeService;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PictureTool;
 import com.example.yizu.tool.ShareStorage;
-import com.example.yizu.tool.ShowDialog;
 import com.example.yizu.tool.ToastShow;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.xiaosu.DataSetAdapter;
 import com.xiaosu.VerticalRollingTextView;
+
+import org.json.JSONObject;
+import org.zackratos.ultimatebar.UltimateBar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,28 +71,19 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.ValueEventListener;
 import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.framework.utils.UIHandler;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import cn.sharesdk.framework.PlatformActionListener;
-
-
-
-import android.os.Handler.Callback;
-
-import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
-import org.zackratos.ultimatebar.UltimateBar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,PlatformActionListener,Callback {
 
     private static  final String text = "这是YI租的下载地址";
     private static  final String imageurl = "http://139.199.224.112/logo.png";
-    private static  final String title = "江苏华漫";
+    private static  final String title = "YI租";
     private static  final String url = "http://139.199.224.112/YI.apk";
-    public static final String SHARE_APP_KEY = "21b0f35691b8";
+    public static final String SHARE_APP_KEY = "1f6fe120545f1";
     private SharePopupWindow share;
 
     private CoordinatorLayout right;
@@ -109,8 +102,6 @@ public class MainActivity extends AppCompatActivity
     private String Path=null;
     private long exitTime;
     private TwinklingRefreshLayout twinklingRefreshLayout;
-    private TextView tools[] = new TextView[8];
-    private String classification[] = {"工具类","数码类","家居类","学习类","服饰类","交通类","场地类","服务类"};
     private List<Goods> recommendList=new ArrayList<>();
     private RecyclerView recyclerView;
     private RecommendAdapter recommendAdapter;
@@ -140,30 +131,17 @@ public class MainActivity extends AppCompatActivity
         left = (NavigationView) findViewById(R.id.nav_view);
         title1 = (LinearLayout) findViewById(R.id.MianTitle);
 
-        tools[0]=(TextView)findViewById(R.id.skill);
-        tools[1]=(TextView)findViewById(R.id.electronic);
-        tools[2]=(TextView)findViewById(R.id.home);
-        tools[3]=(TextView)findViewById(R.id.study);
-        tools[4]=(TextView)findViewById(R.id.clothes);
-        tools[5]=(TextView)findViewById(R.id.transportation);
-        tools[6]=(TextView)findViewById(R.id.place);
-        tools[7]=(TextView)findViewById(R.id.service);
+
         recyclerView=(RecyclerView)findViewById(R.id.recommendRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         twinklingRefreshLayout = (TwinklingRefreshLayout)findViewById(R.id.recommendRefresh);
         twinklingRefreshLayout.setEnableLoadmore(true);
         twinklingRefreshLayout.setOverScrollBottomShow(false);
         twinklingRefreshLayout.setEnableRefresh(false);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
+        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 1);
         recyclerView.setLayoutManager(layoutManager);
         recommendAdapter = new RecommendAdapter(recommendList);
         recyclerView.setAdapter(recommendAdapter);
-        recyclerView.setNestedScrollingEnabled(false);
         scroll = (VerticalRollingTextView)findViewById(R.id.scrollText);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -187,19 +165,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         scroll.run();
-        for(int i = 0;i<8;i++){
-            final int finalI = i;
-            tools[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent=new Intent(MainActivity.this,ArticlesActivity.class);//跳转到技能分类的页面
-                    intent.putExtra("SNTSearch",classification[finalI]);
-                    intent.putExtra("SearchFlag","1");
-                    startActivity(intent);
 
-                }
-            });
-        }
         twinklingRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter(){
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
@@ -212,7 +178,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         queryGoods();
-                        refreshLayout.finishLoadmore();
+
                     }
                 },1000);
             }
@@ -473,7 +439,6 @@ public class MainActivity extends AppCompatActivity
                     exitTime = System.currentTimeMillis();
                 }
                 else {
-                    //moveTaskToBack(false);
                     finish();
                 }
 
@@ -575,8 +540,12 @@ public class MainActivity extends AppCompatActivity
                 if (goodsList == null) {
                     Toast.makeText(MainActivity.this, "无此物品的相关信息！", Toast.LENGTH_SHORT).show();
                 } else {
+                    twinklingRefreshLayout.finishLoadmore();
+                    if(goodsList.size()==0)return;
+                    int num = recommendList.size();
                     recommendList.addAll(goodsList);
-                    recommendAdapter.notifyDataSetChanged();
+                    //recommendAdapter.notifyDataSetChanged();
+                    recommendAdapter.notifyItemRangeChanged(num,recommendList.size()-num);
                 }
             }
         });
@@ -589,7 +558,6 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(JSONObject data) {
                 Intent intent = new Intent(MainActivity.this, StateChangeService.class);
                 startService(intent);
-
             }
 
             @Override
@@ -610,8 +578,6 @@ public class MainActivity extends AppCompatActivity
         {
             @Override
             public void done(List<Goods> goodsList, BmobException e) {
-//                if(e!=null) return;
-//                if(goodsList.size()==0) return;
                 if (rtd.isConnected()){
                     for(Goods g: goodsList){
                         rtd.subRowUpdate("Goods", g.getObjectId());
@@ -623,8 +589,10 @@ public class MainActivity extends AppCompatActivity
     }
     //初始化滚动textview
     private void initList(){
-        textArray.add("欢迎使用YI租在线");
+        textArray.add("欢迎观临YI租在线");
         textArray.add("点我搜索");
     }
-
+//    private void statusBar(){
+//        if(cb)
+//    }
 }

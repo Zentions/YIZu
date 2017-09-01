@@ -5,6 +5,10 @@
     android:layout_marginRight="25dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/pattern_bg_blue" />
         <TextView
             android:id="@+id/title_message"
             android:text="发布成功！"

@@ -128,7 +128,6 @@ public class UserGoodsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollecter.removeActivity(this);
-
     }
 
 }
