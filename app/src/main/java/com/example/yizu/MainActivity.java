@@ -515,22 +515,42 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
     public  void queryGoods() {
+        Object[] names = ShareStorage.getStrings(this,"recommed");
         BmobQuery<Goods> query = new BmobQuery<Goods>();
+        List<BmobQuery<Goods>> queries = new ArrayList<BmobQuery<Goods>>();
         BmobQuery<Goods> q1 = new BmobQuery<Goods>();
         User me = new User();
         me.setObjectId(ShareStorage.getShareString(this,"ObjectId"));
         q1.addWhereNotEqualTo("user",me);
         BmobQuery<Goods> q2 = new BmobQuery<Goods>();
-        q2.order("-StarRating");
         q2.addWhereEqualTo("state","可租用");
         BmobQuery<Goods> q3 = new BmobQuery<Goods>();
         String pos = ShareStorage.getShareString(this,"mainShi");
         q3.addWhereEqualTo("Positioning", pos);//市定位
-        List<BmobQuery<Goods>> queries = new ArrayList<BmobQuery<Goods>>();
+        if(names!=null){
+            BmobQuery<Goods> q4 = new BmobQuery<Goods>();//或查询
+            List<BmobQuery<Goods>> orQueries = new ArrayList<BmobQuery<Goods>>();
+            for(int i = 0;i<3;i++){
+                String temp = (String)names[i];
+                if(!temp.equals("null")){
+                    BmobQuery<Goods> or1 = new BmobQuery<Goods>();
+                    or1.addWhereEqualTo("goodsName",temp);
+                    orQueries.add(or1);
+                }
+            }
+            BmobQuery<Goods> or2 = new BmobQuery<Goods>();
+            or2.addWhereGreaterThan("StarRating",3.75);
+            orQueries.add(or2);
+            BmobQuery<Goods> mainQuery = new BmobQuery<Goods>();
+            q4 = mainQuery.or(orQueries);
+            queries.add(q4);
+        }
+        /////
         queries.add(q1);
         queries.add(q2);
         queries.add(q3);
         query.and(queries);
+        query.order("-StarRating");
         query.setSkip(skip).setLimit(limit);
         skip+=6;
         query.findObjects(new FindListener<Goods>()

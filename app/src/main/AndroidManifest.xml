@@ -154,6 +154,10 @@
         <activity android:name=".DragPhotoActivity">
         </activity>
 
+        <service
+            android:name=".service.RecommendService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

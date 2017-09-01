@@ -27,6 +27,7 @@ import android.util.Log;
 
 import com.dx.dxloadingbutton.lib.LoadingButton;
 import com.example.yizu.bean.User;
+import com.example.yizu.service.RecommendService;
 import com.example.yizu.tool.ActivityCollecter;
 import com.example.yizu.tool.PhoneNumberConfirm;
 import com.iflytek.cloud.thirdparty.L;
@@ -218,6 +219,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                Intent intent = new Intent(LoginActivity.this, RecommendService.class);
+                startService(intent);
                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 login.reset();
                 finish();

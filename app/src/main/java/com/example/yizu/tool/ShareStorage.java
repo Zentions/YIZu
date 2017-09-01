@@ -3,6 +3,10 @@ package com.example.yizu.tool;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 /**
  * Created by q on 2017/7/23.
  */
@@ -45,5 +49,20 @@ public class ShareStorage {
         value[0] = pref.getString(tag1,"");
         value[1] = pref.getString(tag2,"");
         return  value;
+    }
+    public static boolean setStrings(Context context,String tag,String []array){
+        SharedPreferences.Editor editor = context.getSharedPreferences("data",Context.MODE_PRIVATE).edit();
+        HashSet<String> set = new HashSet<String>();
+        for(int i=0;i<array.length;i++){
+            set.add(array[i]);
+        }
+        editor.putStringSet(tag,set);
+        editor.apply();
+        return  true;
+    }
+    public static Object[] getStrings(Context context, String tag){
+        SharedPreferences pref = context.getSharedPreferences("data",Context.MODE_PRIVATE);
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(tag,null);
+        return set.toArray();
     }
 }
