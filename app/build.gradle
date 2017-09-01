@@ -73,6 +73,6 @@ dependencies {
     compile 'com.github.StevenDXC:DxLoadingButton:1.5'
     compile 'com.github.githubwing:DragPhotoView:1.0.1'
     compile 'com.dalong:carrousellayout:1.0.0'
-    compile 'com.github.rubengees:easy-header-footer-adapter:3.0.0@aar'
+    compile 'com.xu.viewpagerflextitle:viewpagerflextitle:1.0.3'
     testCompile 'junit:junit:4.12'
 }
