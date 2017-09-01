@@ -56,7 +56,7 @@ public class WelcomeActivity extends Activity {
                 startActivity(StartIntent);
                 finish();
             }
-        }, 3000);
+        }, 2000);
     }
 
     @Override

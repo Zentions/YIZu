@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity
                     twinklingRefreshLayout.finishLoadmore();
                 } else {
                     twinklingRefreshLayout.finishLoadmore();
-                    if(goodsList.size()==0){
+                    if(goodsList.size()==0 && skip > 6){
                         Toast.makeText(MainActivity.this, "没有更多了！", Toast.LENGTH_SHORT).show();
                         return;
                     }

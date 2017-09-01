@@ -2,17 +2,13 @@ package com.example.yizu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,23 +21,18 @@ import com.example.yizu.tool.PictureTool;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.zackratos.ultimatebar.UltimateBar;
-
-import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class GoodsItemActivity extends AppCompatActivity {
     private TextView itemName1,itemClassification1,itemState1,detail,totalRentMoney,totalRentTimes;
     private ImageView pic1,pic2,pic3;
-    private Button button;
-    private Button button1;
+    private FloatingActionButton button;
+    private FloatingActionButton button1;
     private ImageView back;
     private CarrouselLayout carrousel;
     Goods goods;
@@ -57,8 +48,8 @@ public class GoodsItemActivity extends AppCompatActivity {
         totalRentMoney=(TextView)findViewById(R.id.itemtotalRentMoney2);
         totalRentTimes=(TextView)findViewById(R.id.itemtotalRentTimes2);
         back = (ImageView)findViewById(R.id.goodsBack);
-        button=(Button)findViewById(R.id.holdon);
-        button1=(Button)findViewById(R.id.end);
+        button=(FloatingActionButton)findViewById(R.id.holdon);
+        button1=(FloatingActionButton)findViewById(R.id.end);
         pic1 = (ImageView) findViewById(R.id.p1);
         pic2 = (ImageView) findViewById(R.id.p2);
         pic3 = (ImageView) findViewById(R.id.p3);

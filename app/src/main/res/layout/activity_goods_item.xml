@@ -204,34 +204,62 @@
         android:background="#e0e0e0"
         android:layout_width="wrap_content"
         android:layout_height="1dp"></View>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-        <Button
-            android:id="@+id/holdon"
-            android:layout_width="match_parent"
+    <com.example.yizu.tool.FloatingMusicMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="15dp"
+        app:fmm_button_interval="8dp"
+        app:fmm_cover="@drawable/more1"
+        app:fmm_backgroundTint="@color/white"
+        app:fmm_floating_direction="left">
+
+        <LinearLayout
+            android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:background="#5fb7ef"
-            android:text="继续放租"
-            android:textColor="@android:color/background_dark"
-            android:textSize="16dp" />
-        <View
-            android:background="@color/white"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"></View>
-        <Button
-            android:id="@+id/end"
-            android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/holdon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/on"
+                app:backgroundTint="@color/white"
+                app:rippleColor="@color/white"
+                app:fabSize="normal" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="继续放租"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:background="#5fb7ef"
-            android:text="下架商品"
-            android:textColor="@android:color/background_dark"
-            android:textSize="16dp" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/down"
+                app:backgroundTint="@color/white"
+                app:rippleColor="@color/white"
+                app:fabSize="normal" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="下架商品"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+    </com.example.yizu.tool.FloatingMusicMenu>
+
 </RelativeLayout>
