@@ -2,6 +2,7 @@ package com.example.yizu.tool;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -63,6 +64,7 @@ public class ShareStorage {
     public static Object[] getStrings(Context context, String tag){
         SharedPreferences pref = context.getSharedPreferences("data",Context.MODE_PRIVATE);
         HashSet<String> set = (HashSet<String>) pref.getStringSet(tag,null);
+        Log.d("debug1","$"+set.toString());
         return set.toArray();
     }
 }

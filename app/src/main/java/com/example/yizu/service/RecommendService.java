@@ -66,11 +66,12 @@ public class RecommendService extends Service {
                 return o2.getValue().compareTo(o1.getValue());
             }
         });
-        String[] strings = new String[3];
-        for(i = 0; i<3; i++){
-            if(i>=list.size()) strings[i] = "null";
+        String[] strings = new String[5];
+        for(i = 0; i<5; i++){
+            if(i>=list.size()) strings[i] = "none";
             else  strings[i] = list.get(i).getKey();
         }
+        Log.d("debug1",strings.toString());
         ShareStorage.setStrings(this,"recommed",strings);
     }
 }

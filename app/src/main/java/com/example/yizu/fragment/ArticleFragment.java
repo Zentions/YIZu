@@ -3,11 +3,13 @@ package com.example.yizu.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.LruCache;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,12 +65,14 @@ public class ArticleFragment extends Fragment {
     private int skip;
     private int limit=6;
     private String flag;
+    private LruCache<String, Bitmap> lruCache;
     public ArticleFragment() {
         // Required empty public constructor
     }
 
-    public void setNumber(int number) {
+    public void setNumber(int number,LruCache<String, Bitmap> lruCache) {
         currentPage = number;
+        this.lruCache = lruCache;
     }
 
     @Nullable
@@ -108,10 +112,8 @@ public class ArticleFragment extends Fragment {
         Intent intent = activity.getIntent();
         Name = intent.getStringExtra("SNTSearch");
         flag = intent.getStringExtra("SearchFlag");
-        Log.d("debug1",Name);
-        Log.d("debug1",flag);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        adapter = new ArticleAdapter(articleList);
+        adapter = new ArticleAdapter(articleList,lruCache);
         recyclerView.setAdapter(adapter);
         queryGoods();
         refreshLayout.setOnRefreshListener(new RefreshListenerAdapter(){
@@ -187,10 +189,12 @@ public class ArticleFragment extends Fragment {
         {
             @Override
             public void done(List<Goods> goodsList, BmobException e) {
-                if (goodsList.size()==0 ||goodsList == null) {
+                if (goodsList == null) {
                     Toast.makeText(activity, "无此物品的相关信息！", Toast.LENGTH_SHORT).show();
                 } else {
-                    //articleList.clear();
+                    if(goodsList.size()==0){
+                        return;
+                    }
                     articleList.addAll(goodsList);
                     adapter.notifyDataSetChanged();
                 }

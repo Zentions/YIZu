@@ -516,6 +516,7 @@ public class MainActivity extends AppCompatActivity
     }
     public  void queryGoods() {
         Object[] names = ShareStorage.getStrings(this,"recommed");
+        Log.d("debug1",""+names.toString());
         BmobQuery<Goods> query = new BmobQuery<Goods>();
         List<BmobQuery<Goods>> queries = new ArrayList<BmobQuery<Goods>>();
         BmobQuery<Goods> q1 = new BmobQuery<Goods>();
@@ -527,12 +528,12 @@ public class MainActivity extends AppCompatActivity
         BmobQuery<Goods> q3 = new BmobQuery<Goods>();
         String pos = ShareStorage.getShareString(this,"mainShi");
         q3.addWhereEqualTo("Positioning", pos);//市定位
-        if(names!=null){
+        if(names!=null && !("none".equals((String)names[0]))){
             BmobQuery<Goods> q4 = new BmobQuery<Goods>();//或查询
             List<BmobQuery<Goods>> orQueries = new ArrayList<BmobQuery<Goods>>();
-            for(int i = 0;i<3;i++){
+            for(int i = 0;i<names.length;i++){
                 String temp = (String)names[i];
-                if(!temp.equals("null")){
+                if(!temp.equals("none")){
                     BmobQuery<Goods> or1 = new BmobQuery<Goods>();
                     or1.addWhereEqualTo("goodsName",temp);
                     orQueries.add(or1);
@@ -559,9 +560,13 @@ public class MainActivity extends AppCompatActivity
             public void done(List<Goods> goodsList, BmobException e) {
                 if (goodsList == null) {
                     Toast.makeText(MainActivity.this, "无此物品的相关信息！", Toast.LENGTH_SHORT).show();
+                    twinklingRefreshLayout.finishLoadmore();
                 } else {
                     twinklingRefreshLayout.finishLoadmore();
-                    if(goodsList.size()==0)return;
+                    if(goodsList.size()==0){
+                        Toast.makeText(MainActivity.this, "没有更多了！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     int num = recommendList.size();
                     recommendList.addAll(goodsList);
                     //recommendAdapter.notifyDataSetChanged();

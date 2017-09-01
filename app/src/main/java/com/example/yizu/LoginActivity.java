@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                                             login.loadingFailed();
                                         }
                                     }
-                                },1000);
+                                },500);
 
                             } else {
                                 login.loadingFailed();

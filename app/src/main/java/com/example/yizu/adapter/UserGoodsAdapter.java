@@ -2,7 +2,9 @@ package com.example.yizu.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Environment;
+import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +38,7 @@ import cn.bmob.v3.listener.DownloadFileListener;
 public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.ViewHolder> {
     private Context mContext;
     private List<Goods> mGoodsList;
+    private LruCache<String, Bitmap> lruCache;
     static class ViewHolder  extends RecyclerView.ViewHolder{
         TextView Goodstate;
         TextView Goodsname;
@@ -54,6 +57,16 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
     }
     public UserGoodsAdapter(List<Goods> GoodsList){
         mGoodsList=GoodsList;
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        // 使用最大可用内存值的1/8作为缓存的大小。
+        int cacheSize = maxMemory / 8;
+        lruCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // 重写此方法来衡量每张图片的大小，默认返回图片数量。
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -82,42 +95,53 @@ public class UserGoodsAdapter extends RecyclerView.Adapter<UserGoodsAdapter.View
         holder.Goodsname.setText("物品名称:"+goods.getGoodsName());
         holder.Goodstate.setText("状态:"+goods.getState());
         holder.Classification.setText("分类:"+goods.getClassification());
-      ;downImage(goods,holder);
+      ;setItemBitmaps(goods,holder);
     }
 
     @Override
     public int getItemCount() {
         return mGoodsList.size();
     }
-    void downImage(final Goods goods, final ViewHolder holder){
-        BmobFile[] bmobfile = new BmobFile[3];
-        bmobfile[0] = goods.getPic1();
-        bmobfile[1] = goods.getPic2();
-        bmobfile[2] = goods.getPic3();
-        for(int i = 0;i<3;i++){
-            File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile[i].getFilename());
-            if(bmobfile[i]!= null) {
-                final int finalI = i;
-                bmobfile[i].download(saveFile,new DownloadFileListener() {
-                    @Override
-                    public void done(String s, BmobException e) {
-                        if (e == null) {
-                            goods.setPath(s, finalI);
-                            Log.d("debug1",s);
-                            //  holder.articleImage.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(goods.getPath(0), 300, 300));
-                            if(finalI==0){
-                                holder.itemImage.setImageBitmap(PictureTool.showImage(goods.getPath(0)));
-                            }
-                        } else Toast.makeText(mContext, e.getErrorCode(), Toast.LENGTH_LONG).show();
-                    }
+    public Bitmap getBitmapFromMemoryCache(String url) {
+        return lruCache.get(url);
+    }
+    public void setItemBitmaps(final Goods goods, final ViewHolder holder) {
+        final BmobFile bmobfile = goods.getPic1();
+        if(bmobfile!=null){
+            File saveFile = new File(mContext.getExternalFilesDir(null), bmobfile.getFilename());
+            Bitmap cache = getBitmapFromMemoryCache(bmobfile.getUrl());
+            if (cache != null) {//内存缓存
+                holder.itemImage.setImageBitmap(cache);
+            } else {
+                String filePath = saveFile.getPath();
+                final Bitmap localCache = PictureTool.showImage(filePath);
+                if (localCache != null) {//本地缓存
+                    holder.itemImage.setImageBitmap(localCache);
+                    lruCache.put(bmobfile.getUrl(), localCache);
+                } else {//请求网络
+                    bmobfile.download(saveFile, new DownloadFileListener() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if (e == null) {
+                                goods.setPath(s, 0);
+                                //  holder.articleImage.setImageBitmap(PictureTool.decodeSampledBitmapFromResource(goods.getPath(0), 300, 300));
+                                Bitmap bitmap = PictureTool.showImage(goods.getPath(0));
+                                holder.itemImage.setImageBitmap(bitmap);
+                                lruCache.put(bmobfile.getUrl(), bitmap);
+                            } else
+                                Toast.makeText(mContext, e.getErrorCode(), Toast.LENGTH_LONG).show();
+                        }
 
-                    @Override
-                    public void onProgress(Integer integer, long l) {
+                        @Override
+                        public void onProgress(Integer integer, long l) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
+
         }
+
     }
 
 }
